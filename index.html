@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CommunaRank — Smart Community Index Switzerland</title>
+<meta name="description" content="Switzerland's most comprehensive community ranking platform. Find the best Swiss community to buy land, purchase a home, or rent — ranked by cost of living, infrastructure, education, sustainability and more.">
+<meta property="og:title" content="CommunaRank — Smart Community Index Switzerland">
+<meta property="og:description" content="Find your ideal Swiss community. Ranked across 9 dimensions including cost of living, education, healthcare, sustainability and nature access.">
+<meta property="og:type" content="website">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1a1a18;--ink2:#3d3d38;--ink3:#6b6b64;--paper:#f5f2eb;--paper2:#ede9df;--paper3:#e4dfd2;--green:#2d5a27;--green2:#3d7a35;--green3:#e8f3e6;--gold:#c8960c;--gold2:#f5e8c0;--red:#8b2020;--blue:#1a3a5c;--border:rgba(26,26,24,0.12);--border2:rgba(26,26,24,0.22);--r:10px;--r2:16px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);font-size:15px;min-height:100vh}
+h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:500;line-height:1.2}
+nav{background:var(--ink);color:var(--paper);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+.nav-brand{font-family:'Fraunces',serif;font-size:20px;color:var(--paper);letter-spacing:-0.3px}
+.nav-brand span{color:#7dbf6e}
+.nav-links{display:flex;gap:4px}
+.nav-btn{background:none;border:none;color:rgba(245,242,235,0.7);font-size:13px;padding:6px 12px;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.nav-btn:hover,.nav-btn.active{background:rgba(255,255,255,0.1);color:var(--paper)}
+.lang-sel{display:flex;gap:2px}
+.lang-btn{background:none;border:1px solid rgba(255,255,255,0.2);color:rgba(245,242,235,0.6);font-size:11px;padding:3px 7px;border-radius:4px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s}
+.lang-btn.active{background:var(--green2);border-color:var(--green2);color:white}
+.hero{background:var(--ink);color:var(--paper);padding:64px 24px 48px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 120%,rgba(45,90,39,0.4) 0%,transparent 70%);pointer-events:none}
+.hero-tag{display:inline-block;background:rgba(125,191,110,0.2);color:#7dbf6e;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:20px;border:1px solid rgba(125,191,110,0.3)}
+.hero h1{font-size:clamp(32px,5vw,56px);margin-bottom:16px;font-weight:300;color:var(--paper)}
+.hero h1 em{font-style:italic;color:#7dbf6e}
+.hero-sub{font-size:16px;color:rgba(245,242,235,0.65);max-width:560px;margin:0 auto 32px;line-height:1.7}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--green2);color:white;border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;transition:all 0.2s}
+.btn-primary:hover{background:var(--green);transform:translateY(-1px)}
+.btn-outline{background:none;color:var(--paper);border:1px solid rgba(245,242,235,0.3);padding:12px 28px;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.2s}
+.btn-outline:hover{border-color:rgba(245,242,235,0.6)}
+.hero-stats{display:flex;gap:32px;justify-content:center;margin-top:40px;padding-top:32px;border-top:1px solid rgba(255,255,255,0.08);flex-wrap:wrap}
+.stat-item{text-align:center}
+.stat-num{font-family:'Fraunces',serif;font-size:28px;color:var(--paper)}
+.stat-label{font-size:12px;color:rgba(245,242,235,0.5);margin-top:2px}
+.main{max-width:1100px;margin:0 auto;padding:32px 24px}
+.section{margin-bottom:48px}
+.section-header{margin-bottom:20px}
+.section-title{font-size:22px;color:var(--ink);margin-bottom:4px}
+.section-sub{font-size:13px;color:var(--ink3)}
+.search-bar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.search-input{flex:1;min-width:200px;padding:10px 16px;border:1px solid var(--border2);border-radius:var(--r);font-size:14px;font-family:'DM Sans',sans-serif;background:white;color:var(--ink)}
+.search-input:focus{outline:none;border-color:var(--green2)}
+.filter-select{padding:10px 14px;border:1px solid var(--border2);border-radius:var(--r);font-size:13px;font-family:'DM Sans',sans-serif;background:white;color:var(--ink);cursor:pointer}
+.filter-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.chip{padding:5px 14px;border-radius:20px;font-size:12px;border:1px solid var(--border);cursor:pointer;background:white;color:var(--ink2);transition:all 0.15s}
+.chip.active{background:var(--green);border-color:var(--green);color:white}
+.chip:hover:not(.active){border-color:var(--green2);color:var(--green2)}
+.weights-panel{background:white;border:1px solid var(--border);border-radius:var(--r2);padding:20px;margin-bottom:24px}
+.weights-title{font-size:14px;font-weight:500;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.weights-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+.weight-item label{font-size:12px;color:var(--ink2);display:flex;justify-content:space-between;margin-bottom:4px}
+.weight-item input[type=range]{width:100%;accent-color:var(--green2)}
+.weight-badge{display:inline-block;background:var(--green3);color:var(--green);font-size:10px;font-weight:500;padding:1px 6px;border-radius:4px}
+.rank-grid{display:flex;flex-direction:column;gap:10px}
+.rank-card{background:white;border:1px solid var(--border);border-radius:var(--r2);padding:16px 20px;display:grid;grid-template-columns:40px 1fr auto;gap:16px;align-items:center;cursor:pointer;transition:all 0.2s}
+.rank-card:hover{border-color:var(--green2);transform:translateX(2px)}
+.rank-card.expanded{border-color:var(--green)}
+.rank-card.top1{border-color:var(--gold);background:linear-gradient(135deg,#fffdf5 0%,white 100%)}
+.rank-num{font-family:'Fraunces',serif;font-size:24px;color:var(--ink3);text-align:center;font-weight:300}
+.rank-num.gold{color:var(--gold)}
+.rank-info h3{font-size:16px;font-family:'Fraunces',serif;font-weight:500;margin-bottom:2px}
+.rank-meta{font-size:12px;color:var(--ink3);display:flex;gap:12px;flex-wrap:wrap}
+.rank-right{text-align:right}
+.score-big{font-family:'Fraunces',serif;font-size:28px;font-weight:500;color:var(--green)}
+.score-label{font-size:11px;color:var(--ink3)}
+.mini-bar{display:flex;align-items:center;gap:6px}
+.mini-bar-label{font-size:10px;color:var(--ink3);width:60px;text-align:right}
+.mini-bar-track{flex:1;height:4px;background:var(--paper2);border-radius:2px}
+.mini-bar-fill{height:100%;border-radius:2px;background:var(--green2);transition:width 0.4s ease}
+.detail-panel{grid-column:1/-1;border-top:1px solid var(--border);margin-top:12px;padding-top:16px;display:none}
+.rank-card.expanded .detail-panel{display:block}
+.detail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:16px}
+.detail-metric{background:var(--paper);border-radius:var(--r);padding:10px 12px}
+.dm-label{font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px}
+.dm-val{font-family:'Fraunces',serif;font-size:18px;color:var(--ink)}
+.dm-sub{font-size:10px;color:var(--ink3)}
+.detail-actions{display:flex;gap:8px;flex-wrap:wrap}
+.action-btn{padding:8px 16px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;border:1px solid var(--border2);background:white;color:var(--ink);transition:all 0.15s}
+.action-btn:hover{background:var(--green3);border-color:var(--green2);color:var(--green)}
+.action-btn.primary{background:var(--green);border-color:var(--green);color:white}
+.action-btn.primary:hover{background:var(--green2)}
+.compare-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.compare-card{background:white;border:1px solid var(--border);border-radius:var(--r2);padding:16px}
+.compare-card h4{font-family:'Fraunces',serif;font-size:15px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.compare-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:12px}
+.compare-row-label{color:var(--ink2)}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:500}
+.badge-green{background:var(--green3);color:var(--green)}
+.badge-gold{background:var(--gold2);color:#7a5a00}
+.badge-red{background:#fde8e8;color:var(--red)}
+.ai-panel{background:var(--ink);color:var(--paper);border-radius:var(--r2);padding:24px}
+.ai-header{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.ai-dot{width:8px;height:8px;background:#7dbf6e;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+.ai-title{font-family:'Fraunces',serif;font-size:16px;color:var(--paper)}
+.ai-input-row{display:flex;gap:10px}
+.ai-input{flex:1;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:var(--r);padding:10px 16px;color:var(--paper);font-size:14px;font-family:'DM Sans',sans-serif}
+.ai-input::placeholder{color:rgba(245,242,235,0.35)}
+.ai-input:focus{outline:none;border-color:rgba(125,191,110,0.5)}
+.ai-send{background:var(--green2);color:white;border:none;padding:10px 20px;border-radius:var(--r);font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500}
+.index-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.index-card{background:white;border:1px solid var(--border);border-radius:var(--r2);padding:16px}
+.index-icon{font-size:22px;margin-bottom:8px}
+.index-card h4{font-size:14px;font-family:'Fraunces',serif;margin-bottom:6px}
+.index-card p{font-size:12px;color:var(--ink3);line-height:1.6}
+.index-weight{font-size:11px;font-weight:500;color:var(--green);margin-top:6px}
+.tabs{display:flex;gap:2px;background:var(--paper2);border-radius:10px;padding:3px;margin-bottom:24px;width:fit-content}
+.tab{padding:8px 18px;border-radius:8px;font-size:13px;cursor:pointer;border:none;background:none;font-family:'DM Sans',sans-serif;color:var(--ink2);transition:all 0.15s}
+.tab.active{background:white;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-align:center;font-size:12px;margin-top:48px}
+.footer-brand{font-family:'Fraunces',serif;font-size:18px;color:var(--paper);margin-bottom:8px}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--green);color:white;padding:12px 20px;border-radius:10px;font-size:13px;z-index:999;transform:translateY(80px);opacity:0;transition:all 0.3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+.page{display:none}
+.page.active{display:block}
+.ai-thinking span{width:5px;height:5px;background:rgba(245,242,235,0.4);border-radius:50%;display:inline-block;animation:bounce 1.2s infinite;margin:0 2px}
+.ai-thinking span:nth-child(2){animation-delay:0.2s}
+.ai-thinking span:nth-child(3){animation-delay:0.4s}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@media(max-width:600px){.rank-card{grid-template-columns:36px 1fr}.rank-right{display:none}nav .nav-links{display:none}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-brand">Communa<span>Rank</span></div>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showPage('ranking')" id="nb-ranking">Ranking</button>
+    <button class="nav-btn" onclick="showPage('compare')" id="nb-compare">Compare</button>
+    <button class="nav-btn" onclick="showPage('index')" id="nb-index">Our Index</button>
+    <button class="nav-btn" onclick="showPage('ai')" id="nb-ai">AI Advisor</button>
+  </div>
+  <div class="lang-sel">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+    <button class="lang-btn" onclick="setLang('de')">DE</button>
+    <button class="lang-btn" onclick="setLang('it')">IT</button>
+  </div>
+</nav>
+<div class="hero">
+  <div class="hero-tag" id="h-tag">Switzerland's Community Intelligence Platform</div>
+  <h1 id="h-title">Find where you truly <em>belong</em> in Switzerland</h1>
+  <p class="hero-sub" id="h-sub">Our proprietary Smart Community Index evaluates 2,200+ Swiss communities across 9 dimensions — from cost of living to sustainability — so you can choose where to buy land, a home, or rent with confidence.</p>
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="showPage('ranking')" id="h-cta1">Explore Rankings</button>
+    <button class="btn-outline" onclick="showPage('ai')" id="h-cta2">Ask AI Advisor</button>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item"><div class="stat-num">2,212</div><div class="stat-label" id="h-s1">Communities ranked</div></div>
+    <div class="stat-item"><div class="stat-num">9</div><div class="stat-label" id="h-s2">Index dimensions</div></div>
+    <div class="stat-item"><div class="stat-num">26</div><div class="stat-label" id="h-s3">Cantons covered</div></div>
+    <div class="stat-item"><div class="stat-num">4</div><div class="stat-label" id="h-s4">Languages</div></div>
+  </div>
+</div>
+<div class="main">
+<div class="page active" id="page-ranking">
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title" id="rank-title">Community Rankings</h2>
+      <p class="section-sub" id="rank-sub">Ranked by the CommunaRank Smart Community Index. Adjust weights to personalize your ranking.</p>
+    </div>
+    <div class="search-bar">
+      <input class="search-input" type="text" id="search-input" placeholder="Search community, canton..." oninput="filterCommunities()">
+      <select class="filter-select" id="canton-filter" onchange="filterCommunities()">
+        <option value="">All cantons</option>
+        <option>Zurich (ZH)</option><option>Bern (BE)</option><option>Vaud (VD)</option>
+        <option>Geneva (GE)</option><option>Basel (BS)</option><option>Lucerne (LU)</option>
+        <option>St. Gallen (SG)</option><option>Aargau (AG)</option><option>Ticino (TI)</option>
+        <option>Valais (VS)</option><option>Fribourg (FR)</option><option>Graubünden (GR)</option>
+      </select>
+      <select class="filter-select" id="type-filter" onchange="filterCommunities()">
+        <option value="">All types</option>
+        <option>Urban</option><option>Suburban</option><option>Rural</option><option>Alpine</option>
+      </select>
+    </div>
+    <div class="filter-chips" id="filter-chips">
+      <span class="chip active" onclick="setChip(this,'all')" id="chip-all">All</span>
+      <span class="chip" onclick="setChip(this,'family')" id="chip-family">Family-friendly</span>
+      <span class="chip" onclick="setChip(this,'affordable')" id="chip-affordable">Affordable</span>
+      <span class="chip" onclick="setChip(this,'sustainable')" id="chip-sustainable">Sustainable</span>
+      <span class="chip" onclick="setChip(this,'nature')" id="chip-nature">Near nature</span>
+      <span class="chip" onclick="setChip(this,'urban')" id="chip-urban">Urban lifestyle</span>
+    </div>
+    <div class="weights-panel">
+      <div class="weights-title">
+        <span id="w-title">Personalize index weights</span>
+        <span style="display:inline-block;background:var(--green3);color:var(--green);font-size:10px;padding:2px 8px;border-radius:4px;margin-left:auto;">Affects ranking</span>
+      </div>
+      <div class="weights-grid" id="weights-grid"></div>
+    </div>
+    <div class="rank-grid" id="rank-grid"></div>
+  </div>
+</div>
+<div class="page" id="page-compare">
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title" id="cmp-title">Side-by-side comparison</h2>
+      <p class="section-sub" id="cmp-sub">Select up to 4 communities to compare across all dimensions</p>
+    </div>
+    <div class="search-bar" style="margin-bottom:20px;">
+      <input class="search-input" type="text" id="cmp-search" placeholder="Add community to compare..." oninput="showCmpSuggestions()">
+      <button class="btn-primary" onclick="addSelectedToCompare()" id="cmp-add-btn">Add to compare</button>
+    </div>
+    <div id="cmp-suggestions" style="background:white;border:1px solid var(--border);border-radius:var(--r);margin-bottom:16px;display:none;max-height:200px;overflow-y:auto;"></div>
+    <div id="cmp-selected" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;"></div>
+    <div class="compare-grid" id="compare-grid"></div>
+    <div id="cmp-chart-wrap" style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:20px;margin-top:16px;display:none;">
+      <h4 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:16px;" id="cmp-chart-title">Radar comparison</h4>
+      <div style="position:relative;height:300px;"><canvas id="cmpChart" role="img" aria-label="Radar chart comparing selected communities"></canvas></div>
+    </div>
+  </div>
+</div>
+<div class="page" id="page-index">
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title" id="idx-title">The CommunaRank Smart Community Index</h2>
+      <p class="section-sub" id="idx-sub">Our proprietary methodology for evaluating Swiss communities across 9 pillars</p>
+    </div>
+    <div class="index-grid" id="index-grid"></div>
+    <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:24px;margin-top:24px;">
+      <h3 style="font-family:'Fraunces',serif;margin-bottom:12px;" id="idx-method-title">Methodology</h3>
+      <p style="font-size:14px;color:var(--ink2);line-height:1.8;" id="idx-method-body">The CommunaRank Smart Community Index aggregates publicly available Swiss federal data (OFS/FSO), cantonal statistics, OpenStreetMap infrastructure data, energy provider tariffs, and user-submitted data points. Each dimension is normalized to a 0–100 scale and weighted according to the user's stated priorities.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:20px;">
+        <div style="background:var(--paper);border-radius:var(--r);padding:12px;text-align:center;"><div style="font-family:'Fraunces',serif;font-size:22px;color:var(--green);">OFS</div><div style="font-size:11px;color:var(--ink3);margin-top:2px;" id="ds-1">Federal Statistics Office</div></div>
+        <div style="background:var(--paper);border-radius:var(--r);padding:12px;text-align:center;"><div style="font-family:'Fraunces',serif;font-size:22px;color:var(--green);">OSM</div><div style="font-size:11px;color:var(--ink3);margin-top:2px;" id="ds-2">OpenStreetMap data</div></div>
+        <div style="background:var(--paper);border-radius:var(--r);padding:12px;text-align:center;"><div style="font-family:'Fraunces',serif;font-size:22px;color:var(--green);">ELCOM</div><div style="font-size:11px;color:var(--ink3);margin-top:2px;" id="ds-3">Electricity regulator</div></div>
+        <div style="background:var(--paper);border-radius:var(--r);padding:12px;text-align:center;"><div style="font-family:'Fraunces',serif;font-size:22px;color:var(--green);">FSO</div><div style="font-size:11px;color:var(--ink3);margin-top:2px;" id="ds-4">Cantonal authorities</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page" id="page-ai">
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title" id="ai-page-title">AI Community Advisor</h2>
+      <p class="section-sub" id="ai-page-sub">Ask anything about Swiss communities, land purchase, costs, or lifestyle</p>
+    </div>
+    <div class="ai-panel">
+      <div class="ai-header">
+        <div class="ai-dot"></div>
+        <div class="ai-title" id="ai-title">CommunaRank AI — powered by Claude</div>
+      </div>
+      <div id="ai-chat-history" style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;min-height:60px;"></div>
+      <div class="ai-input-row">
+        <input class="ai-input" type="text" id="ai-input" placeholder="e.g. I have a budget of 800k CHF and need good schools..." onkeydown="if(event.key==='Enter')sendAI()">
+        <button class="ai-send" onclick="sendAI()" id="ai-send-btn">Ask →</button>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;" id="ai-quick-prompts"></div>
+    </div>
+  </div>
+</div>
+</div>
+<footer>
+  <div class="footer-brand">CommunaRank</div>
+  <p>Smart Community Index for Switzerland · Data updated quarterly · Not investment advice</p>
+  <p style="margin-top:6px;">© 2025 CommunaRank · communarank.ch · communarank.com · FR · DE · IT · EN</p>
+</footer>
+<div class="toast" id="toast"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const T={en:{heroTag:"Switzerland's Community Intelligence Platform",heroTitle:"Find where you truly <em>belong</em> in Switzerland",heroSub:"Our proprietary Smart Community Index evaluates 2,200+ Swiss communities across 9 dimensions — from cost of living to sustainability.",heroCta1:"Explore Rankings",heroCta2:"Ask AI Advisor",hS1:"Communities ranked",hS2:"Index dimensions",hS3:"Cantons covered",hS4:"Languages",rankTitle:"Community Rankings",rankSub:"Ranked by the CommunaRank Smart Community Index. Adjust weights to personalize.",wTitle:"Personalize index weights",cmpTitle:"Side-by-side comparison",cmpSub:"Select up to 4 communities to compare",cmpAdd:"Add to compare",cmpChartTitle:"Radar comparison",idxTitle:"The CommunaRank Smart Community Index",idxSub:"Our proprietary methodology for evaluating Swiss communities across 9 pillars",idxMethodTitle:"Methodology",idxMethodBody:"The CommunaRank Smart Community Index aggregates publicly available Swiss federal data (OFS/FSO), cantonal statistics, OpenStreetMap infrastructure data, energy provider tariffs, and user-submitted data points.",ds1:"Federal Statistics Office",ds2:"OpenStreetMap data",ds3:"Electricity regulator",ds4:"Cantonal authorities",aiTitle:"CommunaRank AI — powered by Claude",aiPageTitle:"AI Community Advisor",aiPageSub:"Ask anything about Swiss communities, land purchase, costs, or lifestyle",chipAll:"All",chipFamily:"Family-friendly",chipAffordable:"Affordable",chipSustainable:"Sustainable",chipNature:"Near nature",chipUrban:"Urban lifestyle",quickPrompts:["Best communities under 800k CHF?","Where to live near Zurich with good schools?","Compare land prices Vaud vs Bern","Most sustainable alpine communities"],searchPlaceholder:"Search community, canton...",cmpSearchPlaceholder:"Add community to compare...",detailBuy:"Buy land here",detailRent:"Rental market",detailSave:"Save to wishlist",detailMore:"Full profile",cost:"CHF/m²",score:"Score"},fr:{heroTag:"Plateforme d'intelligence communautaire suisse",heroTitle:"Trouvez où vous <em>appartenir</em> vraiment en Suisse",heroSub:"Notre indice Smart Community évalue 2 200+ communes suisses sur 9 dimensions — du coût de la vie à la durabilité.",heroCta1:"Explorer le classement",heroCta2:"Conseiller IA",hS1:"Communes classées",hS2:"Dimensions d'index",hS3:"Cantons couverts",hS4:"Langues",rankTitle:"Classement des communes",rankSub:"Classé selon l'indice CommunaRank. Ajustez les pondérations pour personnaliser.",wTitle:"Personnaliser les pondérations",cmpTitle:"Comparaison côte-à-côte",cmpSub:"Sélectionnez jusqu'à 4 communes à comparer",cmpAdd:"Ajouter à la comparaison",cmpChartTitle:"Comparaison radar",idxTitle:"L'indice CommunaRank Smart Community",idxSub:"Notre méthodologie propriétaire pour évaluer les communes suisses",idxMethodTitle:"Méthodologie",idxMethodBody:"L'indice agrège les données fédérales suisses disponibles (OFS), les statistiques cantonales, les données OpenStreetMap et les tarifs des fournisseurs d'énergie.",ds1:"Office fédéral des statistiques",ds2:"Données OpenStreetMap",ds3:"Régulateur de l'électricité",ds4:"Autorités cantonales",aiTitle:"CommunaRank IA — propulsé par Claude",aiPageTitle:"Conseiller IA communautaire",aiPageSub:"Posez des questions sur les communes, l'achat de terrain ou le mode de vie",chipAll:"Tous",chipFamily:"Familial",chipAffordable:"Abordable",chipSustainable:"Durable",chipNature:"Proche nature",chipUrban:"Vie urbaine",quickPrompts:["Meilleures communes < 800k CHF?","Vivre près de Genève avec bonnes écoles?","Comparer foncier Vaud vs Berne","Communes alpines durables"],searchPlaceholder:"Rechercher une commune...",cmpSearchPlaceholder:"Ajouter une commune...",detailBuy:"Acheter ici",detailRent:"Marché locatif",detailSave:"Sauvegarder",detailMore:"Profil complet",cost:"CHF/m²",score:"Score"},de:{heroTag:"Schweizer Gemeinschaft-Intelligenzplattform",heroTitle:"Finden Sie Ihr wahres <em>Zuhause</em> in der Schweiz",heroSub:"Unser Smart Community Index bewertet 2.200+ Schweizer Gemeinden in 9 Dimensionen — von Lebenshaltungskosten bis Nachhaltigkeit.",heroCta1:"Rangliste erkunden",heroCta2:"KI-Berater",hS1:"Bewertete Gemeinden",hS2:"Index-Dimensionen",hS3:"Abgedeckte Kantone",hS4:"Sprachen",rankTitle:"Gemeinderankings",rankSub:"Rangiert nach dem CommunaRank Smart Community Index. Gewichtungen anpassen.",wTitle:"Indexgewichtungen anpassen",cmpTitle:"Vergleich nebeneinander",cmpSub:"Bis zu 4 Gemeinden vergleichen",cmpAdd:"Zum Vergleich hinzufügen",cmpChartTitle:"Radar-Vergleich",idxTitle:"Der CommunaRank Smart Community Index",idxSub:"Unsere proprietäre Methodik zur Bewertung Schweizer Gemeinden",idxMethodTitle:"Methodik",idxMethodBody:"Der CommunaRank Smart Community Index aggregiert öffentlich zugängliche Schweizer Bundesdaten (BFS), kantonale Statistiken, OpenStreetMap-Infrastrukturdaten und Energietarife.",ds1:"Bundesamt für Statistik",ds2:"OpenStreetMap-Daten",ds3:"Stromregulator",ds4:"Kantonsbehörden",aiTitle:"CommunaRank KI — betrieben von Claude",aiPageTitle:"KI-Gemeinschaftsberater",aiPageSub:"Fragen zu Schweizer Gemeinden, Landkauf oder Lebensstil",chipAll:"Alle",chipFamily:"Familienfreundlich",chipAffordable:"Erschwinglich",chipSustainable:"Nachhaltig",chipNature:"Naturnahe",chipUrban:"Stadtleben",quickPrompts:["Beste Gemeinden unter 800k CHF?","Leben nahe Zürich mit guten Schulen?","Landpreise Waadt vs. Bern","Nachhaltige alpine Gemeinden"],searchPlaceholder:"Gemeinde, Kanton suchen...",cmpSearchPlaceholder:"Gemeinde hinzufügen...",detailBuy:"Land kaufen",detailRent:"Mietmarkt",detailSave:"Merkliste",detailMore:"Vollprofil",cost:"CHF/m²",score:"Punkte"},it:{heroTag:"Piattaforma di intelligenza comunitaria svizzera",heroTitle:"Trova dove <em>appartenere</em> davvero in Svizzera",heroSub:"Il nostro indice Smart Community valuta 2.200+ comuni svizzeri su 9 dimensioni — dal costo della vita alla sostenibilità.",heroCta1:"Esplora le classifiche",heroCta2:"Consulente IA",hS1:"Comuni classificati",hS2:"Dimensioni indice",hS3:"Cantoni coperti",hS4:"Lingue",rankTitle:"Classifica dei comuni",rankSub:"Classificato secondo l'indice CommunaRank. Regola i pesi per personalizzare.",wTitle:"Personalizza i pesi dell'indice",cmpTitle:"Confronto affiancato",cmpSub:"Seleziona fino a 4 comuni da confrontare",cmpAdd:"Aggiungi al confronto",cmpChartTitle:"Confronto radar",idxTitle:"L'indice CommunaRank Smart Community",idxSub:"La nostra metodologia proprietaria per valutare i comuni svizzeri",idxMethodTitle:"Metodologia",idxMethodBody:"L'indice CommunaRank aggrega i dati federali svizzeri disponibili (UST), statistiche cantonali, dati infrastrutturali OpenStreetMap e tariffe energetiche.",ds1:"Ufficio federale di statistica",ds2:"Dati OpenStreetMap",ds3:"Regolatore energia",ds4:"Autorità cantonali",aiTitle:"CommunaRank IA — alimentato da Claude",aiPageTitle:"Consulente IA comunitario",aiPageSub:"Fai domande su comuni svizzeri, acquisto di terreni o stile di vita",chipAll:"Tutti",chipFamily:"Familiare",chipAffordable:"Conveniente",chipSustainable:"Sostenibile",chipNature:"Vicino natura",chipUrban:"Vita urbana",quickPrompts:["Migliori comuni < 800k CHF?","Vivere vicino Zurigo con buone scuole?","Prezzi terreni Vaud vs Berna","Comuni alpini sostenibili"],searchPlaceholder:"Cerca comune, cantone...",cmpSearchPlaceholder:"Aggiungi comune...",detailBuy:"Acquista terreno",detailRent:"Mercato affitti",detailSave:"Salva",detailMore:"Profilo completo",cost:"CHF/m²",score:"Punteggio"}};
+let lang='en',currentFilter='all',cmpSelected=[],cmpChart=null;
+const WEIGHTS_DEF={costOfLiving:{label:{en:'Cost of Living',fr:'Coût de vie',de:'Lebenshaltung',it:'Costo vita'},val:20,icon:'💰'},infrastructure:{label:{en:'Infrastructure',fr:'Infrastructure',de:'Infrastruktur',it:'Infrastruttura'},val:15,icon:'🏗'},education:{label:{en:'Education',fr:'Éducation',de:'Bildung',it:'Istruzione'},val:15,icon:'📚'},healthcare:{label:{en:'Healthcare',fr:'Santé',de:'Gesundheit',it:'Sanità'},val:12,icon:'🏥'},energy:{label:{en:'Energy & Utilities',fr:'Énergie',de:'Energie',it:'Energia'},val:10,icon:'⚡'},sustainability:{label:{en:'Sustainability',fr:'Durabilité',de:'Nachhaltigkeit',it:'Sostenibilità'},val:10,icon:'🌿'},food:{label:{en:'Food & Shops',fr:'Commerce',de:'Einkauf',it:'Negozi'},val:8,icon:'🛒'},entertainment:{label:{en:'Entertainment',fr:'Loisirs',de:'Freizeit',it:'Svago'},val:5,icon:'🎭'},nature:{label:{en:'Nature Access',fr:'Nature',de:'Natur',it:'Natura'},val:5,icon:'🏔'}};
+const COMMUNITIES=[{name:'Küsnacht',canton:'Zurich (ZH)',type:'Suburban',pop:13800,landPrice:3200,scores:{costOfLiving:55,infrastructure:88,education:95,healthcare:90,energy:75,sustainability:72,food:82,entertainment:70,nature:78},tags:['family','urban']},{name:'Morges',canton:'Vaud (VD)',type:'Urban',pop:16500,landPrice:1850,scores:{costOfLiving:68,infrastructure:82,education:85,healthcare:87,energy:80,sustainability:76,food:88,entertainment:78,nature:84},tags:['family','nature']},{name:'Nyon',canton:'Vaud (VD)',type:'Urban',pop:22000,landPrice:2100,scores:{costOfLiving:62,infrastructure:85,education:86,healthcare:88,energy:82,sustainability:78,food:90,entertainment:82,nature:87},tags:['family','nature','urban']},{name:'Rapperswil-Jona',canton:'St. Gallen (SG)',type:'Suburban',pop:27500,landPrice:1500,scores:{costOfLiving:74,infrastructure:80,education:82,healthcare:84,energy:78,sustainability:80,food:79,entertainment:72,nature:90},tags:['family','nature','affordable']},{name:'Thun',canton:'Bern (BE)',type:'Urban',pop:44000,landPrice:1200,scores:{costOfLiving:78,infrastructure:78,education:80,healthcare:82,energy:76,sustainability:74,food:80,entertainment:75,nature:95},tags:['family','nature','affordable']},{name:'Spiez',canton:'Bern (BE)',type:'Suburban',pop:13000,landPrice:950,scores:{costOfLiving:82,infrastructure:70,education:75,healthcare:72,energy:74,sustainability:78,food:68,entertainment:60,nature:97},tags:['nature','affordable','sustainable']},{name:'Zug',canton:'Zug (ZG)',type:'Urban',pop:30000,landPrice:2800,scores:{costOfLiving:48,infrastructure:92,education:90,healthcare:91,energy:85,sustainability:80,food:87,entertainment:85,nature:76},tags:['urban','family']},{name:'Carouge',canton:'Geneva (GE)',type:'Urban',pop:22000,landPrice:2900,scores:{costOfLiving:44,infrastructure:88,education:88,healthcare:90,energy:72,sustainability:70,food:92,entertainment:92,nature:60},tags:['urban']},{name:'Lugano',canton:'Ticino (TI)',type:'Urban',pop:63000,landPrice:1600,scores:{costOfLiving:65,infrastructure:82,education:80,healthcare:85,energy:70,sustainability:68,food:88,entertainment:88,nature:82},tags:['urban','nature']},{name:'Gruyères',canton:'Fribourg (FR)',type:'Rural',pop:2100,landPrice:700,scores:{costOfLiving:86,infrastructure:58,education:65,healthcare:62,energy:72,sustainability:88,food:72,entertainment:50,nature:96},tags:['nature','sustainable','affordable']},{name:'Verbier',canton:'Valais (VS)',type:'Alpine',pop:3500,landPrice:3500,scores:{costOfLiving:42,infrastructure:70,education:68,healthcare:65,energy:60,sustainability:75,food:70,entertainment:80,nature:98},tags:['nature']},{name:'Winterthur',canton:'Zurich (ZH)',type:'Urban',pop:116000,landPrice:1400,scores:{costOfLiving:70,infrastructure:87,education:86,healthcare:88,energy:80,sustainability:82,food:85,entertainment:84,nature:70},tags:['urban','family','sustainable']},{name:'Biel/Bienne',canton:'Bern (BE)',type:'Urban',pop:56000,landPrice:900,scores:{costOfLiving:80,infrastructure:76,education:78,healthcare:79,energy:77,sustainability:76,food:78,entertainment:74,nature:72},tags:['affordable','urban']},{name:'Solothurn',canton:'Solothurn (SO)',type:'Urban',pop:17000,landPrice:850,scores:{costOfLiving:82,infrastructure:74,education:77,healthcare:78,energy:76,sustainability:75,food:76,entertainment:68,nature:75},tags:['affordable','family']},{name:'Davos',canton:'Graubünden (GR)',type:'Alpine',pop:11500,landPrice:1800,scores:{costOfLiving:55,infrastructure:74,education:72,healthcare:74,energy:65,sustainability:80,food:68,entertainment:76,nature:99},tags:['nature','sustainable']}];
+const INDEX_PILLARS=[{key:'costOfLiving',icon:'💰',title:{en:'Cost of Living',fr:'Coût de vie',de:'Lebenshaltung',it:'Costo vita'},desc:{en:'Property prices, rental index, local tax rates, grocery costs, transport costs',fr:"Prix immobiliers, indice de loyer, taux d'imposition",de:'Immobilienpreise, Mietindex, Steuerbelastung',it:'Prezzi immobili, indice affitti, aliquote fiscali'},weight:'20%'},{key:'infrastructure',icon:'🏗',title:{en:'Infrastructure',fr:'Infrastructure',de:'Infrastruktur',it:'Infrastruttura'},desc:{en:'Road quality, public transport frequency, broadband coverage',fr:'Qualité des routes, fréquence des transports, couverture haut débit',de:'Straßenqualität, ÖPNV-Häufigkeit, Breitbandabdeckung',it:'Qualità strade, frequenza trasporti, copertura banda larga'},weight:'15%'},{key:'education',icon:'📚',title:{en:'Education',fr:'Éducation',de:'Bildung',it:'Istruzione'},desc:{en:'School ratings, international schools, universities, childcare',fr:'Notation des écoles, écoles internationales, garderies',de:'Schulbewertungen, internationale Schulen, Kinderbetreuung',it:'Valutazioni scuole, scuole internazionali, asili nido'},weight:'15%'},{key:'healthcare',icon:'🏥',title:{en:'Healthcare',fr:'Santé',de:'Gesundheit',it:'Sanità'},desc:{en:'Hospital proximity, GP availability, specialist density',fr:'Proximité hôpitaux, disponibilité médecins',de:'Krankenhauszugänglichkeit, Hausarztverfügbarkeit',it:'Prossimità ospedali, disponibilità medici'},weight:'12%'},{key:'energy',icon:'⚡',title:{en:'Energy & Utilities',fr:'Énergie & Services',de:'Energie & Versorgung',it:'Energia & Servizi'},desc:{en:'Electricity tariffs (ELCOM data), renewable energy share, heating costs',fr:'Tarifs électricité (données ELCOM), énergies renouvelables',de:'Stromtarife (ELCOM-Daten), Anteil erneuerbarer Energie',it:'Tariffe energia (dati ELCOM), energie rinnovabili'},weight:'10%'},{key:'sustainability',icon:'🌿',title:{en:'Sustainability',fr:'Durabilité',de:'Nachhaltigkeit',it:'Sostenibilità'},desc:{en:'Green spaces per capita, recycling rates, EV charging, solar installations',fr:'Espaces verts, taux de recyclage, recharge VE',de:'Grünflächen pro Kopf, Recyclingquoten, E-Ladeinfrastruktur',it:'Spazi verdi, tassi di riciclo, ricarica EV'},weight:'10%'},{key:'food',icon:'🛒',title:{en:'Food & Commerce',fr:'Alimentation & Commerce',de:'Lebensmittel & Handel',it:'Alimentari & Commercio'},desc:{en:'Supermarket density, farmers markets, restaurant variety',fr:'Densité supermarchés, marchés fermiers, restaurants',de:'Supermarktdichte, Wochenmärkte, Gastronomie',it:'Densità supermercati, mercati contadini, ristoranti'},weight:'8%'},{key:'entertainment',icon:'🎭',title:{en:'Entertainment',fr:'Loisirs',de:'Freizeit',it:'Svago'},desc:{en:'Cultural venues, sports facilities, nightlife, family activities',fr:'Lieux culturels, équipements sportifs, vie nocturne',de:'Kultureinrichtungen, Sportanlagen, Nachtleben',it:'Luoghi culturali, impianti sportivi, vita notturna'},weight:'5%'},{key:'nature',icon:'🏔',title:{en:'Nature Access',fr:'Accès à la nature',de:'Naturzugang',it:'Accesso natura'},desc:{en:'Hiking trails, lakes, air quality index, biodiversity, altitude',fr:"Sentiers de randonnée, lacs et rivières, qualité de l'air",de:'Wanderwege, Seen und Flüsse, Luftqualität',it:'Sentieri, laghi e fiumi, qualità aria'},weight:'5%'}];
+function getT(k){return T[lang][k]||T.en[k]||''}
+function setLang(l){lang=l;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));applyTranslations();renderWeights();renderRanking();renderIndexPillars();renderCompare();renderQuickPrompts()}
+function applyTranslations(){const s=id=>document.getElementById(id);s('h-tag').textContent=getT('heroTag');s('h-title').innerHTML=getT('heroTitle');s('h-sub').textContent=getT('heroSub');s('h-cta1').textContent=getT('heroCta1');s('h-cta2').textContent=getT('heroCta2');s('h-s1').textContent=getT('hS1');s('h-s2').textContent=getT('hS2');s('h-s3').textContent=getT('hS3');s('h-s4').textContent=getT('hS4');s('rank-title').textContent=getT('rankTitle');s('rank-sub').textContent=getT('rankSub');s('w-title').textContent=getT('wTitle');s('cmp-title').textContent=getT('cmpTitle');s('cmp-sub').textContent=getT('cmpSub');s('cmp-add-btn').textContent=getT('cmpAdd');s('cmp-chart-title').textContent=getT('cmpChartTitle');s('idx-title').textContent=getT('idxTitle');s('idx-sub').textContent=getT('idxSub');s('idx-method-title').textContent=getT('idxMethodTitle');s('idx-method-body').textContent=getT('idxMethodBody');s('ds-1').textContent=getT('ds1');s('ds-2').textContent=getT('ds2');s('ds-3').textContent=getT('ds3');s('ds-4').textContent=getT('ds4');s('ai-title').textContent=getT('aiTitle');s('ai-page-title').textContent=getT('aiPageTitle');s('ai-page-sub').textContent=getT('aiPageSub');s('search-input').placeholder=getT('searchPlaceholder');s('cmp-search').placeholder=getT('cmpSearchPlaceholder');s('chip-all').textContent=getT('chipAll');s('chip-family').textContent=getT('chipFamily');s('chip-affordable').textContent=getT('chipAffordable');s('chip-sustainable').textContent=getT('chipSustainable');s('chip-nature').textContent=getT('chipNature');s('chip-urban').textContent=getT('chipUrban')}
+function calcScore(c){let t=0,w=0;for(const[k,d]of Object.entries(WEIGHTS_DEF)){t+=c.scores[k]*d.val;w+=d.val}return Math.round(t/w)}
+function renderWeights(){const g=document.getElementById('weights-grid');g.innerHTML='';for(const[k,w]of Object.entries(WEIGHTS_DEF)){const d=document.createElement('div');d.className='weight-item';d.innerHTML=`<label><span>${w.icon} ${w.label[lang]||w.label.en}</span><span class="weight-badge" id="wb-${k}">${w.val}%</span></label><input type="range" min="0" max="30" step="1" value="${w.val}" oninput="updateWeight('${k}',this.value)">`;g.appendChild(d)}}
+function updateWeight(k,v){WEIGHTS_DEF[k].val=parseInt(v);document.getElementById('wb-'+k).textContent=v+'%';renderRanking()}
+function getSorted(){const q=(document.getElementById('search-input')?.value||'').toLowerCase();const canton=document.getElementById('canton-filter')?.value||'';const type=document.getElementById('type-filter')?.value||'';return[...COMMUNITIES].filter(c=>{if(q&&!c.name.toLowerCase().includes(q)&&!c.canton.toLowerCase().includes(q))return false;if(canton&&c.canton!==canton)return false;if(type&&c.type!==type)return false;if(currentFilter!=='all'&&!c.tags.includes(currentFilter))return false;return true}).map(c=>({...c,score:calcScore(c)})).sort((a,b)=>b.score-a.score)}
+function renderRanking(){const g=document.getElementById('rank-grid');const s=getSorted();g.innerHTML='';s.forEach((c,i)=>{const rank=i+1;const card=document.createElement('div');card.className='rank-card'+(rank===1?' top1':'');card.dataset.id=c.name;const mk=['costOfLiving','education','healthcare','sustainability'];const mb=mk.map(k=>`<div class="mini-bar"><span class="mini-bar-label">${k.slice(0,6)}</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${c.scores[k]}%"></div></div></div>`).join('');const met=Object.entries(c.scores).map(([k,v])=>{const p=INDEX_PILLARS.find(p=>p.key===k);return`<div class="detail-metric"><div class="dm-label">${p?p.icon:''} ${p?(p.title[lang]||p.title.en):k}</div><div class="dm-val">${v}</div><div class="dm-sub">/100</div></div>`}).join('');card.innerHTML=`<div class="rank-num ${rank===1?'gold':''}">${rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':rank}</div><div class="rank-info"><h3>${c.name}</h3><div class="rank-meta"><span>📍 ${c.canton}</span><span>🏘 ${c.type}</span><span>👥 ${c.pop.toLocaleString()}</span><span>💰 ${c.landPrice} ${getT('cost')}</span></div><div style="margin-top:8px;">${mb}</div></div><div class="rank-right"><div class="score-big">${c.score}</div><div class="score-label">${getT('score')}</div></div><div class="detail-panel"><div class="detail-grid">${met}</div><div class="detail-actions"><button class="action-btn primary" onclick="event.stopPropagation();askAI('Tell me about buying land in ${c.name}')">${getT('detailBuy')}</button><button class="action-btn" onclick="event.stopPropagation();askAI('What is the rental market like in ${c.name}?')">${getT('detailRent')}</button><button class="action-btn" onclick="event.stopPropagation();addToCompare('${c.name}')">${getT('detailSave')}</button><button class="action-btn" onclick="event.stopPropagation();askAI('Give me a full community profile of ${c.name} including pros and cons')">${getT('detailMore')}</button></div></div>`;card.addEventListener('click',()=>{const was=card.classList.contains('expanded');document.querySelectorAll('.rank-card.expanded').forEach(el=>el.classList.remove('expanded'));if(!was)card.classList.add('expanded')});g.appendChild(card)})}
+function filterCommunities(){renderRanking()}
+function setChip(el,f){currentFilter=f;document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderRanking()}
+function renderIndexPillars(){const g=document.getElementById('index-grid');g.innerHTML='';INDEX_PILLARS.forEach(p=>{const c=document.createElement('div');c.className='index-card';c.innerHTML=`<div class="index-icon">${p.icon}</div><h4>${p.title[lang]||p.title.en}</h4><p>${p.desc[lang]||p.desc.en}</p><div class="index-weight">Default weight: ${p.weight}</div>`;g.appendChild(c)})}
+function showCmpSuggestions(){const q=document.getElementById('cmp-search').value.toLowerCase();const d=document.getElementById('cmp-suggestions');if(!q){d.style.display='none';return}const m=COMMUNITIES.filter(c=>c.name.toLowerCase().includes(q)&&!cmpSelected.includes(c.name));d.style.display=m.length?'block':'none';d.innerHTML=m.map(c=>`<div style="padding:10px 16px;cursor:pointer;font-size:14px;border-bottom:1px solid var(--border);" onmouseover="this.style.background='var(--paper)'" onmouseout="this.style.background=''" onclick="selectCmpItem('${c.name}')">${c.name} <span style="color:var(--ink3);font-size:12px;">${c.canton}</span></div>`).join('')}
+function selectCmpItem(n){document.getElementById('cmp-search').value=n;document.getElementById('cmp-suggestions').style.display='none'}
+function addSelectedToCompare(){const n=document.getElementById('cmp-search').value.trim();addToCompare(n);document.getElementById('cmp-search').value=''}
+function addToCompare(n){if(!n)return;const c=COMMUNITIES.find(c=>c.name===n);if(!c){showToast('Community not found');return}if(cmpSelected.includes(n)){showToast('Already in comparison');return}if(cmpSelected.length>=4){showToast('Max 4 communities');return}cmpSelected.push(n);renderCompare();showToast(n+' added')}
+function removeFromCompare(n){cmpSelected=cmpSelected.filter(x=>x!==n);renderCompare()}
+function renderCompare(){const sel=document.getElementById('cmp-selected');sel.innerHTML=cmpSelected.map(n=>`<span style="background:var(--green3);color:var(--green);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;" onclick="removeFromCompare('${n}')">${n} ×</span>`).join('');const g=document.getElementById('compare-grid');if(!cmpSelected.length){g.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--ink3);font-size:14px;">Add communities above to compare</div>`;return}const cs=cmpSelected.map(n=>COMMUNITIES.find(c=>c.name===n)).filter(Boolean);g.innerHTML=cs.map(c=>{const sc=calcScore(c);const rows=INDEX_PILLARS.map(p=>{const v=c.scores[p.key];const cl=v>=80?'badge-green':v>=60?'badge-gold':'badge-red';return`<div class="compare-row"><span class="compare-row-label">${p.icon} ${p.title[lang]||p.title.en}</span><span class="badge ${cl}">${v}</span></div>`}).join('');return`<div class="compare-card"><h4>${c.name} <span style="color:var(--green);font-family:'Fraunces',serif;">${sc}</span></h4><div style="font-size:11px;color:var(--ink3);margin-bottom:10px;">${c.canton} · ${c.type} · ${c.landPrice} ${getT('cost')}</div>${rows}</div>`}).join('');const wrap=document.getElementById('cmp-chart-wrap');wrap.style.display=cs.length>=2?'block':'none';if(cs.length>=2)renderRadar(cs)}
+function renderRadar(cs){if(cmpChart){cmpChart.destroy();cmpChart=null}const labels=INDEX_PILLARS.map(p=>p.title[lang]||p.title.en);const colors=['#2d5a27','#c8960c','#1a3a5c','#8b2020'];const datasets=cs.map((c,i)=>({label:c.name,data:INDEX_PILLARS.map(p=>c.scores[p.key]),borderColor:colors[i],backgroundColor:colors[i]+'22',borderWidth:2,pointRadius:3}));cmpChart=new Chart(document.getElementById('cmpChart'),{type:'radar',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,ticks:{stepSize:20,font:{size:9}},pointLabels:{font:{size:10}}}},plugins:{legend:{display:true,labels:{font:{size:11}}}}}})}
+const CHAT=[];
+async function sendAI(){const input=document.getElementById('ai-input');const msg=input.value.trim();if(!msg)return;input.value='';showPage('ai');appendChat('user',msg);const tid=appendChat('assistant',null);const btn=document.getElementById('ai-send-btn');btn.disabled=true;const top=getSorted().slice(0,5).map(c=>`${c.name} (score:${c.score}, land:${c.landPrice} CHF/m², canton:${c.canton})`).join(', ');const sys=`You are CommunaRank, an expert AI advisor for Swiss real estate and community living. You help people understand Swiss communities, land purchase, rental markets, and quality of life. Top communities right now: ${top}. Be helpful, concise (3-5 sentences), cite Swiss facts. Respond in ${lang==='fr'?'French':lang==='de'?'German':lang==='it'?'Italian':'English'}.`;const messages=[...CHAT.slice(-6),{role:'user',content:msg}];try{const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages})});const data=await res.json();const reply=data.content?.map(b=>b.text||'').join('')||'Sorry, could not get a response.';updateChat(tid,reply);CHAT.push({role:'user',content:msg},{role:'assistant',content:reply})}catch(e){updateChat(tid,'Connection error. Please try again.')}btn.disabled=false}
+let chatN=0;
+function appendChat(role,text){const id='msg-'+(++chatN);const h=document.getElementById('ai-chat-history');const d=document.createElement('div');d.id=id;d.style.cssText=`display:flex;justify-content:${role==='user'?'flex-end':'flex-start'};`;d.innerHTML=`<div style="max-width:80%;padding:10px 14px;border-radius:${role==='user'?'12px 12px 4px 12px':'12px 12px 12px 4px'};background:${role==='user'?'var(--green2)':'rgba(255,255,255,0.1)'};color:${role==='user'?'white':'rgba(245,242,235,0.9)'};font-size:14px;line-height:1.6;" id="${id}-text">${text===null?'<span class="ai-thinking"><span></span><span></span><span></span></span>':text}</div>`;h.appendChild(d);h.scrollTop=h.scrollHeight;return id}
+function updateChat(id,text){const el=document.getElementById(id+'-text');if(el)el.textContent=text}
+function askAI(q){document.getElementById('ai-input').value=q;showPage('ai');sendAI()}
+function renderQuickPrompts(){const ps=getT('quickPrompts')||[];const c=document.getElementById('ai-quick-prompts');c.innerHTML=ps.map(p=>`<button style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(245,242,235,0.8);padding:6px 12px;border-radius:20px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="document.getElementById('ai-input').value='${p.replace(/'/g,"\\'")}'">${p}</button>`).join('')}
+function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+n).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.id==='nb-'+n));if(n==='compare')renderCompare()}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+renderWeights();renderRanking();renderIndexPillars();renderQuickPrompts();applyTranslations();
+</script>
+</body>
+</html>
