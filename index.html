@@ -216,251 +216,7 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
   </div>
 </div>
 <div class="page" id="page-index">
-  <div class="section">
-
-    <!-- HEADER -->
-    <div class="section-header">
-      <h2 class="section-title">The CommunaRank Smart Community Index</h2>
-      <p class="section-sub">A transparent, data-driven methodology for evaluating every Swiss commune across 9 measurable dimensions</p>
-    </div>
-
-    <!-- HOW THE SCORE WORKS -->
-    <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:28px;margin-bottom:20px;">
-      <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:12px;">How the score is calculated</h3>
-      <p style="font-size:14px;color:var(--ink2);line-height:1.8;margin-bottom:16px;">Each commune receives a score from <strong>0 to 100</strong> on every dimension. The final composite score is a weighted average of all 9 dimensions. You can adjust the weights in the Ranking page to reflect your personal priorities — the ranking updates instantly.</p>
-      <div style="background:var(--paper);border-radius:var(--r);padding:16px;font-family:monospace;font-size:13px;color:var(--ink2);line-height:2;">
-        <div style="color:var(--green);font-weight:500;margin-bottom:4px;">Final Score formula:</div>
-        Score = (costOfLiving × w₁ + infrastructure × w₂ + education × w₃ + healthcare × w₄<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ energy × w₅ + sustainability × w₆ + food × w₇ + entertainment × w₈ + nature × w₉)<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;÷ (w₁ + w₂ + w₃ + w₄ + w₅ + w₆ + w₇ + w₈ + w₉)
-        <div style="margin-top:8px;color:var(--ink3);font-size:11px;">where w₁…w₉ are the user-defined weights (default: 20%, 15%, 15%, 12%, 10%, 10%, 8%, 5%, 5%)</div>
-      </div>
-    </div>
-
-    <!-- 9 DIMENSIONS -->
-    <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:28px;margin-bottom:20px;">
-      <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:6px;">The 9 dimensions explained</h3>
-      <p style="font-size:13px;color:var(--ink3);margin-bottom:20px;">For each dimension, we describe exactly what is measured, which data source is used, and how the 0–100 score is derived.</p>
-      <div style="display:flex;flex-direction:column;gap:0;">
-
-        <div style="border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <span style="font-size:20px;">💰</span>
-            <div>
-              <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:500;">Cost of Living</div>
-              <div style="font-size:11px;color:var(--green);font-weight:500;">Default weight: 20%</div>
-            </div>
-            <span style="margin-left:auto;background:var(--green3);color:var(--green);font-size:11px;padding:3px 10px;border-radius:4px;font-weight:500;">BFS + Tax Conference</span>
-          </div>
-          <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:8px;"><strong>What is measured:</strong> Residential land price (CHF/m²) and cantonal/municipal tax burden index.</p>
-          <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:8px;"><strong>How scored:</strong> Land price is scaled inversely — CHF 400/m² scores 100, CHF 5,000/m² scores ~10. Tax burden (0–72 index) is also inverted so lower taxes = higher score. The two sub-scores are combined 60/40.</p>
-          <p style="font-size:13px;color:var(--ink3);line-height:1.7;"><strong>Sources:</strong> Federal Statistical Office (BFS) residential land price statistics 2023–2024; Swiss Tax Conference (SSK) cantonal tax burden comparison 2024; Wüest Partner real estate index.</p>
-        </div>
-
-        <div style="border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <span style="font-size:20px;">🏗</span>
-            <div>
-              <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:500;">Infrastructure</div>
-              <div style="font-size:11px;color:var(--green);font-weight:500;">Default weight: 15%</div>
-            </div>
-            <span style="margin-left:auto;background:var(--green3);color:var(--green);font-size:11px;padding:3px 10px;border-radius:4px;font-weight:500;">OpenStreetMap + SBB</span>
-          </div>
-          <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:8px;"><strong>What is measured:</strong> Density of public transport stops (bus, tram, train) within 5km radius; proximity to railway stations; broadband coverage estimate by settlement type.</p>
-          <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:8px;"><strong>How scored:</strong> Bus stop density contributes 40pts (max at 20+ stops), rail access 30pts (max at 3+ stations), broadband 15pts (urban = full score), base quality 15pts.</p>
-          <p style="font-size:13px;color:var(--ink3);line-height:1.7;"><strong>Sources:</strong> OpenStreetMap Overpass API (live infrastructure counts); SBB open timetable data; Swiss Federal Office of Communications (BAKOM) broadband atlas.</p>
-        </div>
-
-        <div style="border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <span style="font-size:20px;">📚</span>
-            <div>
-              <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:500;">Education</div>
-              <div style="font-size:11px;color:var(--green);font-weight:500;">Default weight: 15%</div>
-            </div>
-            <span style="margin-left:auto;background:var(--green3);color:var(--green);font-size:11px;padding:3px 10px;border-radius:4px;font-weight:500;">OpenStreetMap + EDK</span>
-          </div>
-          <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:8px;"><strong>What is measured:</strong> Number of schools, universities, and colleges within 5km; availability of international schools; childcare infrastructure.</p>
-          <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:8px;"><strong>How scored:</strong> School density contributes 70pts (max at 8+ institutions); Switzerland's baseline educational quality adds a +15pt floor for all communes since Swiss schools consistently rank among Europe's best.</p>
-          <p style="font-size:13px;color:var(--ink3);line-height:1.7;"><strong>Sources:</strong> OpenStreetMap educational facilities; Swiss Conference of Cantonal Ministers of Education (EDK); PISA Switzerland results; cantonal school directories.</p>
-        </div>
-
-        <div style="border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <span style="font-size:20px;">🏥</span>
-            <div>
-              <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:500;">Healthcare</div>
-              <div style="font-size:11px;color:var(--green);font-weight:500;">Default weight: 12%</div>
-            </div>
-            <span style="margin-left:auto;background:var(--green3);color:var(--green);font-size:11px;padding:3px 10px;border-radius:4px;font-weight:500;">OpenStreetMap + GDK</span>
-          </div>
-          <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:8px;"><strong>What is measured:</strong> Hospital and clinic proximity; GP and specialist density; pharmacy access within 5km radius.</p>
-          <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:8px;"><strong>How scored:</strong> Hospital proximity 50pts (max at 3+ hospitals); pharmacy density 30pts (max at 10+ pharmacies); baseline Swiss healthcare quality floor of +15pts applied to all communes.</p>
-          <p style="font-size:13px;color:var(--ink3);line-height:1.7;"><strong>Sources:</strong> OpenStreetMap medical facilities; Swiss Conference of Cantonal Health Directors (GDK) hospital register; Federal Office of Public Health (FOPH) healthcare statistics.</p>
-        </div>
-
-        <div style="border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <span style="font-size:20px;">⚡</span>
-            <div>
-              <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:500;">Energy & Utilities</div>
-              <div style="font-size:11px;color:var(--green);font-weight:500;">Default weight: 10%</div>
-            </div>
-            <span style="margin-left:auto;background:#e8f0ff;color:#1a3a5c;font-size:11px;padding:3px 10px;border-radius:4px;font-weight:500;">ELCOM (official)</span>
-          </div>
-          <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:8px;"><strong>What is measured:</strong> Electricity tariff per kWh for a standard household (H4 profile: 4,500 kWh/year); share of renewable energy in cantonal mix.</p>
-          <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:8px;"><strong>How scored:</strong> Tariff is inversely scaled — CHF 0.190/kWh = 100pts, CHF 0.260/kWh = ~65pts. Cantons with majority hydropower (Valais, Uri, Graubünden, Glarus) receive +10pt renewable bonus.</p>
-          <p style="font-size:13px;color:var(--ink3);line-height:1.7;"><strong>Sources:</strong> <a href="https://www.elcom.admin.ch" target="_blank" style="color:var(--green);">ELCOM (Swiss Federal Electricity Commission)</a> — official annual tariff database covering all Swiss grid operators, published each October for the following year. 2024 tariff data used.</p>
-        </div>
-
-        <div style="border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <span style="font-size:20px;">🌿</span>
-            <div>
-              <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:500;">Sustainability</div>
-              <div style="font-size:11px;color:var(--green);font-weight:500;">Default weight: 10%</div>
-            </div>
-            <span style="margin-left:auto;background:var(--green3);color:var(--green);font-size:11px;padding:3px 10px;border-radius:4px;font-weight:500;">OSM + BAFU</span>
-          </div>
-          <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:8px;"><strong>What is measured:</strong> Green spaces and parks per capita; EV charging station density; settlement type sustainability bonus (alpine and rural communes score higher for low environmental footprint).</p>
-          <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:8px;"><strong>How scored:</strong> Parks density 35pts; EV infrastructure 25pts; settlement type bonus (Alpine: +30, Rural: +25, Suburban: +20, Urban: +15); base 10pts.</p>
-          <p style="font-size:13px;color:var(--ink3);line-height:1.7;"><strong>Sources:</strong> OpenStreetMap green spaces and EV chargers; Swiss Federal Office for the Environment (BAFU) biodiversity and air quality data; ARE urban/rural typology classification.</p>
-        </div>
-
-        <div style="border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <span style="font-size:20px;">🛒</span>
-            <div>
-              <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:500;">Food & Commerce</div>
-              <div style="font-size:11px;color:var(--green);font-weight:500;">Default weight: 8%</div>
-            </div>
-            <span style="margin-left:auto;background:var(--green3);color:var(--green);font-size:11px;padding:3px 10px;border-radius:4px;font-weight:500;">OpenStreetMap</span>
-          </div>
-          <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:8px;"><strong>What is measured:</strong> Supermarket and convenience store density; restaurant and café variety; farmers market and specialty shop presence within 5km.</p>
-          <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:8px;"><strong>How scored:</strong> Supermarket density 50pts (max at 15+ shops); restaurant/café density 35pts (max at 30+ venues); base 15pts.</p>
-          <p style="font-size:13px;color:var(--ink3);line-height:1.7;"><strong>Sources:</strong> OpenStreetMap retail and food service data, queried via the Overpass API with a 5km radius around each commune's centroid.</p>
-        </div>
-
-        <div style="border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <span style="font-size:20px;">🎭</span>
-            <div>
-              <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:500;">Entertainment</div>
-              <div style="font-size:11px;color:var(--green);font-weight:500;">Default weight: 5%</div>
-            </div>
-            <span style="margin-left:auto;background:var(--green3);color:var(--green);font-size:11px;padding:3px 10px;border-radius:4px;font-weight:500;">OpenStreetMap</span>
-          </div>
-          <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:8px;"><strong>What is measured:</strong> Cultural venues, nightlife, sports facilities, cinemas; settlement type bonus reflecting urban vibrancy.</p>
-          <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:8px;"><strong>How scored:</strong> Venue density 40pts; settlement bonus (Urban: +30, Alpine: +20 for winter sports, Suburban: +15, Rural: +5); base 10pts.</p>
-          <p style="font-size:13px;color:var(--ink3);line-height:1.7;"><strong>Sources:</strong> OpenStreetMap leisure, arts, and entertainment POIs within 5km radius.</p>
-        </div>
-
-        <div style="border:1px solid var(--border);border-radius:var(--r);padding:16px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <span style="font-size:20px;">🏔</span>
-            <div>
-              <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:500;">Nature Access</div>
-              <div style="font-size:11px;color:var(--green);font-weight:500;">Default weight: 5%</div>
-            </div>
-            <span style="margin-left:auto;background:var(--green3);color:var(--green);font-size:11px;padding:3px 10px;border-radius:4px;font-weight:500;">Swisstopo + BAFU</span>
-          </div>
-          <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:8px;"><strong>What is measured:</strong> Proximity to hiking trails, lakes, and rivers; air quality index; latitude-adjusted score (southern communes in Ticino and Valais receive a climate bonus).</p>
-          <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:8px;"><strong>How scored:</strong> Settlement type base (Alpine: 95, Rural: 85, Suburban: 65, Urban: 50); southern latitude bonus (+5pts for communes below 46.5°N).</p>
-          <p style="font-size:13px;color:var(--ink3);line-height:1.7;"><strong>Sources:</strong> Swisstopo topographic data; BAFU air quality monitoring network; Swiss hiking trail federation (Schweizer Wanderwege) trail density data.</p>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- DATA SOURCES -->
-    <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:28px;margin-bottom:20px;">
-      <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:6px;">Official data sources</h3>
-      <p style="font-size:13px;color:var(--ink3);margin-bottom:20px;">All data is sourced exclusively from official Swiss government bodies and internationally recognized open data providers.</p>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;">
-
-        <div style="border:1px solid var(--border);border-radius:var(--r);padding:16px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <div style="background:var(--green3);color:var(--green);font-family:'Fraunces',serif;font-size:18px;font-weight:500;padding:8px 12px;border-radius:6px;">BFS/OFS</div>
-            <div style="font-size:12px;font-weight:500;">Federal Statistical Office</div>
-          </div>
-          <p style="font-size:12px;color:var(--ink3);line-height:1.6;">Switzerland's national statistics authority. Provides population data, housing statistics, income levels, and commune registers. Data updated annually.</p>
-          <a href="https://www.bfs.admin.ch" target="_blank" style="font-size:11px;color:var(--green);text-decoration:none;">bfs.admin.ch →</a>
-        </div>
-
-        <div style="border:1px solid var(--border);border-radius:var(--r);padding:16px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <div style="background:#e8f0ff;color:#1a3a5c;font-family:'Fraunces',serif;font-size:18px;font-weight:500;padding:8px 12px;border-radius:6px;">ELCOM</div>
-            <div style="font-size:12px;font-weight:500;">Electricity Commission</div>
-          </div>
-          <p style="font-size:12px;color:var(--ink3);line-height:1.6;">Swiss Federal Electricity Commission. Publishes official electricity tariffs for every grid operator in Switzerland. Data updated annually each October.</p>
-          <a href="https://www.elcom.admin.ch" target="_blank" style="font-size:11px;color:var(--green);text-decoration:none;">elcom.admin.ch →</a>
-        </div>
-
-        <div style="border:1px solid var(--border);border-radius:var(--r);padding:16px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <div style="background:var(--gold2);color:#7a5a00;font-family:'Fraunces',serif;font-size:18px;font-weight:500;padding:8px 12px;border-radius:6px;">OSM</div>
-            <div style="font-size:12px;font-weight:500;">OpenStreetMap</div>
-          </div>
-          <p style="font-size:12px;color:var(--ink3);line-height:1.6;">The world's largest open geographic database. Used to count infrastructure density: hospitals, schools, shops, transport stops, parks, and EV chargers within each commune's radius.</p>
-          <a href="https://www.openstreetmap.org" target="_blank" style="font-size:11px;color:var(--green);text-decoration:none;">openstreetmap.org →</a>
-        </div>
-
-        <div style="border:1px solid var(--border);border-radius:var(--r);padding:16px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <div style="background:var(--green3);color:var(--green);font-family:'Fraunces',serif;font-size:18px;font-weight:500;padding:8px 12px;border-radius:6px;">SSK</div>
-            <div style="font-size:12px;font-weight:500;">Swiss Tax Conference</div>
-          </div>
-          <p style="font-size:12px;color:var(--ink3);line-height:1.6;">The Swiss Tax Conference (Schweizerische Steuerkonferenz) publishes annual cantonal tax burden comparisons used for our Cost of Living dimension.</p>
-          <a href="https://www.ssk-csi.ch" target="_blank" style="font-size:11px;color:var(--green);text-decoration:none;">ssk-csi.ch →</a>
-        </div>
-
-        <div style="border:1px solid var(--border);border-radius:var(--r);padding:16px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <div style="background:var(--green3);color:var(--green);font-family:'Fraunces',serif;font-size:18px;font-weight:500;padding:8px 12px;border-radius:6px;">BAFU</div>
-            <div style="font-size:12px;font-weight:500;">Federal Environment Office</div>
-          </div>
-          <p style="font-size:12px;color:var(--ink3);line-height:1.6;">The Federal Office for the Environment provides air quality, biodiversity, and green space data used in the Sustainability and Nature Access dimensions.</p>
-          <a href="https://www.bafu.admin.ch" target="_blank" style="font-size:11px;color:var(--green);text-decoration:none;">bafu.admin.ch →</a>
-        </div>
-
-        <div style="border:1px solid var(--border);border-radius:var(--r);padding:16px;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-            <div style="background:var(--green3);color:var(--green);font-family:'Fraunces',serif;font-size:18px;font-weight:500;padding:8px 12px;border-radius:6px;">swisstopo</div>
-            <div style="font-size:12px;font-weight:500;">Federal Topography</div>
-          </div>
-          <p style="font-size:12px;color:var(--ink3);line-height:1.6;">Swisstopo provides official Swiss geographic data including commune boundaries, coordinates, altitude, and proximity to natural features like lakes and rivers.</p>
-          <a href="https://www.swisstopo.admin.ch" target="_blank" style="font-size:11px;color:var(--green);text-decoration:none;">swisstopo.admin.ch →</a>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- UPDATE CYCLE + DISCLAIMER -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
-      <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:20px;">
-        <h4 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:10px;">🔄 Data update cycle</h4>
-        <div style="font-size:13px;color:var(--ink2);line-height:1.8;">
-          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);"><span>Land prices</span><span style="font-weight:500;color:var(--green);">Annual (Q1)</span></div>
-          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);"><span>Electricity tariffs</span><span style="font-weight:500;color:var(--green);">Annual (Oct)</span></div>
-          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);"><span>Tax burden index</span><span style="font-weight:500;color:var(--green);">Annual</span></div>
-          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);"><span>OSM infrastructure</span><span style="font-weight:500;color:var(--green);">Quarterly</span></div>
-          <div style="display:flex;justify-content:space-between;padding:4px 0;"><span>Current dataset</span><span style="font-weight:500;color:var(--green);">2024-Q4</span></div>
-        </div>
-      </div>
-      <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:20px;">
-        <h4 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:10px;">⚠️ Important disclaimer</h4>
-        <p style="font-size:13px;color:var(--ink2);line-height:1.7;">The CommunaRank index is provided for informational purposes only and does not constitute financial, legal, or real estate investment advice. Scores reflect general liveability indicators and should not be the sole basis for any property purchase decision. Always consult licensed professionals before buying land or property in Switzerland.</p>
-      </div>
-    </div>
-
-    <!-- FEEDBACK CTA -->
-    <div style="background:var(--ink);color:var(--paper);border-radius:var(--r2);padding:24px;text-align:center;">
-      <h4 style="font-family:'Fraunces',serif;font-size:16px;margin-bottom:8px;color:var(--paper);">Is your commune missing or incorrectly scored?</h4>
-      <p style="font-size:13px;color:rgba(245,242,235,0.65);margin-bottom:16px;">We welcome corrections and local knowledge. Help us improve the index for everyone.</p>
-      <button onclick="askAI('I want to suggest a correction or improvement for a community score in CommunaRank');showPage('ai')" style="background:var(--green2);color:white;border:none;padding:10px 24px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;">Suggest a correction via AI Advisor →</button>
-    </div>
-
-  </div>
+  <div class="section"></div>
 </div>
 <div class="page" id="page-ai">
   <div class="section">
@@ -506,7 +262,228 @@ function getSorted(){const q=(document.getElementById('search-input')?.value||''
 function renderRanking(){const g=document.getElementById('rank-grid');const s=getSorted();g.innerHTML='';s.forEach((c,i)=>{const rank=i+1;const card=document.createElement('div');card.className='rank-card'+(rank===1?' top1':'');card.dataset.id=c.name;const mk=['costOfLiving','education','healthcare','sustainability'];const mb=mk.map(k=>`<div class="mini-bar"><span class="mini-bar-label">${k.slice(0,6)}</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${c.scores[k]}%"></div></div></div>`).join('');const met=Object.entries(c.scores).map(([k,v])=>{const p=INDEX_PILLARS.find(p=>p.key===k);return`<div class="detail-metric"><div class="dm-label">${p?p.icon:''} ${p?(p.title[lang]||p.title.en):k}</div><div class="dm-val">${v}</div><div class="dm-sub">/100</div></div>`}).join('');card.innerHTML=`<div class="rank-num ${rank===1?'gold':''}">${rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':rank}</div><div class="rank-info"><h3>${c.name}</h3><div class="rank-meta"><span>📍 ${c.canton}</span><span>🏘 ${c.type}</span><span>👥 ${c.pop.toLocaleString()}</span><span>💰 ${c.landPrice} ${getT('cost')}</span></div><div style="margin-top:8px;">${mb}</div></div><div class="rank-right"><div class="score-big">${c.score}</div><div class="score-label">${getT('score')}</div></div><div class="detail-panel"><div class="detail-grid">${met}</div><div class="detail-actions"><button class="action-btn primary" onclick="event.stopPropagation();askAI('Tell me about buying land in ${c.name}')">${getT('detailBuy')}</button><button class="action-btn" onclick="event.stopPropagation();askAI('What is the rental market like in ${c.name}?')">${getT('detailRent')}</button><button class="action-btn" onclick="event.stopPropagation();addToCompare('${c.name}')">${getT('detailSave')}</button><button class="action-btn" onclick="event.stopPropagation();askAI('Give me a full community profile of ${c.name} including pros and cons')">${getT('detailMore')}</button></div></div>`;card.addEventListener('click',()=>{const was=card.classList.contains('expanded');document.querySelectorAll('.rank-card.expanded').forEach(el=>el.classList.remove('expanded'));if(!was)card.classList.add('expanded')});g.appendChild(card)})}
 function filterCommunities(){renderRanking()}
 function setChip(el,f){currentFilter=f;document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderRanking()}
-function renderIndexPillars(){const g=document.getElementById('index-grid');g.innerHTML='';INDEX_PILLARS.forEach(p=>{const c=document.createElement('div');c.className='index-card';c.innerHTML=`<div class="index-icon">${p.icon}</div><h4>${p.title[lang]||p.title.en}</h4><p>${p.desc[lang]||p.desc.en}</p><div class="index-weight">Default weight: ${p.weight}</div>`;g.appendChild(c)})}
+function renderIndexPillars(){
+const IDX={
+en:{
+  pageTitle:"The CommunaRank Smart Community Index",
+  pageSub:"A transparent, data-driven methodology for evaluating every Swiss commune across 9 measurable dimensions",
+  howTitle:"How the score is calculated",
+  howBody:"Each commune receives a score from <strong>0 to 100</strong> on every dimension. The final composite score is a weighted average of all 9 dimensions. You can adjust the weights in the Ranking page to reflect your personal priorities — the ranking updates instantly.",
+  formulaLabel:"Final Score formula:",
+  formulaNote:"where w₁…w₉ are the user-defined weights (default: 20%, 15%, 15%, 12%, 10%, 10%, 8%, 5%, 5%)",
+  dimTitle:"The 9 dimensions explained",
+  dimSub:"For each dimension, we describe exactly what is measured, which data source is used, and how the 0–100 score is derived.",
+  sourcesTitle:"Official data sources",
+  sourcesSub:"All data is sourced exclusively from official Swiss government bodies and internationally recognized open data providers.",
+  updateTitle:"Data update cycle",
+  disclaimerTitle:"⚠️ Important disclaimer",
+  disclaimerBody:"The CommunaRank index is provided for informational purposes only and does not constitute financial, legal, or real estate investment advice. Scores reflect general liveability indicators and should not be the sole basis for any property purchase decision. Always consult licensed professionals before buying land or property in Switzerland.",
+  feedbackTitle:"Is your commune missing or incorrectly scored?",
+  feedbackBody:"We welcome corrections and local knowledge. Help us improve the index for everyone.",
+  feedbackBtn:"Suggest a correction via AI Advisor →",
+  measured:"What is measured:",
+  scored:"How scored:",
+  sources:"Sources:",
+  dims:[
+    {icon:"💰",name:"Cost of Living",weight:"20%",source:"BFS + Tax Conference",measured:"Residential land price (CHF/m²) and cantonal/municipal tax burden index.",scored:"Land price scaled inversely — CHF 400/m² = 100pts, CHF 5,000/m² = ~10pts. Tax burden index inverted so lower taxes = higher score. Combined 60/40.",sources:"Federal Statistical Office (BFS) land price statistics 2023–2024; Swiss Tax Conference (SSK) cantonal tax burden comparison 2024; Wüest Partner real estate index."},
+    {icon:"🏗",name:"Infrastructure",weight:"15%",source:"OpenStreetMap + SBB",measured:"Density of public transport stops (bus, tram, train) within 5km; proximity to railway stations; broadband coverage estimate by settlement type.",scored:"Bus stop density: 40pts (max at 20+ stops); rail access: 30pts (max at 3+ stations); broadband: 15pts; base quality: 15pts.",sources:"OpenStreetMap Overpass API; SBB open timetable data; Swiss Federal Office of Communications (BAKOM) broadband atlas."},
+    {icon:"📚",name:"Education",weight:"15%",source:"OpenStreetMap + EDK",measured:"Number of schools, universities, and colleges within 5km; availability of international schools; childcare infrastructure.",scored:"School density: 70pts (max at 8+ institutions); Switzerland baseline educational quality adds +15pt floor for all communes.",sources:"OpenStreetMap educational facilities; Swiss Conference of Cantonal Ministers of Education (EDK); PISA Switzerland results."},
+    {icon:"🏥",name:"Healthcare",weight:"12%",source:"OpenStreetMap + GDK",measured:"Hospital and clinic proximity; GP and specialist density; pharmacy access within 5km radius.",scored:"Hospital proximity: 50pts (max at 3+ hospitals); pharmacy density: 30pts (max at 10+); Swiss healthcare quality baseline: +15pts.",sources:"OpenStreetMap medical facilities; Swiss Conference of Cantonal Health Directors (GDK) hospital register; FOPH healthcare statistics."},
+    {icon:"⚡",name:"Energy & Utilities",weight:"10%",source:"ELCOM (official)",measured:"Electricity tariff per kWh for standard household H4 profile (4,500 kWh/year); share of renewable energy in cantonal mix.",scored:"Tariff inversely scaled — CHF 0.190/kWh = 100pts, CHF 0.260/kWh = ~65pts. Majority-hydro cantons (Valais, Uri, Graubünden, Glarus) receive +10pt renewable bonus.",sources:"ELCOM (Swiss Federal Electricity Commission) — official annual tariff database covering all Swiss grid operators. 2024 tariff data used."},
+    {icon:"🌿",name:"Sustainability",weight:"10%",source:"OSM + BAFU",measured:"Green spaces and parks per capita; EV charging station density; settlement type sustainability bonus.",scored:"Parks density: 35pts; EV infrastructure: 25pts; settlement type bonus (Alpine +30, Rural +25, Suburban +20, Urban +15); base: 10pts.",sources:"OpenStreetMap green spaces and EV chargers; Swiss Federal Office for the Environment (BAFU); ARE urban/rural typology classification."},
+    {icon:"🛒",name:"Food & Commerce",weight:"8%",source:"OpenStreetMap",measured:"Supermarket and convenience store density; restaurant and café variety; specialty shops within 5km.",scored:"Supermarket density: 50pts (max at 15+ shops); restaurant/café density: 35pts (max at 30+ venues); base: 15pts.",sources:"OpenStreetMap retail and food service data, queried via Overpass API with 5km radius around each commune's centroid."},
+    {icon:"🎭",name:"Entertainment",weight:"5%",source:"OpenStreetMap",measured:"Cultural venues, nightlife, sports facilities, cinemas; settlement type bonus reflecting urban vibrancy.",scored:"Venue density: 40pts; settlement bonus (Urban +30, Alpine +20 for winter sports, Suburban +15, Rural +5); base: 10pts.",sources:"OpenStreetMap leisure, arts, and entertainment POIs within 5km radius."},
+    {icon:"🏔",name:"Nature Access",weight:"5%",source:"Swisstopo + BAFU",measured:"Proximity to hiking trails, lakes, rivers; air quality index; latitude-adjusted climate bonus.",scored:"Settlement type base (Alpine: 95, Rural: 85, Suburban: 65, Urban: 50); southern latitude bonus +5pts for communes below 46.5°N.",sources:"Swisstopo topographic data; BAFU air quality monitoring network; Swiss hiking trail federation trail density data."},
+  ],
+  updateRows:[["Land prices","Annual (Q1)"],["Electricity tariffs","Annual (Oct)"],["Tax burden index","Annual"],["OSM infrastructure","Quarterly"],["Current dataset","2024-Q4"]],
+  sourceCards:[
+    {abbr:"BFS/OFS",color:"var(--green3)",textColor:"var(--green)",name:"Federal Statistical Office",desc:"Switzerland's national statistics authority. Provides population data, housing statistics, income levels, and commune registers. Data updated annually.",url:"https://www.bfs.admin.ch",urlLabel:"bfs.admin.ch →"},
+    {abbr:"ELCOM",color:"#e8f0ff",textColor:"#1a3a5c",name:"Electricity Commission",desc:"Swiss Federal Electricity Commission. Publishes official electricity tariffs for every grid operator in Switzerland. Updated annually each October.",url:"https://www.elcom.admin.ch",urlLabel:"elcom.admin.ch →"},
+    {abbr:"OSM",color:"var(--gold2)",textColor:"#7a5a00",name:"OpenStreetMap",desc:"The world's largest open geographic database. Used to count infrastructure density: hospitals, schools, shops, transport stops, parks, and EV chargers.",url:"https://www.openstreetmap.org",urlLabel:"openstreetmap.org →"},
+    {abbr:"SSK",color:"var(--green3)",textColor:"var(--green)",name:"Swiss Tax Conference",desc:"Publishes annual cantonal tax burden comparisons used for our Cost of Living dimension.",url:"https://www.ssk-csi.ch",urlLabel:"ssk-csi.ch →"},
+    {abbr:"BAFU",color:"var(--green3)",textColor:"var(--green)",name:"Federal Environment Office",desc:"Provides air quality, biodiversity, and green space data used in Sustainability and Nature Access dimensions.",url:"https://www.bafu.admin.ch",urlLabel:"bafu.admin.ch →"},
+    {abbr:"swisstopo",color:"var(--green3)",textColor:"var(--green)",name:"Federal Topography",desc:"Official Swiss geographic data including commune boundaries, coordinates, altitude, and proximity to natural features.",url:"https://www.swisstopo.admin.ch",urlLabel:"swisstopo.admin.ch →"},
+  ]
+},
+fr:{
+  pageTitle:"L'indice CommunaRank Smart Community",
+  pageSub:"Une méthodologie transparente et basée sur les données pour évaluer chaque commune suisse selon 9 dimensions mesurables",
+  howTitle:"Comment le score est calculé",
+  howBody:"Chaque commune reçoit un score de <strong>0 à 100</strong> pour chaque dimension. Le score composite final est une moyenne pondérée des 9 dimensions. Vous pouvez ajuster les pondérations dans la page de classement selon vos priorités.",
+  formulaLabel:"Formule du score final:",
+  formulaNote:"où w₁…w₉ sont les pondérations définies par l'utilisateur (défaut: 20%, 15%, 15%, 12%, 10%, 10%, 8%, 5%, 5%)",
+  dimTitle:"Les 9 dimensions expliquées",
+  dimSub:"Pour chaque dimension, nous décrivons ce qui est mesuré, quelle source de données est utilisée et comment le score 0–100 est dérivé.",
+  sourcesTitle:"Sources de données officielles",
+  sourcesSub:"Toutes les données proviennent exclusivement d'organismes gouvernementaux suisses officiels et de fournisseurs de données ouvertes reconnus.",
+  updateTitle:"Cycle de mise à jour des données",
+  disclaimerTitle:"⚠️ Avertissement important",
+  disclaimerBody:"L'indice CommunaRank est fourni à titre informatif uniquement et ne constitue pas un conseil financier, juridique ou immobilier. Les scores reflètent des indicateurs généraux de qualité de vie et ne doivent pas être la seule base d'une décision d'achat immobilier. Consultez toujours des professionnels agréés avant d'acheter un terrain ou une propriété en Suisse.",
+  feedbackTitle:"Votre commune est manquante ou mal notée?",
+  feedbackBody:"Nous accueillons les corrections et les connaissances locales. Aidez-nous à améliorer l'indice.",
+  feedbackBtn:"Suggérer une correction via le conseiller IA →",
+  measured:"Ce qui est mesuré:",scored:"Comment noté:",sources:"Sources:",
+  dims:[
+    {icon:"💰",name:"Coût de vie",weight:"20%",source:"BFS + Conférence fiscale",measured:"Prix foncier résidentiel (CHF/m²) et indice de charge fiscale cantonale/communale.",scored:"Prix foncier inversement proportionnel — CHF 400/m² = 100pts, CHF 5'000/m² = ~10pts. Charge fiscale inversée: moins d'impôts = score plus élevé. Combiné 60/40.",sources:"Office fédéral de la statistique (OFS) 2023–2024; Conférence suisse des impôts (SSK) 2024; indice immobilier Wüest Partner."},
+    {icon:"🏗",name:"Infrastructure",weight:"15%",source:"OpenStreetMap + CFF",measured:"Densité des arrêts de transports publics dans un rayon de 5km; proximité des gares; couverture haut débit.",scored:"Densité arrêts: 40pts; accès ferroviaire: 30pts; haut débit: 15pts; qualité de base: 15pts.",sources:"API Overpass OpenStreetMap; données horaires CFF; atlas haut débit OFCOM."},
+    {icon:"📚",name:"Éducation",weight:"15%",source:"OpenStreetMap + CDIP",measured:"Nombre d'écoles, universités et collèges dans un rayon de 5km; écoles internationales; infrastructure de garde d'enfants.",scored:"Densité scolaire: 70pts; plancher qualité éducative suisse: +15pts pour toutes les communes.",sources:"Équipements scolaires OpenStreetMap; CDIP; résultats PISA Suisse."},
+    {icon:"🏥",name:"Santé",weight:"12%",source:"OpenStreetMap + CDS",measured:"Proximité hôpitaux et cliniques; densité médecins généralistes; accès aux pharmacies dans un rayon de 5km.",scored:"Proximité hôpitaux: 50pts; densité pharmacies: 30pts; plancher qualité sanitaire suisse: +15pts.",sources:"Équipements médicaux OpenStreetMap; registre hospitalier CDS; statistiques OFSP."},
+    {icon:"⚡",name:"Énergie & Services",weight:"10%",source:"ELCOM (officiel)",measured:"Tarif électrique par kWh pour un ménage standard (profil H4: 4'500 kWh/an); part d'énergie renouvelable.",scored:"Tarif inversement proportionnel. Cantons à majorité hydraulique (Valais, Uri, Grisons, Glaris): bonus +10pts.",sources:"ELCOM — base de données officielle des tarifs annuels. Données 2024."},
+    {icon:"🌿",name:"Durabilité",weight:"10%",source:"OSM + OFEV",measured:"Espaces verts par habitant; densité des bornes de recharge VE; bonus selon type d'établissement.",scored:"Espaces verts: 35pts; infrastructure VE: 25pts; bonus type (Alpin +30, Rural +25, Suburbain +20, Urbain +15); base: 10pts.",sources:"OpenStreetMap; Office fédéral de l'environnement (OFEV); classification ARE."},
+    {icon:"🛒",name:"Alimentation & Commerce",weight:"8%",source:"OpenStreetMap",measured:"Densité supermarchés et épiceries; variété restaurants et cafés; commerces spécialisés dans un rayon de 5km.",scored:"Densité supermarchés: 50pts; densité restaurants: 35pts; base: 15pts.",sources:"Données commerces et restauration OpenStreetMap, API Overpass, rayon 5km."},
+    {icon:"🎭",name:"Loisirs",weight:"5%",source:"OpenStreetMap",measured:"Lieux culturels, vie nocturne, équipements sportifs, cinémas; bonus selon type d'établissement.",scored:"Densité établissements: 40pts; bonus type (Urbain +30, Alpin +20, Suburbain +15, Rural +5); base: 10pts.",sources:"Points d'intérêt loisirs et arts OpenStreetMap, rayon 5km."},
+    {icon:"🏔",name:"Accès à la nature",weight:"5%",source:"Swisstopo + OFEV",measured:"Proximité sentiers de randonnée, lacs, rivières; indice qualité de l'air; bonus climatique latitude.",scored:"Base type (Alpin: 95, Rural: 85, Suburbain: 65, Urbain: 50); bonus latitude sud +5pts sous 46.5°N.",sources:"Données topographiques Swisstopo; réseau surveillance OFEV; fédération suisse de randonnée."},
+  ],
+  updateRows:[["Prix fonciers","Annuel (T1)"],["Tarifs électricité","Annuel (oct.)"],["Indice fiscal","Annuel"],["Infrastructure OSM","Trimestriel"],["Données actuelles","2024-T4"]],
+  sourceCards:[
+    {abbr:"OFS/BFS",color:"var(--green3)",textColor:"var(--green)",name:"Office fédéral de la statistique",desc:"Autorité nationale des statistiques suisses. Fournit données démographiques, statistiques de logement, revenus et registres des communes.",url:"https://www.bfs.admin.ch",urlLabel:"bfs.admin.ch →"},
+    {abbr:"ELCOM",color:"#e8f0ff",textColor:"#1a3a5c",name:"Commission fédérale de l'électricité",desc:"Publie les tarifs officiels de l'électricité pour chaque opérateur de réseau en Suisse. Mise à jour annuelle chaque octobre.",url:"https://www.elcom.admin.ch",urlLabel:"elcom.admin.ch →"},
+    {abbr:"OSM",color:"var(--gold2)",textColor:"#7a5a00",name:"OpenStreetMap",desc:"La plus grande base de données géographiques ouverte. Utilisée pour mesurer la densité d'infrastructures: hôpitaux, écoles, commerces, transports.",url:"https://www.openstreetmap.org",urlLabel:"openstreetmap.org →"},
+    {abbr:"SSK",color:"var(--green3)",textColor:"var(--green)",name:"Conférence suisse des impôts",desc:"Publie les comparaisons annuelles de la charge fiscale cantonale utilisées pour notre dimension Coût de vie.",url:"https://www.ssk-csi.ch",urlLabel:"ssk-csi.ch →"},
+    {abbr:"OFEV",color:"var(--green3)",textColor:"var(--green)",name:"Office fédéral de l'environnement",desc:"Fournit données sur la qualité de l'air, la biodiversité et les espaces verts pour les dimensions Durabilité et Nature.",url:"https://www.bafu.admin.ch",urlLabel:"bafu.admin.ch →"},
+    {abbr:"swisstopo",color:"var(--green3)",textColor:"var(--green)",name:"Topographie fédérale",desc:"Données géographiques officielles suisses: limites communales, coordonnées, altitude et proximité aux éléments naturels.",url:"https://www.swisstopo.admin.ch",urlLabel:"swisstopo.admin.ch →"},
+  ]
+},
+de:{
+  pageTitle:"Der CommunaRank Smart Community Index",
+  pageSub:"Eine transparente, datengestützte Methodik zur Bewertung aller Schweizer Gemeinden in 9 messbaren Dimensionen",
+  howTitle:"Wie der Score berechnet wird",
+  howBody:"Jede Gemeinde erhält in jeder Dimension einen Score von <strong>0 bis 100</strong>. Der endgültige Gesamtscore ist ein gewichteter Durchschnitt aller 9 Dimensionen. Sie können die Gewichtungen auf der Rankingseite anpassen.",
+  formulaLabel:"Formel für den Gesamtscore:",
+  formulaNote:"wobei w₁…w₉ die benutzerdefinierte Gewichtungen sind (Standard: 20%, 15%, 15%, 12%, 10%, 10%, 8%, 5%, 5%)",
+  dimTitle:"Die 9 Dimensionen erklärt",
+  dimSub:"Für jede Dimension beschreiben wir genau, was gemessen wird, welche Datenquelle verwendet wird und wie der Score 0–100 berechnet wird.",
+  sourcesTitle:"Offizielle Datenquellen",
+  sourcesSub:"Alle Daten stammen ausschließlich von offiziellen Schweizer Regierungsbehörden und international anerkannten Open-Data-Anbietern.",
+  updateTitle:"Datenaktualisierungszyklus",
+  disclaimerTitle:"⚠️ Wichtiger Haftungsausschluss",
+  disclaimerBody:"Der CommunaRank-Index dient ausschließlich zu Informationszwecken und stellt keine Finanz-, Rechts- oder Immobilienanlageberatung dar. Die Scores spiegeln allgemeine Lebensqualitätsindikatoren wider und sollten nicht die einzige Grundlage für Immobilienkaufentscheidungen sein. Konsultieren Sie stets lizenzierte Fachleute, bevor Sie Land oder Immobilien in der Schweiz kaufen.",
+  feedbackTitle:"Fehlt Ihre Gemeinde oder ist sie falsch bewertet?",
+  feedbackBody:"Wir freuen uns über Korrekturen und lokales Wissen. Helfen Sie uns, den Index für alle zu verbessern.",
+  feedbackBtn:"Korrektur über KI-Berater vorschlagen →",
+  measured:"Was gemessen wird:",scored:"Bewertung:",sources:"Quellen:",
+  dims:[
+    {icon:"💰",name:"Lebenshaltungskosten",weight:"20%",source:"BFS + Steuerkonferenz",measured:"Wohnbaulandpreis (CHF/m²) und kantonaler/kommunaler Steuerbelastungsindex.",scored:"Bodenpreis invers skaliert — CHF 400/m² = 100 Pkt, CHF 5'000/m² = ~10 Pkt. Steuerbelastung invertiert: niedrigere Steuern = höherer Score. Kombiniert 60/40.",sources:"Bundesamt für Statistik (BFS) Bodenpreisstatistik 2023–2024; Schweizerische Steuerkonferenz (SSK) 2024; Wüest Partner Immobilienindex."},
+    {icon:"🏗",name:"Infrastruktur",weight:"15%",source:"OpenStreetMap + SBB",measured:"Dichte der ÖV-Haltestellen im 5km-Radius; Nähe zu Bahnhöfen; Breitbandabdeckung nach Siedlungstyp.",scored:"Haltestellen-Dichte: 40 Pkt; Bahnzugang: 30 Pkt; Breitband: 15 Pkt; Basisqualität: 15 Pkt.",sources:"OpenStreetMap Overpass API; SBB Open-Fahrplandaten; BAKOM Breitbandatlas."},
+    {icon:"📚",name:"Bildung",weight:"15%",source:"OpenStreetMap + EDK",measured:"Anzahl Schulen, Universitäten und Fachhochschulen im 5km-Radius; internationale Schulen; Kinderbetreuungsinfrastruktur.",scored:"Schuldichte: 70 Pkt; Schweizer Bildungsqualitäts-Grundwert: +15 Pkt für alle Gemeinden.",sources:"OpenStreetMap Bildungseinrichtungen; EDK; PISA-Ergebnisse Schweiz."},
+    {icon:"🏥",name:"Gesundheitsversorgung",weight:"12%",source:"OpenStreetMap + GDK",measured:"Krankenhausnähe; Hausarzt- und Spezialistendichte; Apothekenzugang im 5km-Radius.",scored:"Krankenhausnähe: 50 Pkt; Apothekendichte: 30 Pkt; Schweizer Gesundheitsqualitäts-Grundwert: +15 Pkt.",sources:"OpenStreetMap medizinische Einrichtungen; GDK Spitalregister; BAG-Statistiken."},
+    {icon:"⚡",name:"Energie & Versorgung",weight:"10%",source:"ELCOM (offiziell)",measured:"Stromtarif pro kWh für Standardhaushalt H4 (4'500 kWh/Jahr); Anteil erneuerbarer Energie im Kantonsstrommix.",scored:"Tarif invers skaliert. Kantone mit Wasserkraftmehrheit (Wallis, Uri, Graubünden, Glarus): +10 Pkt Erneuerbarkeitsbonus.",sources:"ELCOM — offizielle jährliche Tarifdatenbank. Tarife 2024."},
+    {icon:"🌿",name:"Nachhaltigkeit",weight:"10%",source:"OSM + BAFU",measured:"Grünflächen pro Einwohner; E-Ladeinfrastrukturdichte; Nachhaltigkeitsbonus nach Siedlungstyp.",scored:"Parkdichte: 35 Pkt; E-Ladeinfrastruktur: 25 Pkt; Siedlungstyp-Bonus (Alpin +30, Ländlich +25, Vorstadt +20, Urban +15); Basis: 10 Pkt.",sources:"OpenStreetMap; BAFU; ARE Siedlungstypologie."},
+    {icon:"🛒",name:"Lebensmittel & Handel",weight:"8%",source:"OpenStreetMap",measured:"Supermarkt- und Ladendichte; Restaurant- und Café-Vielfalt; Spezialgeschäfte im 5km-Radius.",scored:"Supermarktdichte: 50 Pkt; Restaurant-/Café-Dichte: 35 Pkt; Basis: 15 Pkt.",sources:"OpenStreetMap Einzelhandels- und Gastronomiebetriebe, Overpass API, 5km-Radius."},
+    {icon:"🎭",name:"Freizeit",weight:"5%",source:"OpenStreetMap",measured:"Kultureinrichtungen, Nachtleben, Sportanlagen, Kinos; Bonus nach Siedlungstyp.",scored:"Einrichtungsdichte: 40 Pkt; Siedlungsbonus (Urban +30, Alpin +20, Vorstadt +15, Ländlich +5); Basis: 10 Pkt.",sources:"OpenStreetMap Freizeit-, Kunst- und Unterhaltungs-POI, 5km-Radius."},
+    {icon:"🏔",name:"Naturzugang",weight:"5%",source:"Swisstopo + BAFU",measured:"Nähe zu Wanderwegen, Seen, Flüssen; Luftqualitätsindex; breitengradunabhängiger Klimabonus.",scored:"Siedlungstyp-Basis (Alpin: 95, Ländlich: 85, Vorstadt: 65, Urban: 50); Südlagen-Bonus +5 Pkt unter 46.5°N.",sources:"Swisstopo topografische Daten; BAFU Luftqualitätsmessnetz; Schweizer Wanderwege Wegdichte."},
+  ],
+  updateRows:[["Bodenpreise","Jährlich (Q1)"],["Stromtarife","Jährlich (Okt.)"],["Steuerbelastungsindex","Jährlich"],["OSM-Infrastruktur","Quartalsweise"],["Aktueller Datensatz","2024-Q4"]],
+  sourceCards:[
+    {abbr:"BFS",color:"var(--green3)",textColor:"var(--green)",name:"Bundesamt für Statistik",desc:"Nationale Statistikbehörde der Schweiz. Liefert Bevölkerungsdaten, Wohnungsstatistiken, Einkommensniveaus und Gemeinderegister.",url:"https://www.bfs.admin.ch",urlLabel:"bfs.admin.ch →"},
+    {abbr:"ELCOM",color:"#e8f0ff",textColor:"#1a3a5c",name:"Eidg. Elektrizitätskommission",desc:"Veröffentlicht offizielle Stromtarife für alle Netzbetreiber in der Schweiz. Jährliche Aktualisierung im Oktober.",url:"https://www.elcom.admin.ch",urlLabel:"elcom.admin.ch →"},
+    {abbr:"OSM",color:"var(--gold2)",textColor:"#7a5a00",name:"OpenStreetMap",desc:"Die größte offene geografische Datenbank. Für die Messung der Infrastrukturdichte: Krankenhäuser, Schulen, Geschäfte, Haltestellen.",url:"https://www.openstreetmap.org",urlLabel:"openstreetmap.org →"},
+    {abbr:"SSK",color:"var(--green3)",textColor:"var(--green)",name:"Schweizerische Steuerkonferenz",desc:"Veröffentlicht jährliche kantonale Steuerbelastungsvergleiche für unsere Dimension Lebenshaltungskosten.",url:"https://www.ssk-csi.ch",urlLabel:"ssk-csi.ch →"},
+    {abbr:"BAFU",color:"var(--green3)",textColor:"var(--green)",name:"Bundesamt für Umwelt",desc:"Liefert Luftqualitäts-, Biodiversitäts- und Grünflächendaten für Nachhaltigkeit und Naturzugang.",url:"https://www.bafu.admin.ch",urlLabel:"bafu.admin.ch →"},
+    {abbr:"swisstopo",color:"var(--green3)",textColor:"var(--green)",name:"Bundesamt für Landestopografie",desc:"Offizielle Schweizer Geodaten: Gemeindegrenzen, Koordinaten, Höhenlagen und Naturnähe.",url:"https://www.swisstopo.admin.ch",urlLabel:"swisstopo.admin.ch →"},
+  ]
+},
+it:{
+  pageTitle:"L'indice CommunaRank Smart Community",
+  pageSub:"Una metodologia trasparente e basata sui dati per valutare ogni comune svizzero in 9 dimensioni misurabili",
+  howTitle:"Come viene calcolato il punteggio",
+  howBody:"Ogni comune riceve un punteggio da <strong>0 a 100</strong> per ogni dimensione. Il punteggio composito finale è una media ponderata di tutte le 9 dimensioni. Puoi regolare i pesi nella pagina di classifica.",
+  formulaLabel:"Formula del punteggio finale:",
+  formulaNote:"dove w₁…w₉ sono i pesi definiti dall'utente (predefiniti: 20%, 15%, 15%, 12%, 10%, 10%, 8%, 5%, 5%)",
+  dimTitle:"Le 9 dimensioni spiegate",
+  dimSub:"Per ogni dimensione descriviamo cosa viene misurato, quale fonte dati viene utilizzata e come viene derivato il punteggio 0–100.",
+  sourcesTitle:"Fonti di dati ufficiali",
+  sourcesSub:"Tutti i dati provengono esclusivamente da enti governativi svizzeri ufficiali e fornitori di dati aperti riconosciuti.",
+  updateTitle:"Ciclo di aggiornamento dei dati",
+  disclaimerTitle:"⚠️ Avvertenza importante",
+  disclaimerBody:"L'indice CommunaRank è fornito solo a scopo informativo e non costituisce consulenza finanziaria, legale o immobiliare. I punteggi riflettono indicatori generali di qualità della vita. Consultare sempre professionisti autorizzati prima di acquistare terreni o proprietà in Svizzera.",
+  feedbackTitle:"Il tuo comune manca o ha un punteggio errato?",
+  feedbackBody:"Accogliamo correzioni e conoscenze locali. Aiutaci a migliorare l'indice per tutti.",
+  feedbackBtn:"Suggerisci una correzione tramite il consulente IA →",
+  measured:"Cosa viene misurato:",scored:"Come si punteggia:",sources:"Fonti:",
+  dims:[
+    {icon:"💰",name:"Costo della vita",weight:"20%",source:"BFS + Conferenza fiscale",measured:"Prezzo del terreno residenziale (CHF/m²) e indice di carico fiscale cantonale/comunale.",scored:"Prezzo del terreno inversamente scalato — CHF 400/m² = 100pts, CHF 5'000/m² = ~10pts. Carico fiscale invertito. Combinato 60/40.",sources:"Ufficio federale di statistica (UST) 2023–2024; Conferenza svizzera delle imposte (SSK) 2024; indice immobiliare Wüest Partner."},
+    {icon:"🏗",name:"Infrastruttura",weight:"15%",source:"OpenStreetMap + FFS",measured:"Densità delle fermate dei trasporti pubblici entro 5km; prossimità alle stazioni ferroviarie; copertura banda larga.",scored:"Densità fermate: 40pts; accesso ferroviario: 30pts; banda larga: 15pts; qualità base: 15pts.",sources:"API Overpass OpenStreetMap; dati orari FFS; atlante banda larga UFCOM."},
+    {icon:"📚",name:"Istruzione",weight:"15%",source:"OpenStreetMap + CDPE",measured:"Numero di scuole, università e college entro 5km; scuole internazionali; infrastruttura per l'infanzia.",scored:"Densità scolastica: 70pts; punteggio base qualità istruzione svizzera: +15pts per tutti i comuni.",sources:"Strutture scolastiche OpenStreetMap; CDPE; risultati PISA Svizzera."},
+    {icon:"🏥",name:"Sanità",weight:"12%",source:"OpenStreetMap + CDS",measured:"Prossimità ospedali e cliniche; densità medici di base e specialisti; accesso a farmacie entro 5km.",scored:"Prossimità ospedali: 50pts; densità farmacie: 30pts; punteggio base sanità svizzera: +15pts.",sources:"Strutture mediche OpenStreetMap; registro ospedaliero CDS; statistiche UFSP."},
+    {icon:"⚡",name:"Energia & Servizi",weight:"10%",source:"ELCOM (ufficiale)",measured:"Tariffa elettrica per kWh per nucleo familiare standard H4 (4'500 kWh/anno); quota energia rinnovabile.",scored:"Tariffa inversamente scalata. Cantoni a maggioranza idroelettrica (Vallese, Uri, Grigioni, Glarona): +10pts bonus rinnovabili.",sources:"ELCOM — database ufficiale tariffe annuali. Dati 2024."},
+    {icon:"🌿",name:"Sostenibilità",weight:"10%",source:"OSM + UFAM",measured:"Spazi verdi pro capite; densità stazioni di ricarica EV; bonus sostenibilità per tipo di insediamento.",scored:"Densità parchi: 35pts; infrastruttura EV: 25pts; bonus tipo (Alpino +30, Rurale +25, Suburbano +20, Urbano +15); base: 10pts.",sources:"OpenStreetMap; Ufficio federale dell'ambiente (UFAM); classificazione ARE."},
+    {icon:"🛒",name:"Alimentari & Commercio",weight:"8%",source:"OpenStreetMap",measured:"Densità supermercati e negozi di convenienza; varietà ristoranti e caffè; negozi specializzati entro 5km.",scored:"Densità supermercati: 50pts; densità ristoranti/caffè: 35pts; base: 15pts.",sources:"Dati commercio e ristorazione OpenStreetMap, API Overpass, raggio 5km."},
+    {icon:"🎭",name:"Svago",weight:"5%",source:"OpenStreetMap",measured:"Luoghi culturali, vita notturna, impianti sportivi, cinema; bonus per tipo di insediamento.",scored:"Densità strutture: 40pts; bonus tipo (Urbano +30, Alpino +20, Suburbano +15, Rurale +5); base: 10pts.",sources:"POI svago, arti e intrattenimento OpenStreetMap, raggio 5km."},
+    {icon:"🏔",name:"Accesso natura",weight:"5%",source:"Swisstopo + UFAM",measured:"Prossimità a sentieri, laghi, fiumi; indice qualità aria; bonus climatico per latitudine.",scored:"Base tipo (Alpino: 95, Rurale: 85, Suburbano: 65, Urbano: 50); bonus latitudine sud +5pts sotto 46.5°N.",sources:"Dati topografici Swisstopo; rete monitoraggio UFAM; densità sentieri federazione escursionismo svizzero."},
+  ],
+  updateRows:[["Prezzi terreni","Annuale (T1)"],["Tariffe elettriche","Annuale (ott.)"],["Indice fiscale","Annuale"],["Infrastruttura OSM","Trimestrale"],["Dataset attuale","2024-T4"]],
+  sourceCards:[
+    {abbr:"UST/BFS",color:"var(--green3)",textColor:"var(--green)",name:"Ufficio federale di statistica",desc:"Autorità statistica nazionale svizzera. Fornisce dati demografici, statistiche abitative, livelli di reddito e registri comunali.",url:"https://www.bfs.admin.ch",urlLabel:"bfs.admin.ch →"},
+    {abbr:"ELCOM",color:"#e8f0ff",textColor:"#1a3a5c",name:"Commissione federale dell'energia elettrica",desc:"Pubblica le tariffe ufficiali dell'elettricità per ogni gestore di rete in Svizzera. Aggiornamento annuale ogni ottobre.",url:"https://www.elcom.admin.ch",urlLabel:"elcom.admin.ch →"},
+    {abbr:"OSM",color:"var(--gold2)",textColor:"#7a5a00",name:"OpenStreetMap",desc:"Il più grande database geografico aperto al mondo. Usato per misurare la densità infrastrutturale: ospedali, scuole, negozi, trasporti.",url:"https://www.openstreetmap.org",urlLabel:"openstreetmap.org →"},
+    {abbr:"SSK",color:"var(--green3)",textColor:"var(--green)",name:"Conferenza svizzera delle imposte",desc:"Pubblica confronti annuali del carico fiscale cantonale usati per la dimensione Costo della vita.",url:"https://www.ssk-csi.ch",urlLabel:"ssk-csi.ch →"},
+    {abbr:"UFAM",color:"var(--green3)",textColor:"var(--green)",name:"Ufficio federale dell'ambiente",desc:"Fornisce dati sulla qualità dell'aria, biodiversità e spazi verdi per le dimensioni Sostenibilità e Natura.",url:"https://www.bafu.admin.ch",urlLabel:"bafu.admin.ch →"},
+    {abbr:"swisstopo",color:"var(--green3)",textColor:"var(--green)",name:"Topografia federale",desc:"Dati geografici ufficiali svizzeri: confini comunali, coordinate, altitudine e prossimità a elementi naturali.",url:"https://www.swisstopo.admin.ch",urlLabel:"swisstopo.admin.ch →"},
+  ]
+}};
+const t=IDX[lang]||IDX.en;
+const dimsHTML=t.dims.map(d=>`
+<div style="border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+    <span style="font-size:20px;">${d.icon}</span>
+    <div><div style="font-family:'Fraunces',serif;font-size:15px;font-weight:500;">${d.name}</div><div style="font-size:11px;color:var(--green);font-weight:500;">${lang==='de'?'Standardgewichtung':'Default weight'}: ${d.weight}</div></div>
+    <span style="margin-left:auto;background:var(--green3);color:var(--green);font-size:11px;padding:3px 10px;border-radius:4px;font-weight:500;">${d.source}</span>
+  </div>
+  <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:6px;"><strong>${t.measured}</strong> ${d.measured}</p>
+  <p style="font-size:13px;color:var(--ink2);line-height:1.7;margin-bottom:6px;"><strong>${t.scored}</strong> ${d.scored}</p>
+  <p style="font-size:13px;color:var(--ink3);line-height:1.7;"><strong>${t.sources}</strong> ${d.sources}</p>
+</div>`).join('');
+const srcsHTML=t.sourceCards.map(s=>`
+<div style="border:1px solid var(--border);border-radius:var(--r);padding:16px;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+    <div style="background:${s.color};color:${s.textColor};font-family:'Fraunces',serif;font-size:16px;font-weight:500;padding:6px 10px;border-radius:6px;white-space:nowrap;">${s.abbr}</div>
+    <div style="font-size:12px;font-weight:500;">${s.name}</div>
+  </div>
+  <p style="font-size:12px;color:var(--ink3);line-height:1.6;margin-bottom:6px;">${s.desc}</p>
+  <a href="${s.url}" target="_blank" style="font-size:11px;color:var(--green);text-decoration:none;">${s.urlLabel}</a>
+</div>`).join('');
+const updRows=t.updateRows.map(r=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--ink2);"><span>${r[0]}</span><span style="font-weight:500;color:var(--green);">${r[1]}</span></div>`).join('');
+const pg=document.getElementById('page-index');
+pg.querySelector('.section').innerHTML=`
+<div class="section-header"><h2 class="section-title">${t.pageTitle}</h2><p class="section-sub">${t.pageSub}</p></div>
+<div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:28px;margin-bottom:20px;">
+  <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:12px;">${t.howTitle}</h3>
+  <p style="font-size:14px;color:var(--ink2);line-height:1.8;margin-bottom:16px;">${t.howBody}</p>
+  <div style="background:var(--paper);border-radius:var(--r);padding:16px;font-family:monospace;font-size:13px;color:var(--ink2);line-height:2;">
+    <div style="color:var(--green);font-weight:500;margin-bottom:4px;">${t.formulaLabel}</div>
+    Score = (costOfLiving × w₁ + infrastructure × w₂ + education × w₃ + healthcare × w₄<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ energy × w₅ + sustainability × w₆ + food × w₇ + entertainment × w₈ + nature × w₉)<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;÷ (w₁ + w₂ + w₃ + w₄ + w₅ + w₆ + w₇ + w₈ + w₉)
+    <div style="margin-top:8px;color:var(--ink3);font-size:11px;">${t.formulaNote}</div>
+  </div>
+</div>
+<div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:28px;margin-bottom:20px;">
+  <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:6px;">${t.dimTitle}</h3>
+  <p style="font-size:13px;color:var(--ink3);margin-bottom:20px;">${t.dimSub}</p>
+  ${dimsHTML}
+</div>
+<div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:28px;margin-bottom:20px;">
+  <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:6px;">${t.sourcesTitle}</h3>
+  <p style="font-size:13px;color:var(--ink3);margin-bottom:20px;">${t.sourcesSub}</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;">${srcsHTML}</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
+  <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:20px;">
+    <h4 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:10px;">🔄 ${t.updateTitle}</h4>
+    ${updRows}
+  </div>
+  <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:20px;">
+    <h4 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:10px;">${t.disclaimerTitle}</h4>
+    <p style="font-size:13px;color:var(--ink2);line-height:1.7;">${t.disclaimerBody}</p>
+  </div>
+</div>
+<div style="background:var(--ink);color:var(--paper);border-radius:var(--r2);padding:24px;text-align:center;">
+  <h4 style="font-family:'Fraunces',serif;font-size:16px;margin-bottom:8px;color:var(--paper);">${t.feedbackTitle}</h4>
+  <p style="font-size:13px;color:rgba(245,242,235,0.65);margin-bottom:16px;">${t.feedbackBody}</p>
+  <button onclick="askAI('I want to suggest a correction for a community score');showPage('ai')" style="background:var(--green2);color:white;border:none;padding:10px 24px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;">${t.feedbackBtn}</button>
+</div>`;
+}
 function showCmpSuggestions(){const q=document.getElementById('cmp-search').value.toLowerCase();const d=document.getElementById('cmp-suggestions');if(!q){d.style.display='none';return}const m=COMMUNITIES.filter(c=>c.name.toLowerCase().includes(q)&&!cmpSelected.includes(c.name));d.style.display=m.length?'block':'none';d.innerHTML=m.map(c=>`<div style="padding:10px 16px;cursor:pointer;font-size:14px;border-bottom:1px solid var(--border);" onmouseover="this.style.background='var(--paper)'" onmouseout="this.style.background=''" onclick="selectCmpItem('${c.name}')">${c.name} <span style="color:var(--ink3);font-size:12px;">${c.canton}</span></div>`).join('')}
 function selectCmpItem(n){document.getElementById('cmp-search').value=n;document.getElementById('cmp-suggestions').style.display='none'}
 function addSelectedToCompare(){const n=document.getElementById('cmp-search').value.trim();addToCompare(n);document.getElementById('cmp-search').value=''}
