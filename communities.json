@@ -1,0 +1,1384 @@
+{
+  "meta": {
+    "version": "1.0",
+    "generated": "2024-Q4",
+    "sources": [
+      "BFS/FSO",
+      "ELCOM",
+      "OpenStreetMap"
+    ],
+    "totalCommunities": 50,
+    "license": "CC BY 4.0"
+  },
+  "communities": [
+    {
+      "name": "Zürich",
+      "bfsNumber": 261,
+      "canton": "Zurich (ZH)",
+      "type": "Urban",
+      "lat": 47.3769,
+      "lon": 8.5417,
+      "pop": 45000,
+      "landPrice": 3800,
+      "scores": {
+        "costOfLiving": 32,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 86,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 50
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Genève",
+      "bfsNumber": 6621,
+      "canton": "Geneva (GE)",
+      "type": "Urban",
+      "lat": 46.2044,
+      "lon": 6.1432,
+      "pop": 45000,
+      "landPrice": 4200,
+      "scores": {
+        "costOfLiving": 21,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 75,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 55
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Basel",
+      "bfsNumber": 2701,
+      "canton": "Basel (BS)",
+      "type": "Urban",
+      "lat": 47.5596,
+      "lon": 7.5886,
+      "pop": 45000,
+      "landPrice": 2800,
+      "scores": {
+        "costOfLiving": 42,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 80,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 50
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Bern",
+      "bfsNumber": 351,
+      "canton": "Bern (BE)",
+      "type": "Urban",
+      "lat": 46.9481,
+      "lon": 7.4474,
+      "pop": 45000,
+      "landPrice": 2200,
+      "scores": {
+        "costOfLiving": 51,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 82,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 50
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Lausanne",
+      "bfsNumber": 5586,
+      "canton": "Vaud (VD)",
+      "type": "Urban",
+      "lat": 46.5197,
+      "lon": 6.6323,
+      "pop": 45000,
+      "landPrice": 3100,
+      "scores": {
+        "costOfLiving": 38,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 81,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 50
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Winterthur",
+      "bfsNumber": 230,
+      "canton": "Zurich (ZH)",
+      "type": "Urban",
+      "lat": 47.5001,
+      "lon": 8.7238,
+      "pop": 45000,
+      "landPrice": 1800,
+      "scores": {
+        "costOfLiving": 58,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 86,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 50
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Luzern",
+      "bfsNumber": 1061,
+      "canton": "Lucerne (LU)",
+      "type": "Urban",
+      "lat": 47.0502,
+      "lon": 8.3093,
+      "pop": 45000,
+      "landPrice": 2600,
+      "scores": {
+        "costOfLiving": 50,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 90,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 50
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "St. Gallen",
+      "bfsNumber": 3203,
+      "canton": "St. Gallen (SG)",
+      "type": "Urban",
+      "lat": 47.4245,
+      "lon": 9.3767,
+      "pop": 45000,
+      "landPrice": 1400,
+      "scores": {
+        "costOfLiving": 68,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 87,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 50
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Lugano",
+      "bfsNumber": 5192,
+      "canton": "Ticino (TI)",
+      "type": "Urban",
+      "lat": 46.0037,
+      "lon": 8.9511,
+      "pop": 45000,
+      "landPrice": 2000,
+      "scores": {
+        "costOfLiving": 54,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 77,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 55
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Biel/Bienne",
+      "bfsNumber": 371,
+      "canton": "Bern (BE)",
+      "type": "Urban",
+      "lat": 47.1368,
+      "lon": 7.2467,
+      "pop": 45000,
+      "landPrice": 950,
+      "scores": {
+        "costOfLiving": 68,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 82,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 50
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Thun",
+      "bfsNumber": 942,
+      "canton": "Bern (BE)",
+      "type": "Urban",
+      "lat": 46.758,
+      "lon": 7.628,
+      "pop": 45000,
+      "landPrice": 1300,
+      "scores": {
+        "costOfLiving": 63,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 82,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 50
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Köniz",
+      "bfsNumber": 355,
+      "canton": "Bern (BE)",
+      "type": "Suburban",
+      "lat": 46.9267,
+      "lon": 7.4101,
+      "pop": 18000,
+      "landPrice": 1600,
+      "scores": {
+        "costOfLiving": 59,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 82,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "La Chaux-de-Fonds",
+      "bfsNumber": 6421,
+      "canton": "Neuchâtel (NE)",
+      "type": "Urban",
+      "lat": 47.1001,
+      "lon": 6.8262,
+      "pop": 45000,
+      "landPrice": 750,
+      "scores": {
+        "costOfLiving": 67,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 79,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 50
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Schaffhausen",
+      "bfsNumber": 2901,
+      "canton": "Schaffhausen (SH)",
+      "type": "Urban",
+      "lat": 47.6959,
+      "lon": 8.6317,
+      "pop": 45000,
+      "landPrice": 1200,
+      "scores": {
+        "costOfLiving": 69,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 87,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 50
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Fribourg",
+      "bfsNumber": 228,
+      "canton": "Fribourg (FR)",
+      "type": "Urban",
+      "lat": 46.8065,
+      "lon": 7.162,
+      "pop": 45000,
+      "landPrice": 1400,
+      "scores": {
+        "costOfLiving": 62,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 84,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 50
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Chur",
+      "bfsNumber": 3901,
+      "canton": "Graubünden (GR)",
+      "type": "Urban",
+      "lat": 46.8508,
+      "lon": 9.5329,
+      "pop": 45000,
+      "landPrice": 1500,
+      "scores": {
+        "costOfLiving": 69,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 100,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 50
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Vernier",
+      "bfsNumber": 6625,
+      "canton": "Geneva (GE)",
+      "type": "Suburban",
+      "lat": 46.2167,
+      "lon": 6.0833,
+      "pop": 18000,
+      "landPrice": 2800,
+      "scores": {
+        "costOfLiving": 39,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 75,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 70
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Uster",
+      "bfsNumber": 198,
+      "canton": "Zurich (ZH)",
+      "type": "Suburban",
+      "lat": 47.35,
+      "lon": 8.7167,
+      "pop": 18000,
+      "landPrice": 2200,
+      "scores": {
+        "costOfLiving": 53,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 86,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Sion",
+      "bfsNumber": 6266,
+      "canton": "Valais (VS)",
+      "type": "Urban",
+      "lat": 46.233,
+      "lon": 7.3598,
+      "pop": 45000,
+      "landPrice": 1100,
+      "scores": {
+        "costOfLiving": 67,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 100,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 55
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Emmen",
+      "bfsNumber": 1024,
+      "canton": "Lucerne (LU)",
+      "type": "Suburban",
+      "lat": 47.0833,
+      "lon": 8.3,
+      "pop": 18000,
+      "landPrice": 1300,
+      "scores": {
+        "costOfLiving": 67,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 90,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Küsnacht",
+      "bfsNumber": 157,
+      "canton": "Zurich (ZH)",
+      "type": "Suburban",
+      "lat": 47.3167,
+      "lon": 8.5833,
+      "pop": 18000,
+      "landPrice": 3800,
+      "scores": {
+        "costOfLiving": 32,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 86,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Zug",
+      "bfsNumber": 1711,
+      "canton": "Zug (ZG)",
+      "type": "Urban",
+      "lat": 47.166,
+      "lon": 8.516,
+      "pop": 45000,
+      "landPrice": 3200,
+      "scores": {
+        "costOfLiving": 54,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 96,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 50
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Nyon",
+      "bfsNumber": 5724,
+      "canton": "Vaud (VD)",
+      "type": "Urban",
+      "lat": 46.3833,
+      "lon": 6.2333,
+      "pop": 45000,
+      "landPrice": 2400,
+      "scores": {
+        "costOfLiving": 47,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 81,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 55
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Morges",
+      "bfsNumber": 5642,
+      "canton": "Vaud (VD)",
+      "type": "Urban",
+      "lat": 46.5167,
+      "lon": 6.5,
+      "pop": 45000,
+      "landPrice": 2100,
+      "scores": {
+        "costOfLiving": 51,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 81,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 50
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Rapperswil-Jona",
+      "bfsNumber": 3206,
+      "canton": "St. Gallen (SG)",
+      "type": "Suburban",
+      "lat": 47.2263,
+      "lon": 8.8182,
+      "pop": 18000,
+      "landPrice": 1700,
+      "scores": {
+        "costOfLiving": 64,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 87,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Davos",
+      "bfsNumber": 3851,
+      "canton": "Graubünden (GR)",
+      "type": "Alpine",
+      "lat": 46.8008,
+      "lon": 9.8355,
+      "pop": 5000,
+      "landPrice": 2200,
+      "scores": {
+        "costOfLiving": 60,
+        "infrastructure": 58,
+        "education": 68,
+        "healthcare": 60,
+        "energy": 100,
+        "sustainability": 73,
+        "food": 60,
+        "entertainment": 70,
+        "nature": 95
+      },
+      "tags": [
+        "nature"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Verbier",
+      "bfsNumber": 6243,
+      "canton": "Valais (VS)",
+      "type": "Alpine",
+      "lat": 46.0964,
+      "lon": 7.2278,
+      "pop": 5000,
+      "landPrice": 4500,
+      "scores": {
+        "costOfLiving": 22,
+        "infrastructure": 58,
+        "education": 68,
+        "healthcare": 60,
+        "energy": 100,
+        "sustainability": 73,
+        "food": 60,
+        "entertainment": 70,
+        "nature": 100
+      },
+      "tags": [
+        "nature"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Gruyères",
+      "bfsNumber": 261,
+      "canton": "Fribourg (FR)",
+      "type": "Rural",
+      "lat": 46.5833,
+      "lon": 7.0833,
+      "pop": 3500,
+      "landPrice": 750,
+      "scores": {
+        "costOfLiving": 71,
+        "infrastructure": 58,
+        "education": 68,
+        "healthcare": 60,
+        "energy": 84,
+        "sustainability": 68,
+        "food": 60,
+        "entertainment": 55,
+        "nature": 85
+      },
+      "tags": [
+        "nature"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Spiez",
+      "bfsNumber": 743,
+      "canton": "Bern (BE)",
+      "type": "Suburban",
+      "lat": 46.6833,
+      "lon": 7.6833,
+      "pop": 18000,
+      "landPrice": 1000,
+      "scores": {
+        "costOfLiving": 66,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 82,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Solothurn",
+      "bfsNumber": 2601,
+      "canton": "Solothurn (SO)",
+      "type": "Urban",
+      "lat": 47.2088,
+      "lon": 7.5323,
+      "pop": 45000,
+      "landPrice": 900,
+      "scores": {
+        "costOfLiving": 71,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 84,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 50
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Carouge",
+      "bfsNumber": 6612,
+      "canton": "Geneva (GE)",
+      "type": "Urban",
+      "lat": 46.1833,
+      "lon": 6.1333,
+      "pop": 45000,
+      "landPrice": 3500,
+      "scores": {
+        "costOfLiving": 30,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 75,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 55
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Aarau",
+      "bfsNumber": 4001,
+      "canton": "Aargau (AG)",
+      "type": "Urban",
+      "lat": 47.3925,
+      "lon": 8.04,
+      "pop": 45000,
+      "landPrice": 1500,
+      "scores": {
+        "costOfLiving": 66,
+        "infrastructure": 95,
+        "education": 95,
+        "healthcare": 95,
+        "energy": 85,
+        "sustainability": 85,
+        "food": 95,
+        "entertainment": 80,
+        "nature": 50
+      },
+      "tags": [
+        "family",
+        "sustainable",
+        "urban"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Frenkendorf",
+      "bfsNumber": 2762,
+      "canton": "Basel (BL)",
+      "type": "Suburban",
+      "lat": 47.5,
+      "lon": 7.7167,
+      "pop": 18000,
+      "landPrice": 1400,
+      "scores": {
+        "costOfLiving": 61,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 81,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Arlesheim",
+      "bfsNumber": 2761,
+      "canton": "Basel (BL)",
+      "type": "Suburban",
+      "lat": 47.4833,
+      "lon": 7.6167,
+      "pop": 18000,
+      "landPrice": 1900,
+      "scores": {
+        "costOfLiving": 55,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 81,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Riehen",
+      "bfsNumber": 2702,
+      "canton": "Basel (BS)",
+      "type": "Suburban",
+      "lat": 47.5833,
+      "lon": 7.65,
+      "pop": 18000,
+      "landPrice": 2800,
+      "scores": {
+        "costOfLiving": 42,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 80,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Küssnacht",
+      "bfsNumber": 1060,
+      "canton": "Schwyz (SZ)",
+      "type": "Suburban",
+      "lat": 47.0833,
+      "lon": 8.4333,
+      "pop": 18000,
+      "landPrice": 1600,
+      "scores": {
+        "costOfLiving": 72,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 94,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Wollerau",
+      "bfsNumber": 1145,
+      "canton": "Schwyz (SZ)",
+      "type": "Suburban",
+      "lat": 47.1833,
+      "lon": 8.7167,
+      "pop": 18000,
+      "landPrice": 3200,
+      "scores": {
+        "costOfLiving": 52,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 94,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Freienbach",
+      "bfsNumber": 1142,
+      "canton": "Schwyz (SZ)",
+      "type": "Suburban",
+      "lat": 47.2,
+      "lon": 8.75,
+      "pop": 18000,
+      "landPrice": 2800,
+      "scores": {
+        "costOfLiving": 57,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 94,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Muri bei Bern",
+      "bfsNumber": 356,
+      "canton": "Bern (BE)",
+      "type": "Suburban",
+      "lat": 46.9167,
+      "lon": 7.4833,
+      "pop": 18000,
+      "landPrice": 1800,
+      "scores": {
+        "costOfLiving": 56,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 82,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Binningen",
+      "bfsNumber": 2762,
+      "canton": "Basel (BL)",
+      "type": "Suburban",
+      "lat": 47.5333,
+      "lon": 7.5667,
+      "pop": 18000,
+      "landPrice": 2000,
+      "scores": {
+        "costOfLiving": 53,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 81,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Männedorf",
+      "bfsNumber": 155,
+      "canton": "Zurich (ZH)",
+      "type": "Suburban",
+      "lat": 47.2667,
+      "lon": 8.7167,
+      "pop": 18000,
+      "landPrice": 2300,
+      "scores": {
+        "costOfLiving": 52,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 86,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Thalwil",
+      "bfsNumber": 135,
+      "canton": "Zurich (ZH)",
+      "type": "Suburban",
+      "lat": 47.2833,
+      "lon": 8.5667,
+      "pop": 18000,
+      "landPrice": 2900,
+      "scores": {
+        "costOfLiving": 44,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 86,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Horgen",
+      "bfsNumber": 295,
+      "canton": "Zurich (ZH)",
+      "type": "Suburban",
+      "lat": 47.25,
+      "lon": 8.5833,
+      "pop": 18000,
+      "landPrice": 2400,
+      "scores": {
+        "costOfLiving": 50,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 86,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Volketswil",
+      "bfsNumber": 196,
+      "canton": "Zurich (ZH)",
+      "type": "Suburban",
+      "lat": 47.3833,
+      "lon": 8.75,
+      "pop": 18000,
+      "landPrice": 1800,
+      "scores": {
+        "costOfLiving": 58,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 86,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Muttenz",
+      "bfsNumber": 2774,
+      "canton": "Basel (BL)",
+      "type": "Suburban",
+      "lat": 47.5167,
+      "lon": 7.65,
+      "pop": 18000,
+      "landPrice": 1500,
+      "scores": {
+        "costOfLiving": 60,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 81,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Allschwil",
+      "bfsNumber": 2761,
+      "canton": "Basel (BL)",
+      "type": "Suburban",
+      "lat": 47.55,
+      "lon": 7.5333,
+      "pop": 18000,
+      "landPrice": 1600,
+      "scores": {
+        "costOfLiving": 58,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 81,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Kriens",
+      "bfsNumber": 1015,
+      "canton": "Lucerne (LU)",
+      "type": "Suburban",
+      "lat": 47.0333,
+      "lon": 8.2667,
+      "pop": 18000,
+      "landPrice": 1400,
+      "scores": {
+        "costOfLiving": 66,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 90,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Baar",
+      "bfsNumber": 1701,
+      "canton": "Zug (ZG)",
+      "type": "Suburban",
+      "lat": 47.1967,
+      "lon": 8.5233,
+      "pop": 18000,
+      "landPrice": 2400,
+      "scores": {
+        "costOfLiving": 64,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 96,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Steinhausen",
+      "bfsNumber": 1709,
+      "canton": "Zug (ZG)",
+      "type": "Suburban",
+      "lat": 47.1833,
+      "lon": 8.4833,
+      "pop": 18000,
+      "landPrice": 2200,
+      "scores": {
+        "costOfLiving": 67,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 96,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    },
+    {
+      "name": "Opfikon",
+      "bfsNumber": 66,
+      "canton": "Zurich (ZH)",
+      "type": "Suburban",
+      "lat": 47.4333,
+      "lon": 8.5667,
+      "pop": 18000,
+      "landPrice": 2600,
+      "scores": {
+        "costOfLiving": 48,
+        "infrastructure": 78,
+        "education": 95,
+        "healthcare": 89,
+        "energy": 86,
+        "sustainability": 90,
+        "food": 95,
+        "entertainment": 65,
+        "nature": 65
+      },
+      "tags": [
+        "family",
+        "sustainable"
+      ],
+      "dataSource": "OSM+ELCOM+BFS",
+      "lastUpdated": "2024-Q4"
+    }
+  ]
+}
