@@ -133,6 +133,7 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
     <button class="nav-btn active" onclick="showPage('ranking')" id="nb-ranking">Ranking</button>
     <button class="nav-btn" onclick="showPage('compare')" id="nb-compare">Compare</button>
     <button class="nav-btn" onclick="showPage('index')" id="nb-index">Our Index</button>
+    <button class="nav-btn" onclick="showPage('map')" id="nb-map">Map</button>
     <button class="nav-btn" onclick="showPage('ai')" id="nb-ai">AI Advisor</button>
   </div>
   <div class="lang-sel">
@@ -218,6 +219,33 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
 <div class="page" id="page-index">
   <div class="section"></div>
 </div>
+<div class="page" id="page-map">
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title" id="map-title">Community Map</h2>
+      <p class="section-sub" id="map-sub">Canton scores visualized — darker green means higher overall ranking</p>
+    </div>
+    <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:16px;">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;" id="map-dim-btns"></div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink3);">
+          <span id="map-legend-low" style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:2px;background:#e8f3e6;display:inline-block;border:1px solid #ccc;"></span>Lower</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:2px;background:#3d7a35;display:inline-block;"></span><span id="map-legend-high">Higher</span></span>
+        </div>
+      </div>
+      <div id="swiss-map-container" style="width:100%;min-height:380px;position:relative;">
+        <div id="map-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--ink3);">Loading map...</div>
+        <svg id="swiss-map" style="width:100%;display:block;"></svg>
+      </div>
+      <div id="map-tooltip" style="position:fixed;background:var(--ink);color:var(--paper);padding:10px 14px;border-radius:8px;font-size:13px;pointer-events:none;display:none;z-index:999;max-width:200px;"></div>
+    </div>
+    <!-- Community dots -->
+    <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:20px;">
+      <h4 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:14px;" id="map-communities-title">Communities in our index</h4>
+      <div id="map-community-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;"></div>
+    </div>
+  </div>
+</div>
 <div class="page" id="page-ai">
   <div class="section">
     <div class="section-header">
@@ -246,6 +274,8 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
 </footer>
 <div class="toast" id="toast"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
 <script>
 const T={en:{heroTag:"Switzerland's Community Intelligence Platform",heroTitle:"Find where you truly <em>belong</em> in Switzerland",heroSub:"Our proprietary Smart Community Index evaluates Swiss communities across 9 dimensions — from cost of living to sustainability — with more communes added quarterly.",heroCta1:"Explore Rankings",heroCta2:"Ask AI Advisor",hS1:"Communities ranked",hS2:"Index dimensions",hS3:"Cantons covered",hS4:"Languages",rankTitle:"Community Rankings",rankSub:"Ranked by the CommunaRank Smart Community Index. Adjust weights to personalize.",wTitle:"Personalize index weights",cmpTitle:"Side-by-side comparison",cmpSub:"Select up to 4 communities to compare",cmpAdd:"Add to compare",cmpChartTitle:"Radar comparison",idxTitle:"The CommunaRank Smart Community Index",idxSub:"Our proprietary methodology for evaluating Swiss communities across 9 pillars",idxMethodTitle:"Methodology",idxMethodBody:"The CommunaRank Smart Community Index aggregates publicly available Swiss federal data (OFS/FSO), cantonal statistics, OpenStreetMap infrastructure data, energy provider tariffs, and user-submitted data points.",ds1:"Federal Statistics Office",ds2:"OpenStreetMap data",ds3:"Electricity regulator",ds4:"Cantonal authorities",aiTitle:"CommunaRank AI — powered by Claude",aiPageTitle:"AI Community Advisor",aiPageSub:"Ask anything about Swiss communities, land purchase, costs, or lifestyle",chipAll:"All",chipFamily:"Family-friendly",chipAffordable:"Affordable",chipSustainable:"Sustainable",chipNature:"Near nature",chipUrban:"Urban lifestyle",quickPrompts:["Best communities under 800k CHF?","Where to live near Zurich with good schools?","Compare land prices Vaud vs Bern","Most sustainable alpine communities"],searchPlaceholder:"Search community, canton...",cmpSearchPlaceholder:"Add community to compare...",detailBuy:"Buy land here",detailRent:"Rental market",detailSave:"Save to wishlist",detailMore:"Full profile",cost:"CHF/m²",score:"Score"},fr:{heroTag:"Plateforme d'intelligence communautaire suisse",heroTitle:"Trouvez où vous <em>appartenir</em> vraiment en Suisse",heroSub:"Notre indice Smart Community évalue les communes suisses sur 9 dimensions — du coût de la vie à la durabilité.",heroCta1:"Explorer le classement",heroCta2:"Conseiller IA",hS1:"Communes classées",hS2:"Dimensions d'index",hS3:"Cantons couverts",hS4:"Langues",rankTitle:"Classement des communes",rankSub:"Classé selon l'indice CommunaRank. Ajustez les pondérations pour personnaliser.",wTitle:"Personnaliser les pondérations",cmpTitle:"Comparaison côte-à-côte",cmpSub:"Sélectionnez jusqu'à 4 communes à comparer",cmpAdd:"Ajouter à la comparaison",cmpChartTitle:"Comparaison radar",idxTitle:"L'indice CommunaRank Smart Community",idxSub:"Notre méthodologie propriétaire pour évaluer les communes suisses",idxMethodTitle:"Méthodologie",idxMethodBody:"L'indice agrège les données fédérales suisses disponibles (OFS), les statistiques cantonales, les données OpenStreetMap et les tarifs des fournisseurs d'énergie.",ds1:"Office fédéral des statistiques",ds2:"Données OpenStreetMap",ds3:"Régulateur de l'électricité",ds4:"Autorités cantonales",aiTitle:"CommunaRank IA — propulsé par Claude",aiPageTitle:"Conseiller IA communautaire",aiPageSub:"Posez des questions sur les communes, l'achat de terrain ou le mode de vie",chipAll:"Tous",chipFamily:"Familial",chipAffordable:"Abordable",chipSustainable:"Durable",chipNature:"Proche nature",chipUrban:"Vie urbaine",quickPrompts:["Meilleures communes < 800k CHF?","Vivre près de Genève avec bonnes écoles?","Comparer foncier Vaud vs Berne","Communes alpines durables"],searchPlaceholder:"Rechercher une commune...",cmpSearchPlaceholder:"Ajouter une commune...",detailBuy:"Acheter ici",detailRent:"Marché locatif",detailSave:"Sauvegarder",detailMore:"Profil complet",cost:"CHF/m²",score:"Score"},de:{heroTag:"Schweizer Gemeinschaft-Intelligenzplattform",heroTitle:"Finden Sie Ihr wahres <em>Zuhause</em> in der Schweiz",heroSub:"Unser Smart Community Index bewertet Schweizer Gemeinden in 9 Dimensionen — von Lebenshaltungskosten bis Nachhaltigkeit.",heroCta1:"Rangliste erkunden",heroCta2:"KI-Berater",hS1:"Bewertete Gemeinden",hS2:"Index-Dimensionen",hS3:"Abgedeckte Kantone",hS4:"Sprachen",rankTitle:"Gemeinderankings",rankSub:"Rangiert nach dem CommunaRank Smart Community Index. Gewichtungen anpassen.",wTitle:"Indexgewichtungen anpassen",cmpTitle:"Vergleich nebeneinander",cmpSub:"Bis zu 4 Gemeinden vergleichen",cmpAdd:"Zum Vergleich hinzufügen",cmpChartTitle:"Radar-Vergleich",idxTitle:"Der CommunaRank Smart Community Index",idxSub:"Unsere proprietäre Methodik zur Bewertung Schweizer Gemeinden",idxMethodTitle:"Methodik",idxMethodBody:"Der CommunaRank Smart Community Index aggregiert öffentlich zugängliche Schweizer Bundesdaten (BFS), kantonale Statistiken, OpenStreetMap-Infrastrukturdaten und Energietarife.",ds1:"Bundesamt für Statistik",ds2:"OpenStreetMap-Daten",ds3:"Stromregulator",ds4:"Kantonsbehörden",aiTitle:"CommunaRank KI — betrieben von Claude",aiPageTitle:"KI-Gemeinschaftsberater",aiPageSub:"Fragen zu Schweizer Gemeinden, Landkauf oder Lebensstil",chipAll:"Alle",chipFamily:"Familienfreundlich",chipAffordable:"Erschwinglich",chipSustainable:"Nachhaltig",chipNature:"Naturnahe",chipUrban:"Stadtleben",quickPrompts:["Beste Gemeinden unter 800k CHF?","Leben nahe Zürich mit guten Schulen?","Landpreise Waadt vs. Bern","Nachhaltige alpine Gemeinden"],searchPlaceholder:"Gemeinde, Kanton suchen...",cmpSearchPlaceholder:"Gemeinde hinzufügen...",detailBuy:"Land kaufen",detailRent:"Mietmarkt",detailSave:"Merkliste",detailMore:"Vollprofil",cost:"CHF/m²",score:"Punkte"},it:{heroTag:"Piattaforma di intelligenza comunitaria svizzera",heroTitle:"Trova dove <em>appartenere</em> davvero in Svizzera",heroSub:"Il nostro indice Smart Community valuta i comuni svizzeri su 9 dimensioni — dal costo della vita alla sostenibilità.",heroCta1:"Esplora le classifiche",heroCta2:"Consulente IA",hS1:"Comuni classificati",hS2:"Dimensioni indice",hS3:"Cantoni coperti",hS4:"Lingue",rankTitle:"Classifica dei comuni",rankSub:"Classificato secondo l'indice CommunaRank. Regola i pesi per personalizzare.",wTitle:"Personalizza i pesi dell'indice",cmpTitle:"Confronto affiancato",cmpSub:"Seleziona fino a 4 comuni da confrontare",cmpAdd:"Aggiungi al confronto",cmpChartTitle:"Confronto radar",idxTitle:"L'indice CommunaRank Smart Community",idxSub:"La nostra metodologia proprietaria per valutare i comuni svizzeri",idxMethodTitle:"Metodologia",idxMethodBody:"L'indice CommunaRank aggrega i dati federali svizzeri disponibili (UST), statistiche cantonali, dati infrastrutturali OpenStreetMap e tariffe energetiche.",ds1:"Ufficio federale di statistica",ds2:"Dati OpenStreetMap",ds3:"Regolatore energia",ds4:"Autorità cantonali",aiTitle:"CommunaRank IA — alimentato da Claude",aiPageTitle:"Consulente IA comunitario",aiPageSub:"Fai domande su comuni svizzeri, acquisto di terreni o stile di vita",chipAll:"Tutti",chipFamily:"Familiare",chipAffordable:"Conveniente",chipSustainable:"Sostenibile",chipNature:"Vicino natura",chipUrban:"Vita urbana",quickPrompts:["Migliori comuni < 800k CHF?","Vivere vicino Zurigo con buone scuole?","Prezzi terreni Vaud vs Berna","Comuni alpini sostenibili"],searchPlaceholder:"Cerca comune, cantone...",cmpSearchPlaceholder:"Aggiungi comune...",detailBuy:"Acquista terreno",detailRent:"Mercato affitti",detailSave:"Salva",detailMore:"Profilo completo",cost:"CHF/m²",score:"Punteggio"}};
 let lang='en',currentFilter='all',cmpSelected=[],cmpChart=null;
@@ -500,6 +530,309 @@ function askAI(q){document.getElementById('ai-input').value=q;showPage('ai');sen
 function renderQuickPrompts(){const ps=getT('quickPrompts')||[];const c=document.getElementById('ai-quick-prompts');c.innerHTML=ps.map(p=>`<button style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(245,242,235,0.8);padding:6px 12px;border-radius:20px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="document.getElementById('ai-input').value='${p.replace(/'/g,"\\'")}'">${p}</button>`).join('')}
 function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+n).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.id==='nb-'+n));if(n==='compare')renderCompare();if(n==='index')renderIndexPillars();}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+
+// ─── MAP ───────────────────────────────────────────────
+const MAP_T = {
+  en:{title:'Community Map',sub:'Canton scores — darker green means higher overall ranking',dimBtn:'Showing:',commTitle:'Communities in our index',loading:'Loading map...'},
+  fr:{title:'Carte des communes',sub:'Scores cantonaux — vert plus foncé = meilleur classement',dimBtn:'Affichage:',commTitle:'Communes dans notre index',loading:'Chargement...'},
+  de:{title:'Gemeindekarte',sub:'Kantonswerte — dunkleres Grün = höheres Ranking',dimBtn:'Anzeige:',commTitle:'Gemeinden in unserem Index',loading:'Lädt...'},
+  it:{title:'Mappa dei comuni',sub:'Punteggi cantonali — verde più scuro = ranking superiore',dimBtn:'Visualizzazione:',commTitle:'Comuni nel nostro indice',loading:'Caricamento...'}
+};
+
+const DIM_LABELS = {
+  overall:    {en:'Overall',fr:'Global',de:'Gesamt',it:'Globale'},
+  costOfLiving:{en:'Cost of Living',fr:'Coût de vie',de:'Lebenshaltung',it:'Costo vita'},
+  infrastructure:{en:'Infrastructure',fr:'Infrastructure',de:'Infrastruktur',it:'Infrastruttura'},
+  education:  {en:'Education',fr:'Éducation',de:'Bildung',it:'Istruzione'},
+  healthcare: {en:'Healthcare',fr:'Santé',de:'Gesundheit',it:'Sanità'},
+  energy:     {en:'Energy',fr:'Énergie',de:'Energie',it:'Energia'},
+  sustainability:{en:'Sustainability',fr:'Durabilité',de:'Nachhaltigkeit',it:'Sostenibilità'},
+  nature:     {en:'Nature',fr:'Nature',de:'Natur',it:'Natura'},
+};
+
+// Canton name → canton key mapping
+const CANTON_KEYS = {
+  'Zurich (ZH)':'ZH','Bern (BE)':'BE','Vaud (VD)':'VD','Geneva (GE)':'GE',
+  'Basel (BS)':'BS','Lucerne (LU)':'LU','St. Gallen (SG)':'SG','Aargau (AG)':'AG',
+  'Ticino (TI)':'TI','Valais (VS)':'VS','Fribourg (FR)':'FR','Graubünden (GR)':'GR',
+  'Solothurn (SO)':'SO','Basel (BL)':'BL','Schaffhausen (SH)':'SH','Schwyz (SZ)':'SZ',
+  'Zug (ZG)':'ZG','Neuchâtel (NE)':'NE','Thurgau (TG)':'TG','Glarus (GL)':'GL',
+  'Jura (JU)':'JU','Nidwalden (NW)':'NW','Obwalden (OW)':'OW','Uri (UR)':'UR',
+  'Appenzell Ausserrhoden (AR)':'AR','Appenzell Innerrhoden (AI)':'AI'
+};
+
+// Canton abbreviation → full display name
+const CANTON_NAMES = {
+  ZH:'Zürich',BE:'Bern',VD:'Vaud',GE:'Genève',BS:'Basel-Stadt',LU:'Luzern',
+  SG:'St. Gallen',AG:'Aargau',TI:'Ticino',VS:'Valais/Wallis',FR:'Fribourg',
+  GR:'Graubünden',SO:'Solothurn',BL:'Basel-Landschaft',SH:'Schaffhausen',
+  SZ:'Schwyz',ZG:'Zug',NE:'Neuchâtel',TG:'Thurgau',GL:'Glarus',
+  JU:'Jura',NW:'Nidwalden',OW:'Obwalden',UR:'Uri',AR:'Appenzell AR',AI:'Appenzell AI'
+};
+
+// Canton centroid coordinates (WGS84) for dot placement
+const CANTON_CENTROIDS = {
+  ZH:[47.41,8.65],BE:[46.95,7.45],VD:[46.57,6.53],GE:[46.22,6.10],
+  BS:[47.56,7.59],LU:[47.05,8.30],SG:[47.42,9.37],AG:[47.39,8.05],
+  TI:[46.33,8.80],VS:[46.20,7.53],FR:[46.80,7.15],GR:[46.66,9.58],
+  SO:[47.33,7.63],BL:[47.48,7.73],SH:[47.70,8.63],SZ:[47.02,8.65],
+  ZG:[47.17,8.52],NE:[46.99,6.93],TG:[47.55,9.05],GL:[46.98,9.07],
+  JU:[47.35,7.15],NW:[46.93,8.40],OW:[46.87,8.25],UR:[46.77,8.63],
+  AR:[47.37,9.28],AI:[47.32,9.42]
+};
+
+let mapDimension = 'overall';
+let mapTopoLoaded = false;
+let mapTopoData = null;
+
+function getCantonScores(dim) {
+  const scores = {};
+  Object.keys(CANTON_NAMES).forEach(ab => { scores[ab] = []; });
+  COMMUNITIES.forEach(c => {
+    const ab = CANTON_KEYS[c.canton];
+    if (!ab) return;
+    const val = dim === 'overall' ? calcScore(c) : c.scores[dim];
+    if (val !== undefined) scores[ab].push(val);
+  });
+  const result = {};
+  Object.entries(scores).forEach(([ab, vals]) => {
+    result[ab] = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : null;
+  });
+  return result;
+}
+
+function renderMap() {
+  const mt = MAP_T[lang] || MAP_T.en;
+  const el = id => document.getElementById(id);
+  if(el('map-title')) el('map-title').textContent = mt.title;
+  if(el('map-sub')) el('map-sub').textContent = mt.sub;
+  if(el('map-communities-title')) el('map-communities-title').textContent = mt.commTitle;
+
+  // Render dimension buttons
+  const btns = el('map-dim-btns');
+  if(btns) {
+    btns.innerHTML = Object.entries(DIM_LABELS).map(([key,labels]) =>
+      `<button onclick="setMapDim('${key}')" id="mdim-${key}" style="padding:4px 10px;border-radius:6px;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;border:1px solid var(--border2);background:${mapDimension===key?'var(--green)':'white'};color:${mapDimension===key?'white':'var(--ink2)'};transition:all 0.15s;">${labels[lang]||labels.en}</button>`
+    ).join('');
+  }
+
+  // Render community list
+  const list = el('map-community-list');
+  if(list) {
+    const sorted = getSorted();
+    list.innerHTML = sorted.map((c,i) => {
+      const score = mapDimension==='overall' ? c.score : c.scores[mapDimension];
+      const ab = CANTON_KEYS[c.canton] || '';
+      return `<div style="display:flex;align-items:center;gap:8px;padding:6px 10px;border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--green2)'" onmouseout="this.style.borderColor='var(--border)'" onclick="showPage('ranking')">
+        <span style="font-family:'Fraunces',serif;font-size:13px;color:var(--ink3);min-width:20px;">${i+1}</span>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${c.name}</div>
+          <div style="font-size:10px;color:var(--ink3);">${ab}</div>
+        </div>
+        <span style="font-family:'Fraunces',serif;font-size:14px;color:var(--green);font-weight:500;">${score}</span>
+      </div>`;
+    }).join('');
+  }
+
+  // Draw the choropleth
+  drawChoropleth();
+}
+
+function setMapDim(dim) {
+  mapDimension = dim;
+  renderMap();
+}
+
+function drawChoropleth() {
+  if (!mapTopoLoaded) {
+    loadMapTopo();
+    return;
+  }
+  _drawWithTopo(mapTopoData);
+}
+
+function loadMapTopo() {
+  const loading = document.getElementById('map-loading');
+  if(loading) loading.style.display = 'flex';
+
+  // Use the swiss-maps topojson — Swiss coordinate system (Cartesian, no projection needed)
+  fetch('https://unpkg.com/swiss-maps@4/2021/ch-combined.json')
+    .then(r => r.json())
+    .then(topo => {
+      mapTopoData = topo;
+      mapTopoLoaded = true;
+      if(document.getElementById('map-loading'))
+        document.getElementById('map-loading').style.display = 'none';
+      _drawWithTopo(topo);
+    })
+    .catch(e => {
+      console.error('Map load failed:', e);
+      const loading = document.getElementById('map-loading');
+      if(loading) loading.textContent = 'Map unavailable — check your connection.';
+    });
+}
+
+function _drawWithTopo(topo) {
+  const svg = document.getElementById('swiss-map');
+  if(!svg || !topo) return;
+
+  const scores = getCantonScores(mapDimension);
+  const vals = Object.values(scores).filter(v => v !== null);
+  const minVal = Math.min(...vals);
+  const maxVal = Math.max(...vals);
+
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const colorScale = d3.scaleSequential()
+    .domain([minVal, maxVal])
+    .interpolator(isDark
+      ? d3.interpolateRgb('#1a3320','#7dbf6e')
+      : d3.interpolateRgb('#e8f3e6','#2d5a27'));
+
+  const container = svg.parentElement;
+  const W = container.clientWidth || 680;
+  const H = Math.round(W * 0.58);
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+  // Swiss topo uses Cartesian CH1903 coordinates — use identity projection
+  const cantonFeatures = topojson.feature(topo, topo.objects.cantons);
+  const projection = d3.geoIdentity().reflectY(true).fitSize([W, H], cantonFeatures);
+  const path = d3.geoPath(projection);
+
+  // Clear and redraw
+  d3.select(svg).selectAll('*').remove();
+
+  const tooltip = document.getElementById('map-tooltip');
+
+  // Draw cantons
+  const g = d3.select(svg).append('g');
+
+  // Draw lakes for visual quality
+  if(topo.objects.lakes) {
+    const lakeFeatures = topojson.feature(topo, topo.objects.lakes);
+    g.selectAll('.lake')
+      .data(lakeFeatures.features)
+      .join('path')
+      .attr('class','lake')
+      .attr('d', path)
+      .attr('fill', isDark ? '#1a2a3a' : '#c8e6f5')
+      .attr('stroke', 'none');
+  }
+
+  g.selectAll('.canton')
+    .data(cantonFeatures.features)
+    .join('path')
+    .attr('class','canton')
+    .attr('d', path)
+    .attr('fill', d => {
+      const ab = d.properties && (d.properties.abbr || d.properties.kan_name || d.id);
+      // Try to match by abbreviation stored in properties
+      const score = ab ? scores[ab] : null;
+      return score !== null && score !== undefined ? colorScale(score) : (isDark ? '#2a2a28' : '#e4dfd2');
+    })
+    .attr('stroke', isDark ? 'rgba(255,255,255,0.15)' : 'white')
+    .attr('stroke-width', 0.8)
+    .style('cursor','pointer')
+    .on('mousemove', (event, d) => {
+      const ab = d.properties && (d.properties.abbr || d.properties.kan_name || d.id);
+      const score = ab ? scores[ab] : null;
+      const name = CANTON_NAMES[ab] || ab || 'Unknown';
+      const dimLabel = DIM_LABELS[mapDimension]?.[lang] || mapDimension;
+      const communities = COMMUNITIES.filter(c => CANTON_KEYS[c.canton] === ab);
+      if(tooltip) {
+        tooltip.style.display = 'block';
+        tooltip.style.left = (event.clientX + 12) + 'px';
+        tooltip.style.top = (event.clientY - 10) + 'px';
+        tooltip.innerHTML = `<div style="font-family:'Fraunces',serif;font-size:14px;margin-bottom:4px;">${name} (${ab||'?'})</div>
+          <div style="font-size:12px;color:rgba(245,242,235,0.7);">${dimLabel}: <strong style="color:#7dbf6e;">${score ?? 'n/a'}</strong></div>
+          <div style="font-size:11px;color:rgba(245,242,235,0.5);margin-top:3px;">${communities.length} commune${communities.length!==1?'s':''} in index</div>`;
+      }
+    })
+    .on('mouseleave', () => {
+      if(tooltip) tooltip.style.display = 'none';
+    })
+    .on('click', (event, d) => {
+      const ab = d.properties && (d.properties.abbr || d.properties.kan_name || d.id);
+      if(!ab) return;
+      // Filter ranking by this canton
+      const canontonName = Object.entries(CANTON_KEYS).find(([k,v])=>v===ab)?.[0];
+      if(canontonName) {
+        const sel = document.getElementById('canton-filter');
+        if(sel) sel.value = canontonName;
+        filterCommunities();
+        showPage('ranking');
+      }
+    });
+
+  // Canton abbreviation labels
+  g.selectAll('.canton-label')
+    .data(cantonFeatures.features)
+    .join('text')
+    .attr('class','canton-label')
+    .attr('x', d => path.centroid(d)[0])
+    .attr('y', d => path.centroid(d)[1])
+    .attr('text-anchor','middle')
+    .attr('dominant-baseline','middle')
+    .attr('font-size', W < 500 ? '7' : '9')
+    .attr('font-family',"'DM Sans', sans-serif")
+    .attr('fill', d => {
+      const ab = d.properties && (d.properties.abbr || d.properties.kan_name || d.id);
+      const score = ab ? scores[ab] : null;
+      if (score === null || score === undefined) return isDark ? '#888' : '#666';
+      const normalized = (score - minVal) / (maxVal - minVal || 1);
+      return normalized > 0.5 ? 'white' : (isDark ? '#ccc' : '#2d5a27');
+    })
+    .attr('pointer-events','none')
+    .text(d => {
+      const ab = d.properties && (d.properties.abbr || d.properties.kan_name || d.id);
+      return ab || '';
+    });
+
+  // Score labels
+  g.selectAll('.canton-score')
+    .data(cantonFeatures.features)
+    .join('text')
+    .attr('class','canton-score')
+    .attr('x', d => path.centroid(d)[0])
+    .attr('y', d => path.centroid(d)[1] + (W < 500 ? 8 : 11))
+    .attr('text-anchor','middle')
+    .attr('dominant-baseline','middle')
+    .attr('font-size', W < 500 ? '6' : '8')
+    .attr('font-family',"'Fraunces', serif")
+    .attr('font-weight','500')
+    .attr('fill', d => {
+      const ab = d.properties && (d.properties.abbr || d.properties.kan_name || d.id);
+      const score = ab ? scores[ab] : null;
+      if (score === null || score === undefined) return isDark ? '#888' : '#999';
+      const normalized = (score - minVal) / (maxVal - minVal || 1);
+      return normalized > 0.5 ? 'rgba(255,255,255,0.85)' : (isDark ? '#aaa' : '#3d7a35');
+    })
+    .attr('pointer-events','none')
+    .text(d => {
+      const ab = d.properties && (d.properties.abbr || d.properties.kan_name || d.id);
+      return scores[ab] ?? '';
+    });
+}
+
+// Call renderMap when navigating to map page
+const _origShowPage = showPage;
+function showPage(n) {
+  _origShowPage(n);
+  if(n==='map') renderMap();
+}
+// Also re-render map on language change
+const _origSetLang = setLang;
+function setLang(l) {
+  _origSetLang(l);
+  const mapTitle = MAP_T[l]||MAP_T.en;
+  const el = id => document.getElementById(id);
+  if(el('map-title')) el('map-title').textContent = mapTitle.title;
+  if(el('map-sub')) el('map-sub').textContent = mapTitle.sub;
+  if(el('map-communities-title')) el('map-communities-title').textContent = mapTitle.commTitle;
+  if(document.getElementById('page-map').classList.contains('active')) renderMap();
+}
+
 renderWeights();renderRanking();renderIndexPillars();renderQuickPrompts();applyTranslations();
 // Update community count from real data
 const countEl=document.getElementById('community-count');
