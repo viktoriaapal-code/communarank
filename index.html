@@ -676,17 +676,32 @@ function _drawWithTopo(topo) {
   const svg = document.getElementById('swiss-map');
   if(!svg || !topo) return;
 
+  // BFS numeric ID → canton abbreviation (official Swiss order)
+  const BFS_ID_TO_AB = {
+    1:'ZH',2:'BE',3:'LU',4:'UR',5:'SZ',6:'OW',7:'NW',8:'GL',9:'ZG',10:'FR',
+    11:'SO',12:'BS',13:'BL',14:'SH',15:'AR',16:'AI',17:'SG',18:'GR',19:'AG',
+    20:'TG',21:'TI',22:'VD',23:'VS',24:'NE',25:'GE',26:'JU'
+  };
+
+  // Helper: get canton abbreviation from a TopoJSON feature
+  function getAb(d) {
+    if (!d.properties) return BFS_ID_TO_AB[d.id] || null;
+    return d.properties.abbr
+      || d.properties.ABBR
+      || d.properties.kan_name
+      || BFS_ID_TO_AB[d.id]
+      || BFS_ID_TO_AB[d.properties.id]
+      || null;
+  }
+
   const scores = getCantonScores(mapDimension);
   const vals = Object.values(scores).filter(v => v !== null);
   const minVal = Math.min(...vals);
   const maxVal = Math.max(...vals);
 
-  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   const colorScale = d3.scaleSequential()
     .domain([minVal, maxVal])
-    .interpolator(isDark
-      ? d3.interpolateRgb('#1a3320','#7dbf6e')
-      : d3.interpolateRgb('#e8f3e6','#2d5a27'));
+    .interpolator(d3.interpolateRgb('#c8e8c2','#1a4d14'));
 
   const container = svg.parentElement;
   const W = container.clientWidth || 680;
@@ -695,124 +710,97 @@ function _drawWithTopo(topo) {
   svg.setAttribute('height', H);
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
 
-  // Swiss topo uses Cartesian CH1903 coordinates — use identity projection
   const cantonFeatures = topojson.feature(topo, topo.objects.cantons);
-  const projection = d3.geoIdentity().reflectY(true).fitSize([W, H], cantonFeatures);
-  const path = d3.geoPath(projection);
+  const projection = d3.geoIdentity().reflectY(true).fitSize([W-20, H-20], cantonFeatures);
+  // Add a small margin
+  const baseProj = projection;
+  const pathGen = d3.geoPath(baseProj);
 
-  // Clear and redraw
   d3.select(svg).selectAll('*').remove();
+  const g = d3.select(svg).append('g').attr('transform','translate(10,10)');
+
+  // Lakes
+  if(topo.objects.lakes) {
+    const lakeFeatures = topojson.feature(topo, topo.objects.lakes);
+    g.selectAll('.lake').data(lakeFeatures.features).join('path')
+      .attr('class','lake').attr('d', pathGen)
+      .attr('fill','#b8d8ed').attr('stroke','none');
+  }
 
   const tooltip = document.getElementById('map-tooltip');
 
-  // Draw cantons
-  const g = d3.select(svg).append('g');
-
-  // Draw lakes for visual quality
-  if(topo.objects.lakes) {
-    const lakeFeatures = topojson.feature(topo, topo.objects.lakes);
-    g.selectAll('.lake')
-      .data(lakeFeatures.features)
-      .join('path')
-      .attr('class','lake')
-      .attr('d', path)
-      .attr('fill', isDark ? '#1a2a3a' : '#c8e6f5')
-      .attr('stroke', 'none');
-  }
-
-  g.selectAll('.canton')
-    .data(cantonFeatures.features)
-    .join('path')
-    .attr('class','canton')
-    .attr('d', path)
+  // Canton fills
+  g.selectAll('.canton').data(cantonFeatures.features).join('path')
+    .attr('class','canton').attr('d', pathGen)
     .attr('fill', d => {
-      const ab = d.properties && (d.properties.abbr || d.properties.kan_name || d.id);
-      // Try to match by abbreviation stored in properties
+      const ab = getAb(d);
       const score = ab ? scores[ab] : null;
-      return score !== null && score !== undefined ? colorScale(score) : (isDark ? '#2a2a28' : '#e4dfd2');
+      return (score !== null && score !== undefined) ? colorScale(score) : '#ddd8cc';
     })
-    .attr('stroke', isDark ? 'rgba(255,255,255,0.15)' : 'white')
-    .attr('stroke-width', 0.8)
+    .attr('stroke','white').attr('stroke-width', 1)
     .style('cursor','pointer')
     .on('mousemove', (event, d) => {
-      const ab = d.properties && (d.properties.abbr || d.properties.kan_name || d.id);
+      const ab = getAb(d);
       const score = ab ? scores[ab] : null;
-      const name = CANTON_NAMES[ab] || ab || 'Unknown';
-      const dimLabel = DIM_LABELS[mapDimension]?.[lang] || mapDimension;
-      const communities = COMMUNITIES.filter(c => CANTON_KEYS[c.canton] === ab);
+      const name = (ab && CANTON_NAMES[ab]) || ab || '?';
+      const dimLabel = (DIM_LABELS[mapDimension]||{})[lang] || mapDimension;
+      const comms = COMMUNITIES.filter(c => CANTON_KEYS[c.canton] === ab);
       if(tooltip) {
         tooltip.style.display = 'block';
-        tooltip.style.left = (event.clientX + 12) + 'px';
-        tooltip.style.top = (event.clientY - 10) + 'px';
-        tooltip.innerHTML = `<div style="font-family:'Fraunces',serif;font-size:14px;margin-bottom:4px;">${name} (${ab||'?'})</div>
-          <div style="font-size:12px;color:rgba(245,242,235,0.7);">${dimLabel}: <strong style="color:#7dbf6e;">${score ?? 'n/a'}</strong></div>
-          <div style="font-size:11px;color:rgba(245,242,235,0.5);margin-top:3px;">${communities.length} commune${communities.length!==1?'s':''} in index</div>`;
+        tooltip.style.left = (event.clientX + 14) + 'px';
+        tooltip.style.top  = (event.clientY - 14) + 'px';
+        tooltip.innerHTML = `
+          <div style="font-family:'Fraunces',serif;font-size:14px;margin-bottom:3px;">${name}</div>
+          <div style="font-size:12px;color:rgba(245,242,235,0.75);">${dimLabel}: <strong style="color:#7dbf6e;">${score ?? 'n/a'}</strong></div>
+          <div style="font-size:11px;color:rgba(245,242,235,0.45);margin-top:2px;">${comms.length} commune${comms.length!==1?'s':''} in index</div>`;
       }
     })
-    .on('mouseleave', () => {
-      if(tooltip) tooltip.style.display = 'none';
-    })
+    .on('mouseleave', () => { if(tooltip) tooltip.style.display='none'; })
     .on('click', (event, d) => {
-      const ab = d.properties && (d.properties.abbr || d.properties.kan_name || d.id);
+      const ab = getAb(d);
       if(!ab) return;
-      // Filter ranking by this canton
-      const canontonName = Object.entries(CANTON_KEYS).find(([k,v])=>v===ab)?.[0];
-      if(canontonName) {
+      const cantonName = Object.entries(CANTON_KEYS).find(([k,v])=>v===ab)?.[0];
+      if(cantonName) {
         const sel = document.getElementById('canton-filter');
-        if(sel) sel.value = canontonName;
+        if(sel) sel.value = cantonName;
         filterCommunities();
         showPage('ranking');
       }
     });
 
-  // Canton abbreviation labels
-  g.selectAll('.canton-label')
-    .data(cantonFeatures.features)
-    .join('text')
+  // Abbreviation labels
+  g.selectAll('.canton-label').data(cantonFeatures.features).join('text')
     .attr('class','canton-label')
-    .attr('x', d => path.centroid(d)[0])
-    .attr('y', d => path.centroid(d)[1])
-    .attr('text-anchor','middle')
-    .attr('dominant-baseline','middle')
+    .attr('x', d => pathGen.centroid(d)[0])
+    .attr('y', d => pathGen.centroid(d)[1] - (W < 500 ? 5 : 7))
+    .attr('text-anchor','middle').attr('dominant-baseline','middle')
     .attr('font-size', W < 500 ? '7' : '9')
-    .attr('font-family',"'DM Sans', sans-serif")
-    .attr('fill', d => {
-      const ab = d.properties && (d.properties.abbr || d.properties.kan_name || d.id);
-      const score = ab ? scores[ab] : null;
-      if (score === null || score === undefined) return isDark ? '#888' : '#666';
-      const normalized = (score - minVal) / (maxVal - minVal || 1);
-      return normalized > 0.5 ? 'white' : (isDark ? '#ccc' : '#2d5a27');
-    })
+    .attr('font-family',"'DM Sans',sans-serif")
     .attr('pointer-events','none')
-    .text(d => {
-      const ab = d.properties && (d.properties.abbr || d.properties.kan_name || d.id);
-      return ab || '';
-    });
+    .attr('fill', d => {
+      const ab = getAb(d);
+      const score = ab ? scores[ab] : null;
+      if(!score) return '#777';
+      return (score-minVal)/(maxVal-minVal||1) > 0.55 ? 'white' : '#2d5a27';
+    })
+    .text(d => getAb(d) || '');
 
   // Score labels
-  g.selectAll('.canton-score')
-    .data(cantonFeatures.features)
-    .join('text')
+  g.selectAll('.canton-score').data(cantonFeatures.features).join('text')
     .attr('class','canton-score')
-    .attr('x', d => path.centroid(d)[0])
-    .attr('y', d => path.centroid(d)[1] + (W < 500 ? 8 : 11))
-    .attr('text-anchor','middle')
-    .attr('dominant-baseline','middle')
-    .attr('font-size', W < 500 ? '6' : '8')
-    .attr('font-family',"'Fraunces', serif")
-    .attr('font-weight','500')
-    .attr('fill', d => {
-      const ab = d.properties && (d.properties.abbr || d.properties.kan_name || d.id);
-      const score = ab ? scores[ab] : null;
-      if (score === null || score === undefined) return isDark ? '#888' : '#999';
-      const normalized = (score - minVal) / (maxVal - minVal || 1);
-      return normalized > 0.5 ? 'rgba(255,255,255,0.85)' : (isDark ? '#aaa' : '#3d7a35');
-    })
+    .attr('x', d => pathGen.centroid(d)[0])
+    .attr('y', d => pathGen.centroid(d)[1] + (W < 500 ? 5 : 7))
+    .attr('text-anchor','middle').attr('dominant-baseline','middle')
+    .attr('font-size', W < 500 ? '6' : '9')
+    .attr('font-family',"'Fraunces',serif").attr('font-weight','600')
     .attr('pointer-events','none')
-    .text(d => {
-      const ab = d.properties && (d.properties.abbr || d.properties.kan_name || d.id);
-      return scores[ab] ?? '';
-    });
+    .attr('fill', d => {
+      const ab = getAb(d);
+      const score = ab ? scores[ab] : null;
+      if(!score) return '#aaa';
+      return (score-minVal)/(maxVal-minVal||1) > 0.55 ? 'rgba(255,255,255,0.9)' : '#1a4d14';
+    })
+    .text(d => { const ab=getAb(d); return ab&&scores[ab]!=null ? scores[ab] : ''; });
 }
 
 // Map hooks integrated below
