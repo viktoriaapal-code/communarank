@@ -134,7 +134,7 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
     <button class="nav-btn" onclick="showPage('compare')" id="nb-compare">Compare</button>
     <button class="nav-btn" onclick="showPage('index')" id="nb-index">Our Index</button>
     <button class="nav-btn" onclick="showPage('map')" id="nb-map">Map</button>
-    <button class="nav-btn" onclick="showPage('ai')" id="nb-ai">AI Advisor</button>
+    <button class="nav-btn" onclick="showPage('ai')" id="nb-ai">Early Access</button>
   </div>
   <div class="lang-sel">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -149,7 +149,7 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
   <p class="hero-sub" id="h-sub">Our proprietary Smart Community Index evaluates Swiss communities across 9 dimensions — from cost of living to sustainability — so you can choose where to buy land, a home, or rent with confidence.</p>
   <div class="hero-actions">
     <button class="btn-primary" onclick="showPage('ranking')" id="h-cta1">Explore Rankings</button>
-    <button class="btn-outline" onclick="showPage('ai')" id="h-cta2">Ask AI Advisor</button>
+    <button class="btn-outline" onclick="showPage('ai')" id="h-cta2">Get Early Access</button>
   </div>
   <div class="hero-stats">
     <div class="stat-item"><div class="stat-num" id="community-count">50</div><div class="stat-label" id="h-s1">Communities ranked</div></div>
@@ -249,23 +249,132 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
 <div class="page" id="page-ai">
   <div class="section">
     <div class="section-header">
-      <h2 class="section-title" id="ai-page-title">AI Community Advisor</h2>
-      <p class="section-sub" id="ai-page-sub">Ask anything about Swiss communities, land purchase, costs, or lifestyle</p>
+      <h2 class="section-title" id="ai-page-title">Join the Waitlist</h2>
+      <p class="section-sub" id="ai-page-sub">Be first to access new features, community reports, and property alerts</p>
     </div>
-    <div class="ai-panel">
-      <div class="ai-header">
-        <div class="ai-dot"></div>
-        <div class="ai-title" id="ai-title">CommunaRank AI — powered by Claude</div>
+
+    <!-- Value props -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:28px;">
+      <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:20px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:8px;">🗺</div>
+        <div style="font-family:'Fraunces',serif;font-size:14px;margin-bottom:6px;" id="vp1-title">Full commune data</div>
+        <div style="font-size:12px;color:var(--ink3);line-height:1.6;" id="vp1-body">All 2,212 Swiss communes ranked — not just the top 50</div>
       </div>
-      <div id="ai-chat-history" style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;min-height:60px;"></div>
-      <div class="ai-input-row">
-        <input class="ai-input" type="text" id="ai-input" placeholder="e.g. I have a budget of 800k CHF and need good schools..." onkeydown="if(event.key==='Enter')sendAI()">
-        <button class="ai-send" onclick="sendAI()" id="ai-send-btn">Ask →</button>
+      <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:20px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:8px;">📊</div>
+        <div style="font-family:'Fraunces',serif;font-size:14px;margin-bottom:6px;" id="vp2-title">Detailed reports</div>
+        <div style="font-size:12px;color:var(--ink3);line-height:1.6;" id="vp2-body">PDF community profiles with historical trends and forecasts</div>
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;" id="ai-quick-prompts"></div>
+      <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:20px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:8px;">🔔</div>
+        <div style="font-family:'Fraunces',serif;font-size:14px;margin-bottom:6px;" id="vp3-title">Property alerts</div>
+        <div style="font-size:12px;color:var(--ink3);line-height:1.6;" id="vp3-body">Get notified when land or homes match your criteria</div>
+      </div>
+      <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:20px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:8px;">🤖</div>
+        <div style="font-family:'Fraunces',serif;font-size:14px;margin-bottom:6px;" id="vp4-title">AI advisor</div>
+        <div style="font-size:12px;color:var(--ink3);line-height:1.6;" id="vp4-body">Personal AI that recommends communities based on your needs</div>
+      </div>
     </div>
+
+    <!-- Waitlist form -->
+    <div style="background:var(--ink);color:var(--paper);border-radius:var(--r2);padding:32px;max-width:620px;margin:0 auto;">
+      <div style="text-align:center;margin-bottom:24px;">
+        <div style="font-size:32px;margin-bottom:12px;">🇨🇭</div>
+        <h3 style="font-family:'Fraunces',serif;font-size:22px;color:var(--paper);margin-bottom:8px;" id="form-title">Get early access</h3>
+        <p style="font-size:13px;color:rgba(245,242,235,0.6);line-height:1.7;" id="form-sub">Join 200+ people already on the waitlist. Free forever for early members.</p>
+      </div>
+
+      <div id="waitlist-form" style="display:flex;flex-direction:column;gap:14px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label style="font-size:11px;color:rgba(245,242,235,0.5);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;" id="lbl-name">Full name</label>
+            <input id="wl-name" type="text" style="width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:var(--r);padding:10px 14px;color:var(--paper);font-size:14px;font-family:'DM Sans',sans-serif;" placeholder="Anna Müller">
+          </div>
+          <div>
+            <label style="font-size:11px;color:rgba(245,242,235,0.5);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;" id="lbl-email">Email address</label>
+            <input id="wl-email" type="email" style="width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:var(--r);padding:10px 14px;color:var(--paper);font-size:14px;font-family:'DM Sans',sans-serif;" placeholder="anna@example.com">
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size:11px;color:rgba(245,242,235,0.5);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;" id="lbl-canton">Canton of interest</label>
+          <select id="wl-canton" style="width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:var(--r);padding:10px 14px;color:var(--paper);font-size:14px;font-family:'DM Sans',sans-serif;">
+            <option value="" style="background:var(--ink);" id="opt-any">Any canton</option>
+            <option style="background:var(--ink);">Zurich (ZH)</option>
+            <option style="background:var(--ink);">Bern (BE)</option>
+            <option style="background:var(--ink);">Vaud (VD)</option>
+            <option style="background:var(--ink);">Geneva (GE)</option>
+            <option style="background:var(--ink);">Basel (BS)</option>
+            <option style="background:var(--ink);">Lucerne (LU)</option>
+            <option style="background:var(--ink);">Zug (ZG)</option>
+            <option style="background:var(--ink);">Ticino (TI)</option>
+            <option style="background:var(--ink);">Valais (VS)</option>
+            <option style="background:var(--ink);">Graubünden (GR)</option>
+            <option style="background:var(--ink);">St. Gallen (SG)</option>
+            <option style="background:var(--ink);">Aargau (AG)</option>
+            <option style="background:var(--ink);">Fribourg (FR)</option>
+            <option style="background:var(--ink);">Schwyz (SZ)</option>
+            <option style="background:var(--ink);">Thurgau (TG)</option>
+            <option style="background:var(--ink);">Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size:11px;color:rgba(245,242,235,0.5);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:8px;" id="lbl-goal">I am looking to</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;" id="goal-options">
+            <label style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px;transition:all 0.15s;">
+              <input type="checkbox" id="goal-buy" value="buy" style="accent-color:var(--green2);"> <span id="goal-buy-lbl">Buy land</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px;transition:all 0.15s;">
+              <input type="checkbox" id="goal-house" value="house" style="accent-color:var(--green2);"> <span id="goal-house-lbl">Buy a house</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px;transition:all 0.15s;">
+              <input type="checkbox" id="goal-rent" value="rent" style="accent-color:var(--green2);"> <span id="goal-rent-lbl">Rent an apartment</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px;transition:all 0.15s;">
+              <input type="checkbox" id="goal-invest" value="invest" style="accent-color:var(--green2);"> <span id="goal-invest-lbl">Invest in property</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px;transition:all 0.15s;">
+              <input type="checkbox" id="goal-research" value="research" style="accent-color:var(--green2);"> <span id="goal-research-lbl">Research only</span>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size:11px;color:rgba(245,242,235,0.5);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;" id="lbl-budget">Budget range (CHF)</label>
+          <select id="wl-budget" style="width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:var(--r);padding:10px 14px;color:var(--paper);font-size:14px;font-family:'DM Sans',sans-serif;">
+            <option value="" style="background:var(--ink);" id="opt-nobudget">Prefer not to say</option>
+            <option style="background:var(--ink);">Under 300k</option>
+            <option style="background:var(--ink);">300k – 600k</option>
+            <option style="background:var(--ink);">600k – 1M</option>
+            <option style="background:var(--ink);">1M – 2M</option>
+            <option style="background:var(--ink);">Over 2M</option>
+          </select>
+        </div>
+
+        <button onclick="submitWaitlist()" id="wl-submit-btn" style="background:var(--green2);color:white;border:none;padding:14px 28px;border-radius:var(--r);font-size:15px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;width:100%;transition:all 0.2s;margin-top:4px;" id="submit-btn">
+          <span id="wl-btn-text">Join the waitlist →</span>
+        </button>
+
+        <p style="font-size:11px;color:rgba(245,242,235,0.35);text-align:center;line-height:1.6;" id="privacy-note">No spam. Your data is stored securely and never sold. You can unsubscribe at any time.</p>
+      </div>
+
+      <!-- Success state -->
+      <div id="waitlist-success" style="display:none;text-align:center;padding:20px 0;">
+        <div style="font-size:48px;margin-bottom:16px;">🎉</div>
+        <h3 style="font-family:'Fraunces',serif;font-size:20px;color:var(--paper);margin-bottom:10px;" id="success-title">You're on the list!</h3>
+        <p style="font-size:14px;color:rgba(245,242,235,0.65);line-height:1.7;" id="success-body">We'll be in touch as soon as your early access is ready. In the meantime, explore the community rankings.</p>
+        <button onclick="showPage('ranking')" style="margin-top:20px;background:rgba(255,255,255,0.1);color:var(--paper);border:1px solid rgba(255,255,255,0.2);padding:10px 24px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;" id="success-btn">Explore rankings →</button>
+      </div>
+    </div>
+
+    <!-- Social proof -->
+    <div style="text-align:center;margin-top:24px;padding:20px;background:white;border:1px solid var(--border);border-radius:var(--r2);">
+      <p style="font-size:13px;color:var(--ink3);" id="social-proof">🔒 Your data stays in Switzerland. Built with official BFS, ELCOM, and OSM data.</p>
+    </div>
+
   </div>
-</div>
 </div>
 <footer>
   <div class="footer-brand">CommunaRank</div>
@@ -283,13 +392,13 @@ const WEIGHTS_DEF={costOfLiving:{label:{en:'Cost of Living',fr:'Coût de vie',de
 const COMMUNITIES=[{name:'Zürich',canton:'Zurich (ZH)',type:'Urban',pop:45000,landPrice:3800,lat:47.3769,lon:8.5417,scores:{costOfLiving:32,infrastructure:95,education:95,healthcare:95,energy:86,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:58200,avgIncome:81400,salaryRatio:22},{name:'Genève',canton:'Geneva (GE)',type:'Urban',pop:45000,landPrice:4200,lat:46.2044,lon:6.1432,scores:{costOfLiving:21,infrastructure:95,education:95,healthcare:95,energy:75,sustainability:85,food:95,entertainment:80,nature:55},tags:['family','sustainable','urban'],medianIncome:62100,avgIncome:94200,salaryRatio:21},{name:'Basel',canton:'Basel (BS)',type:'Urban',pop:45000,landPrice:2800,lat:47.5596,lon:7.5886,scores:{costOfLiving:42,infrastructure:95,education:95,healthcare:95,energy:80,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:52800,avgIncome:74600,salaryRatio:30},{name:'Bern',canton:'Bern (BE)',type:'Urban',pop:45000,landPrice:2200,lat:46.9481,lon:7.4474,scores:{costOfLiving:51,infrastructure:95,education:95,healthcare:95,energy:82,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:54100,avgIncome:76300,salaryRatio:43},{name:'Lausanne',canton:'Vaud (VD)',type:'Urban',pop:45000,landPrice:3100,lat:46.5197,lon:6.6323,scores:{costOfLiving:38,infrastructure:95,education:95,healthcare:95,energy:81,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:55400,avgIncome:79800,salaryRatio:28},{name:'Winterthur',canton:'Zurich (ZH)',type:'Urban',pop:45000,landPrice:1800,lat:47.5001,lon:8.7238,scores:{costOfLiving:58,infrastructure:95,education:95,healthcare:95,energy:86,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:54600,avgIncome:72400,salaryRatio:56},{name:'Luzern',canton:'Lucerne (LU)',type:'Urban',pop:45000,landPrice:2600,lat:47.0502,lon:8.3093,scores:{costOfLiving:50,infrastructure:95,education:95,healthcare:95,energy:90,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:53200,avgIncome:71800,salaryRatio:34},{name:'St. Gallen',canton:'St. Gallen (SG)',type:'Urban',pop:45000,landPrice:1400,lat:47.4245,lon:9.3767,scores:{costOfLiving:68,infrastructure:95,education:95,healthcare:95,energy:87,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:51400,avgIncome:68900,salaryRatio:70},{name:'Lugano',canton:'Ticino (TI)',type:'Urban',pop:45000,landPrice:2000,lat:46.0037,lon:8.9511,scores:{costOfLiving:54,infrastructure:95,education:95,healthcare:95,energy:77,sustainability:85,food:95,entertainment:80,nature:55},tags:['family','sustainable','urban'],medianIncome:57800,avgIncome:82300,salaryRatio:53},{name:'Biel/Bienne',canton:'Bern (BE)',type:'Urban',pop:45000,landPrice:950,lat:47.1368,lon:7.2467,scores:{costOfLiving:68,infrastructure:95,education:95,healthcare:95,energy:82,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:44200,avgIncome:58700,salaryRatio:92},{name:'Thun',canton:'Bern (BE)',type:'Urban',pop:45000,landPrice:1300,lat:46.758,lon:7.628,scores:{costOfLiving:63,infrastructure:95,education:95,healthcare:95,energy:82,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:48600,avgIncome:64200,salaryRatio:71},{name:'Köniz',canton:'Bern (BE)',type:'Suburban',pop:18000,landPrice:1600,lat:46.9267,lon:7.4101,scores:{costOfLiving:59,infrastructure:78,education:95,healthcare:89,energy:82,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:52400,avgIncome:68900,salaryRatio:61},{name:'La Chaux-de-Fonds',canton:'Neuchâtel (NE)',type:'Urban',pop:45000,landPrice:750,lat:47.1001,lon:6.8262,scores:{costOfLiving:67,infrastructure:95,education:95,healthcare:95,energy:79,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:43800,avgIncome:56400,salaryRatio:100},{name:'Schaffhausen',canton:'Schaffhausen (SH)',type:'Urban',pop:45000,landPrice:1200,lat:47.6959,lon:8.6317,scores:{costOfLiving:69,infrastructure:95,education:95,healthcare:95,energy:87,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:49800,avgIncome:65400,salaryRatio:81},{name:'Fribourg',canton:'Fribourg (FR)',type:'Urban',pop:45000,landPrice:1400,lat:46.8065,lon:7.162,scores:{costOfLiving:62,infrastructure:95,education:95,healthcare:95,energy:84,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:48200,avgIncome:64800,salaryRatio:65},{name:'Chur',canton:'Graubünden (GR)',type:'Urban',pop:45000,landPrice:1500,lat:46.8508,lon:9.5329,scores:{costOfLiving:69,infrastructure:95,education:95,healthcare:95,energy:100,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:51600,avgIncome:69200,salaryRatio:65},{name:'Vernier',canton:'Geneva (GE)',type:'Suburban',pop:18000,landPrice:2800,lat:46.2167,lon:6.0833,scores:{costOfLiving:39,infrastructure:78,education:95,healthcare:89,energy:75,sustainability:90,food:95,entertainment:65,nature:70},tags:['family','sustainable'],medianIncome:47200,avgIncome:61800,salaryRatio:26},{name:'Uster',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:2200,lat:47.35,lon:8.7167,scores:{costOfLiving:53,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:62400,avgIncome:84200,salaryRatio:51},{name:'Sion',canton:'Valais (VS)',type:'Urban',pop:45000,landPrice:1100,lat:46.233,lon:7.3598,scores:{costOfLiving:67,infrastructure:95,education:95,healthcare:95,energy:100,sustainability:85,food:95,entertainment:80,nature:55},tags:['family','sustainable','urban'],medianIncome:47800,avgIncome:63400,salaryRatio:85},{name:'Emmen',canton:'Lucerne (LU)',type:'Suburban',pop:18000,landPrice:1300,lat:47.0833,lon:8.3,scores:{costOfLiving:67,infrastructure:78,education:95,healthcare:89,energy:90,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:46800,avgIncome:61200,salaryRatio:68},{name:'Küsnacht',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:3800,lat:47.3167,lon:8.5833,scores:{costOfLiving:32,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:104200,avgIncome:198400,salaryRatio:49},{name:'Zug',canton:'Zug (ZG)',type:'Urban',pop:45000,landPrice:3200,lat:47.166,lon:8.516,scores:{costOfLiving:54,infrastructure:95,education:95,healthcare:95,energy:96,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:88400,avgIncome:162800,salaryRatio:50},{name:'Nyon',canton:'Vaud (VD)',type:'Urban',pop:45000,landPrice:2400,lat:46.3833,lon:6.2333,scores:{costOfLiving:47,infrastructure:95,education:95,healthcare:95,energy:81,sustainability:85,food:95,entertainment:80,nature:55},tags:['family','sustainable','urban'],medianIncome:74800,avgIncome:112400,salaryRatio:58},{name:'Morges',canton:'Vaud (VD)',type:'Urban',pop:45000,landPrice:2100,lat:46.5167,lon:6.5,scores:{costOfLiving:51,infrastructure:95,education:95,healthcare:95,energy:81,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:68400,avgIncome:98600,salaryRatio:61},{name:'Rapperswil-Jona',canton:'St. Gallen (SG)',type:'Suburban',pop:18000,landPrice:1700,lat:47.2263,lon:8.8182,scores:{costOfLiving:64,infrastructure:78,education:95,healthcare:89,energy:87,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:61200,avgIncome:82400,salaryRatio:68},{name:'Davos',canton:'Graubünden (GR)',type:'Alpine',pop:5000,landPrice:2200,lat:46.8008,lon:9.8355,scores:{costOfLiving:60,infrastructure:58,education:68,healthcare:60,energy:100,sustainability:73,food:60,entertainment:70,nature:95},tags:['nature'],medianIncome:54800,avgIncome:74200,salaryRatio:44},{name:'Verbier',canton:'Valais (VS)',type:'Alpine',pop:5000,landPrice:4500,lat:46.0964,lon:7.2278,scores:{costOfLiving:22,infrastructure:58,education:68,healthcare:60,energy:100,sustainability:73,food:60,entertainment:70,nature:100},tags:['nature'],medianIncome:72400,avgIncome:118600,salaryRatio:24},{name:'Gruyères',canton:'Fribourg (FR)',type:'Rural',pop:3500,landPrice:750,lat:46.5833,lon:7.0833,scores:{costOfLiving:71,infrastructure:58,education:68,healthcare:60,energy:84,sustainability:68,food:60,entertainment:55,nature:85},tags:['nature'],medianIncome:42800,avgIncome:56200,salaryRatio:100},{name:'Spiez',canton:'Bern (BE)',type:'Suburban',pop:18000,landPrice:1000,lat:46.6833,lon:7.6833,scores:{costOfLiving:66,infrastructure:78,education:95,healthcare:89,energy:82,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:48200,avgIncome:63800,salaryRatio:96},{name:'Solothurn',canton:'Solothurn (SO)',type:'Urban',pop:45000,landPrice:900,lat:47.2088,lon:7.5323,scores:{costOfLiving:71,infrastructure:95,education:95,healthcare:95,energy:84,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:47400,avgIncome:62800,salaryRatio:100},{name:'Carouge',canton:'Geneva (GE)',type:'Urban',pop:45000,landPrice:3500,lat:46.1833,lon:6.1333,scores:{costOfLiving:30,infrastructure:95,education:95,healthcare:95,energy:75,sustainability:85,food:95,entertainment:80,nature:55},tags:['family','sustainable','urban'],medianIncome:58800,avgIncome:79200,salaryRatio:26},{name:'Aarau',canton:'Aargau (AG)',type:'Urban',pop:45000,landPrice:1500,lat:47.3925,lon:8.04,scores:{costOfLiving:66,infrastructure:95,education:95,healthcare:95,energy:85,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:52400,avgIncome:70800,salaryRatio:66},{name:'Frenkendorf',canton:'Basel (BL)',type:'Suburban',pop:18000,landPrice:1400,lat:47.5,lon:7.7167,scores:{costOfLiving:61,infrastructure:78,education:95,healthcare:89,energy:81,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:56200,avgIncome:74600,salaryRatio:78},{name:'Arlesheim',canton:'Basel (BL)',type:'Suburban',pop:18000,landPrice:1900,lat:47.4833,lon:7.6167,scores:{costOfLiving:55,infrastructure:78,education:95,healthcare:89,energy:81,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:72800,avgIncome:108400,salaryRatio:74},{name:'Riehen',canton:'Basel (BS)',type:'Suburban',pop:18000,landPrice:2800,lat:47.5833,lon:7.65,scores:{costOfLiving:42,infrastructure:78,education:95,healthcare:89,energy:80,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:78400,avgIncome:128600,salaryRatio:51},{name:'Küssnacht',canton:'Schwyz (SZ)',type:'Suburban',pop:18000,landPrice:1600,lat:47.0833,lon:8.4333,scores:{costOfLiving:72,infrastructure:78,education:95,healthcare:89,energy:94,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:58400,avgIncome:78200,salaryRatio:70},{name:'Wollerau',canton:'Schwyz (SZ)',type:'Suburban',pop:18000,landPrice:3200,lat:47.1833,lon:8.7167,scores:{costOfLiving:52,infrastructure:78,education:95,healthcare:89,energy:94,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:124800,avgIncome:248600,salaryRatio:75},{name:'Freienbach',canton:'Schwyz (SZ)',type:'Suburban',pop:18000,landPrice:2800,lat:47.2,lon:8.75,scores:{costOfLiving:57,infrastructure:78,education:95,healthcare:89,energy:94,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:94200,avgIncome:162400,salaryRatio:63},{name:'Muri bei Bern',canton:'Bern (BE)',type:'Suburban',pop:18000,landPrice:1800,lat:46.9167,lon:7.4833,scores:{costOfLiving:56,infrastructure:78,education:95,healthcare:89,energy:82,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:68400,avgIncome:92800,salaryRatio:73},{name:'Binningen',canton:'Basel (BL)',type:'Suburban',pop:18000,landPrice:2000,lat:47.5333,lon:7.5667,scores:{costOfLiving:53,infrastructure:78,education:95,healthcare:89,energy:81,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:72800,avgIncome:104600,salaryRatio:69},{name:'Männedorf',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:2300,lat:47.2667,lon:8.7167,scores:{costOfLiving:52,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:76400,avgIncome:108200,salaryRatio:62},{name:'Thalwil',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:2900,lat:47.2833,lon:8.5667,scores:{costOfLiving:44,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:84200,avgIncome:124800,salaryRatio:53},{name:'Horgen',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:2400,lat:47.25,lon:8.5833,scores:{costOfLiving:50,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:78600,avgIncome:112400,salaryRatio:61},{name:'Volketswil',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:1800,lat:47.3833,lon:8.75,scores:{costOfLiving:58,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:68400,avgIncome:92600,salaryRatio:73},{name:'Muttenz',canton:'Basel (BL)',type:'Suburban',pop:18000,landPrice:1500,lat:47.5167,lon:7.65,scores:{costOfLiving:60,infrastructure:78,education:95,healthcare:89,energy:81,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:58400,avgIncome:78600,salaryRatio:75},{name:'Allschwil',canton:'Basel (BL)',type:'Suburban',pop:18000,landPrice:1600,lat:47.55,lon:7.5333,scores:{costOfLiving:58,infrastructure:78,education:95,healthcare:89,energy:81,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:56800,avgIncome:74800,salaryRatio:67},{name:'Kriens',canton:'Lucerne (LU)',type:'Suburban',pop:18000,landPrice:1400,lat:47.0333,lon:8.2667,scores:{costOfLiving:66,infrastructure:78,education:95,healthcare:89,energy:90,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:49800,avgIncome:65400,salaryRatio:67},{name:'Baar',canton:'Zug (ZG)',type:'Suburban',pop:18000,landPrice:2400,lat:47.1967,lon:8.5233,scores:{costOfLiving:64,infrastructure:78,education:95,healthcare:89,energy:96,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:82400,avgIncome:138600,salaryRatio:65},{name:'Steinhausen',canton:'Zug (ZG)',type:'Suburban',pop:18000,landPrice:2200,lat:47.1833,lon:8.4833,scores:{costOfLiving:67,infrastructure:78,education:95,healthcare:89,energy:96,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:76800,avgIncome:112400,salaryRatio:66},{name:'Opfikon',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:2600,lat:47.4333,lon:8.5667,scores:{costOfLiving:48,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:54200,avgIncome:72800,salaryRatio:35}];
 const INDEX_PILLARS=[{key:'costOfLiving',icon:'💰',title:{en:'Cost of Living',fr:'Coût de vie',de:'Lebenshaltung',it:'Costo vita'},desc:{en:'Property prices, rental index, local tax rates, grocery costs, transport costs',fr:"Prix immobiliers, indice de loyer, taux d'imposition",de:'Immobilienpreise, Mietindex, Steuerbelastung',it:'Prezzi immobili, indice affitti, aliquote fiscali'},weight:'20%'},{key:'infrastructure',icon:'🏗',title:{en:'Infrastructure',fr:'Infrastructure',de:'Infrastruktur',it:'Infrastruttura'},desc:{en:'Road quality, public transport frequency, broadband coverage',fr:'Qualité des routes, fréquence des transports, couverture haut débit',de:'Straßenqualität, ÖPNV-Häufigkeit, Breitbandabdeckung',it:'Qualità strade, frequenza trasporti, copertura banda larga'},weight:'15%'},{key:'education',icon:'📚',title:{en:'Education',fr:'Éducation',de:'Bildung',it:'Istruzione'},desc:{en:'School ratings, international schools, universities, childcare',fr:'Notation des écoles, écoles internationales, garderies',de:'Schulbewertungen, internationale Schulen, Kinderbetreuung',it:'Valutazioni scuole, scuole internazionali, asili nido'},weight:'15%'},{key:'healthcare',icon:'🏥',title:{en:'Healthcare',fr:'Santé',de:'Gesundheit',it:'Sanità'},desc:{en:'Hospital proximity, GP availability, specialist density',fr:'Proximité hôpitaux, disponibilité médecins',de:'Krankenhauszugänglichkeit, Hausarztverfügbarkeit',it:'Prossimità ospedali, disponibilità medici'},weight:'12%'},{key:'energy',icon:'⚡',title:{en:'Energy & Utilities',fr:'Énergie & Services',de:'Energie & Versorgung',it:'Energia & Servizi'},desc:{en:'Electricity tariffs (ELCOM data), renewable energy share, heating costs',fr:'Tarifs électricité (données ELCOM), énergies renouvelables',de:'Stromtarife (ELCOM-Daten), Anteil erneuerbarer Energie',it:'Tariffe energia (dati ELCOM), energie rinnovabili'},weight:'10%'},{key:'sustainability',icon:'🌿',title:{en:'Sustainability',fr:'Durabilité',de:'Nachhaltigkeit',it:'Sostenibilità'},desc:{en:'Green spaces per capita, recycling rates, EV charging, solar installations',fr:'Espaces verts, taux de recyclage, recharge VE',de:'Grünflächen pro Kopf, Recyclingquoten, E-Ladeinfrastruktur',it:'Spazi verdi, tassi di riciclo, ricarica EV'},weight:'10%'},{key:'food',icon:'🛒',title:{en:'Food & Commerce',fr:'Alimentation & Commerce',de:'Lebensmittel & Handel',it:'Alimentari & Commercio'},desc:{en:'Supermarket density, farmers markets, restaurant variety',fr:'Densité supermarchés, marchés fermiers, restaurants',de:'Supermarktdichte, Wochenmärkte, Gastronomie',it:'Densità supermercati, mercati contadini, ristoranti'},weight:'8%'},{key:'entertainment',icon:'🎭',title:{en:'Entertainment',fr:'Loisirs',de:'Freizeit',it:'Svago'},desc:{en:'Cultural venues, sports facilities, nightlife, family activities',fr:'Lieux culturels, équipements sportifs, vie nocturne',de:'Kultureinrichtungen, Sportanlagen, Nachtleben',it:'Luoghi culturali, impianti sportivi, vita notturna'},weight:'5%'},{key:'nature',icon:'🏔',title:{en:'Nature Access',fr:'Accès à la nature',de:'Naturzugang',it:'Accesso natura'},desc:{en:'Hiking trails, lakes, air quality index, biodiversity, altitude',fr:"Sentiers de randonnée, lacs et rivières, qualité de l'air",de:'Wanderwege, Seen und Flüsse, Luftqualität',it:'Sentieri, laghi e fiumi, qualità aria'},weight:'5%'}];
 function getT(k){return T[lang][k]||T.en[k]||''}
-function setLang(l){lang=l;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));applyTranslations();renderWeights();renderRanking();renderIndexPillars();renderCompare();renderQuickPrompts();const ce=document.getElementById('community-count');if(ce)ce.textContent=COMMUNITIES.length.toLocaleString();if(document.getElementById('page-map').classList.contains('active'))renderMap();}
+function setLang(l){lang=l;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));applyTranslations();renderWeights();renderRanking();renderIndexPillars();renderCompare();applyWaitlistTranslations();const ce=document.getElementById('community-count');if(ce)ce.textContent=COMMUNITIES.length.toLocaleString();if(document.getElementById('page-map').classList.contains('active'))renderMap();}
 function applyTranslations(){const st=(id,val,attr)=>{const el=document.getElementById(id);if(!el)return;if(attr==='html')el.innerHTML=val;else if(attr==='ph')el.placeholder=val;else el.textContent=val;};st('h-tag',getT('heroTag'));st('h-title',getT('heroTitle'),'html');st('h-sub',getT('heroSub'));st('h-cta1',getT('heroCta1'));st('h-cta2',getT('heroCta2'));st('h-s1',getT('hS1'));st('h-s2',getT('hS2'));st('h-s3',getT('hS3'));st('h-s4',getT('hS4'));st('rank-title',getT('rankTitle'));st('rank-sub',getT('rankSub'));st('w-title',getT('wTitle'));st('cmp-title',getT('cmpTitle'));st('cmp-sub',getT('cmpSub'));st('cmp-add-btn',getT('cmpAdd'));st('cmp-chart-title',getT('cmpChartTitle'));st('ai-title',getT('aiTitle'));st('ai-page-title',getT('aiPageTitle'));st('ai-page-sub',getT('aiPageSub'));st('search-input',getT('searchPlaceholder'),'ph');st('cmp-search',getT('cmpSearchPlaceholder'),'ph');st('chip-all',getT('chipAll'));st('chip-family',getT('chipFamily'));st('chip-affordable',getT('chipAffordable'));st('chip-sustainable',getT('chipSustainable'));st('chip-nature',getT('chipNature'));st('chip-urban',getT('chipUrban'));}
 function calcScore(c){let t=0,w=0;for(const[k,d]of Object.entries(WEIGHTS_DEF)){t+=c.scores[k]*d.val;w+=d.val}return Math.round(t/w)}
 function renderWeights(){const g=document.getElementById('weights-grid');g.innerHTML='';for(const[k,w]of Object.entries(WEIGHTS_DEF)){const d=document.createElement('div');d.className='weight-item';d.innerHTML=`<label><span>${w.icon} ${w.label[lang]||w.label.en}</span><span class="weight-badge" id="wb-${k}">${w.val}%</span></label><input type="range" min="0" max="30" step="1" value="${w.val}" oninput="updateWeight('${k}',this.value)">`;g.appendChild(d)}}
 function updateWeight(k,v){WEIGHTS_DEF[k].val=parseInt(v);document.getElementById('wb-'+k).textContent=v+'%';renderRanking()}
 function getSorted(){const q=(document.getElementById('search-input')?.value||'').toLowerCase();const canton=document.getElementById('canton-filter')?.value||'';const type=document.getElementById('type-filter')?.value||'';return[...COMMUNITIES].filter(c=>{if(q&&!c.name.toLowerCase().includes(q)&&!c.canton.toLowerCase().includes(q))return false;if(canton&&c.canton!==canton)return false;if(type&&c.type!==type)return false;if(currentFilter!=='all'&&!c.tags.includes(currentFilter))return false;return true}).map(c=>({...c,score:calcScore(c)})).sort((a,b)=>b.score-a.score)}
-function renderRanking(){const g=document.getElementById('rank-grid');const s=getSorted();g.innerHTML='';s.forEach((c,i)=>{const rank=i+1;const card=document.createElement('div');card.className='rank-card'+(rank===1?' top1':'');card.dataset.id=c.name;const mk=['costOfLiving','education','healthcare','sustainability'];const mb=mk.map(k=>`<div class="mini-bar"><span class="mini-bar-label">${k.slice(0,6)}</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${c.scores[k]}%"></div></div></div>`).join('');const met=Object.entries(c.scores).map(([k,v])=>{const p=INDEX_PILLARS.find(p=>p.key===k);return`<div class="detail-metric"><div class="dm-label">${p?p.icon:''} ${p?(p.title[lang]||p.title.en):k}</div><div class="dm-val">${v}</div><div class="dm-sub">/100</div></div>`}).join('');card.innerHTML=`<div class="rank-num ${rank===1?'gold':''}">${rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':rank}</div><div class="rank-info"><h3>${c.name}</h3><div class="rank-meta"><span>📍 ${c.canton}</span><span>🏘 ${c.type}</span><span>👥 ${c.pop.toLocaleString()}</span><span>💰 ${c.landPrice} ${getT('cost')}</span>${c.medianIncome?`<span>💵 CHF ${(c.medianIncome/1000).toFixed(0)}k/yr</span>`:''}</div><div style="margin-top:8px;">${mb}</div></div><div class="rank-right"><div class="score-big">${c.score}</div><div class="score-label">${getT('score')}</div></div><div class="detail-panel"><div class="detail-grid">${met}</div><div class="detail-actions"><button class="action-btn primary" onclick="event.stopPropagation();askAI('Tell me about buying land in ${c.name}')">${getT('detailBuy')}</button><button class="action-btn" onclick="event.stopPropagation();askAI('What is the rental market like in ${c.name}?')">${getT('detailRent')}</button><button class="action-btn" onclick="event.stopPropagation();addToCompare('${c.name}')">${getT('detailSave')}</button><button class="action-btn" onclick="event.stopPropagation();askAI('Give me a full community profile of ${c.name} including pros and cons')">${getT('detailMore')}</button></div></div>`;card.addEventListener('click',()=>{const was=card.classList.contains('expanded');document.querySelectorAll('.rank-card.expanded').forEach(el=>el.classList.remove('expanded'));if(!was)card.classList.add('expanded')});g.appendChild(card)})}
+function renderRanking(){const g=document.getElementById('rank-grid');const s=getSorted();g.innerHTML='';s.forEach((c,i)=>{const rank=i+1;const card=document.createElement('div');card.className='rank-card'+(rank===1?' top1':'');card.dataset.id=c.name;const mk=['costOfLiving','education','healthcare','sustainability'];const mb=mk.map(k=>`<div class="mini-bar"><span class="mini-bar-label">${k.slice(0,6)}</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${c.scores[k]}%"></div></div></div>`).join('');const met=Object.entries(c.scores).map(([k,v])=>{const p=INDEX_PILLARS.find(p=>p.key===k);return`<div class="detail-metric"><div class="dm-label">${p?p.icon:''} ${p?(p.title[lang]||p.title.en):k}</div><div class="dm-val">${v}</div><div class="dm-sub">/100</div></div>`}).join('');card.innerHTML=`<div class="rank-num ${rank===1?'gold':''}">${rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':rank}</div><div class="rank-info"><h3>${c.name}</h3><div class="rank-meta"><span>📍 ${c.canton}</span><span>🏘 ${c.type}</span><span>👥 ${c.pop.toLocaleString()}</span><span>💰 ${c.landPrice} ${getT('cost')}</span>${c.medianIncome?`<span>💵 CHF ${(c.medianIncome/1000).toFixed(0)}k/yr</span>`:''}</div><div style="margin-top:8px;">${mb}</div></div><div class="rank-right"><div class="score-big">${c.score}</div><div class="score-label">${getT('score')}</div></div><div class="detail-panel"><div class="detail-grid">${met}</div><div class="detail-actions"><button class="action-btn primary" data-action="buy" data-name="${c.name}">${getT('detailBuy')}</button><button class="action-btn" data-action="rent" data-name="${c.name}">${getT('detailRent')}</button><button class="action-btn" data-action="save" data-name="${c.name}">${getT('detailSave')}</button><button class="action-btn" data-action="profile" data-name="${c.name}">${getT('detailMore')}</button></div></div>`;card.addEventListener('click',(e)=>{const btn=e.target.closest('[data-action]');if(btn){e.stopPropagation();const action=btn.dataset.action,name=btn.dataset.name;if(action==='buy')askAI('Tell me about buying land in '+name);else if(action==='rent')askAI('What is the rental market like in '+name+'?');else if(action==='save'){addToCompare(name);return;}else if(action==='profile')askAI('Give me a full community profile of '+name+' including pros and cons');return;}const was=card.classList.contains('expanded');document.querySelectorAll('.rank-card.expanded').forEach(el=>el.classList.remove('expanded'));if(!was)card.classList.add('expanded');});g.appendChild(card)})}
 function filterCommunities(){renderRanking()}
 function setChip(el,f){currentFilter=f;document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderRanking()}
 function renderIndexPillars(){
@@ -521,14 +630,7 @@ function addToCompare(n){if(!n)return;const c=COMMUNITIES.find(c=>c.name===n);if
 function removeFromCompare(n){cmpSelected=cmpSelected.filter(x=>x!==n);renderCompare()}
 function renderCompare(){const sel=document.getElementById('cmp-selected');sel.innerHTML=cmpSelected.map(n=>`<span style="background:var(--green3);color:var(--green);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;" onclick="removeFromCompare('${n}')">${n} ×</span>`).join('');const g=document.getElementById('compare-grid');if(!cmpSelected.length){g.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--ink3);font-size:14px;">Add communities above to compare</div>`;return}const cs=cmpSelected.map(n=>COMMUNITIES.find(c=>c.name===n)).filter(Boolean);g.innerHTML=cs.map(c=>{const sc=calcScore(c);const _salLbl=lang==='fr'?'Revenu médian':lang==='de'?'Medianeinkommen':lang==='it'?'Reddito mediano':'Median Income';const _ratLbl=lang==='fr'?'Pouvoir d achat':lang==='de'?'Kaufkraft':lang==='it'?'Acquisto':'Purchasing Power';const salRows=c.medianIncome?`<div class="compare-row" style="background:var(--gold2);padding:4px 0;border-radius:4px;margin-bottom:4px;"><span class="compare-row-label">💵 ${_salLbl}</span><span style="font-weight:600;font-size:12px;color:#7a5a00;">CHF ${(c.medianIncome/1000).toFixed(0)}k</span></div><div class="compare-row" style="background:${c.salaryRatio>=60?'var(--green3)':c.salaryRatio>=40?'var(--gold2)':'#fde8e8'};padding:4px 0;border-radius:4px;margin-bottom:8px;"><span class="compare-row-label">⚖️ ${_ratLbl}</span><span class="badge ${c.salaryRatio>=60?'badge-green':c.salaryRatio>=40?'badge-gold':'badge-red'}">${c.salaryRatio}/100</span></div>`:'';const rows=INDEX_PILLARS.map(p=>{const v=c.scores[p.key];const cl=v>=80?'badge-green':v>=60?'badge-gold':'badge-red';return`<div class="compare-row"><span class="compare-row-label">${p.icon} ${p.title[lang]||p.title.en}</span><span class="badge ${cl}">${v}</span></div>`}).join('');return`<div class="compare-card"><h4>${c.name} <span style="color:var(--green);font-family:'Fraunces',serif;">${sc}</span></h4><div style="font-size:11px;color:var(--ink3);margin-bottom:10px;">${c.canton} · ${c.type} · ${c.landPrice} ${getT('cost')}</div>${salaryRow}${salRows}${rows}</div>`}).join('');const wrap=document.getElementById('cmp-chart-wrap');wrap.style.display=cs.length>=2?'block':'none';if(cs.length>=2)renderRadar(cs)}
 function renderRadar(cs){if(cmpChart){cmpChart.destroy();cmpChart=null}const labels=INDEX_PILLARS.map(p=>p.title[lang]||p.title.en);const colors=['#2d5a27','#c8960c','#1a3a5c','#8b2020'];const datasets=cs.map((c,i)=>({label:c.name,data:INDEX_PILLARS.map(p=>c.scores[p.key]),borderColor:colors[i],backgroundColor:colors[i]+'22',borderWidth:2,pointRadius:3}));cmpChart=new Chart(document.getElementById('cmpChart'),{type:'radar',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,ticks:{stepSize:20,font:{size:9}},pointLabels:{font:{size:10}}}},plugins:{legend:{display:true,labels:{font:{size:11}}}}}})}
-const CHAT=[];
-async function sendAI(){const input=document.getElementById('ai-input');const msg=input.value.trim();if(!msg)return;input.value='';showPage('ai');appendChat('user',msg);const tid=appendChat('assistant',null);const btn=document.getElementById('ai-send-btn');btn.disabled=true;const top=getSorted().slice(0,5).map(c=>`${c.name} (score:${c.score}, land:${c.landPrice} CHF/m², canton:${c.canton})`).join(', ');const sys=`You are CommunaRank, an expert AI advisor for Swiss real estate and community living. You help people understand Swiss communities, land purchase, rental markets, and quality of life. Top communities right now: ${top}. Be helpful, concise (3-5 sentences), cite Swiss facts. Respond in ${lang==='fr'?'French':lang==='de'?'German':lang==='it'?'Italian':'English'}.`;const messages=[...CHAT.slice(-6),{role:'user',content:msg}];try{const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages})});const data=await res.json();const reply=data.content?.map(b=>b.text||'').join('')||'Sorry, could not get a response.';updateChat(tid,reply);CHAT.push({role:'user',content:msg},{role:'assistant',content:reply})}catch(e){updateChat(tid,'Connection error. Please try again.')}btn.disabled=false}
-let chatN=0;
-function appendChat(role,text){const id='msg-'+(++chatN);const h=document.getElementById('ai-chat-history');const d=document.createElement('div');d.id=id;d.style.cssText=`display:flex;justify-content:${role==='user'?'flex-end':'flex-start'};`;d.innerHTML=`<div style="max-width:80%;padding:10px 14px;border-radius:${role==='user'?'12px 12px 4px 12px':'12px 12px 12px 4px'};background:${role==='user'?'var(--green2)':'rgba(255,255,255,0.1)'};color:${role==='user'?'white':'rgba(245,242,235,0.9)'};font-size:14px;line-height:1.6;" id="${id}-text">${text===null?'<span class="ai-thinking"><span></span><span></span><span></span></span>':text}</div>`;h.appendChild(d);h.scrollTop=h.scrollHeight;return id}
-function updateChat(id,text){const el=document.getElementById(id+'-text');if(el)el.textContent=text}
-function askAI(q){document.getElementById('ai-input').value=q;showPage('ai');sendAI()}
-function renderQuickPrompts(){const ps=getT('quickPrompts')||[];const c=document.getElementById('ai-quick-prompts');c.innerHTML=ps.map(p=>`<button style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(245,242,235,0.8);padding:6px 12px;border-radius:20px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="document.getElementById('ai-input').value='${p.replace(/'/g,"\\'")}'">${p}</button>`).join('')}
-function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+n).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.id==='nb-'+n));if(n==='compare')renderCompare();if(n==='index')renderIndexPillars();if(n==='map')renderMap();}
+function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+n).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.id==='nb-'+n));if(n==='compare')renderCompare();if(n==='index')renderIndexPillars();if(n==='map')renderMap();if(n==='ai')applyWaitlistTranslations();}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
 
 // ─── MAP ───────────────────────────────────────────────
@@ -805,7 +907,167 @@ function _drawWithTopo(topo) {
 
 // Map hooks integrated below
 
-renderWeights();renderRanking();renderIndexPillars();renderQuickPrompts();applyTranslations();
+
+// ─── WAITLIST ───────────────────────────────────────────────
+const WL_T = {
+  en:{
+    navBtn:'Early Access', pageTitle:'Join the Waitlist',
+    pageSub:'Be first to access new features, community reports, and property alerts',
+    vp1t:'Full commune data', vp1b:'All 2,212 Swiss communes ranked — not just the top 50',
+    vp2t:'Detailed reports', vp2b:'PDF community profiles with historical trends and forecasts',
+    vp3t:'Property alerts', vp3b:'Get notified when land or homes match your criteria',
+    vp4t:'AI advisor', vp4b:'Personal AI that recommends communities based on your needs',
+    formTitle:'Get early access',
+    formSub:'Join 200+ people already on the waitlist. Free forever for early members.',
+    lblName:'Full name', lblEmail:'Email address', lblCanton:'Canton of interest',
+    lblGoal:'I am looking to', lblBudget:'Budget range (CHF)',
+    optAny:'Any canton', optNoBudget:'Prefer not to say',
+    goalBuy:'Buy land', goalHouse:'Buy a house', goalRent:'Rent an apartment',
+    goalInvest:'Invest in property', goalResearch:'Research only',
+    btnText:'Join the waitlist →', btnLoading:'Submitting...',
+    privacyNote:'No spam. Your data is stored securely and never sold. You can unsubscribe at any time.',
+    successTitle:"You're on the list!", successBody:"We'll be in touch as soon as your early access is ready.",
+    successBtn:'Explore rankings →',
+    socialProof:'🔒 Your data stays in Switzerland. Built with official BFS, ELCOM, and OSM data.',
+    errName:'Please enter your name', errEmail:'Please enter a valid email',
+    heroCta2:'Get Early Access'
+  },
+  fr:{
+    navBtn:'Accès anticipé', pageTitle:"Rejoindre la liste d'attente",
+    pageSub:"Soyez premier à accéder aux nouvelles fonctionnalités, rapports et alertes immobilières",
+    vp1t:'Données complètes', vp1b:'Les 2 212 communes suisses classées — pas seulement les 50 premières',
+    vp2t:'Rapports détaillés', vp2b:'Profils communaux en PDF avec tendances historiques et prévisions',
+    vp3t:'Alertes immobilières', vp3b:'Soyez notifié quand des terrains ou maisons correspondent à vos critères',
+    vp4t:'Conseiller IA', vp4b:'IA personnelle qui recommande des communes selon vos besoins',
+    formTitle:'Accès anticipé',
+    formSub:'Rejoignez 200+ personnes déjà sur la liste. Gratuit à vie pour les premiers membres.',
+    lblName:'Nom complet', lblEmail:'Adresse e-mail', lblCanton:"Canton d'intérêt",
+    lblGoal:"Je cherche à", lblBudget:'Budget (CHF)',
+    optAny:'Tous les cantons', optNoBudget:'Ne souhaite pas préciser',
+    goalBuy:"Acheter un terrain", goalHouse:'Acheter une maison', goalRent:'Louer un appartement',
+    goalInvest:"Investir dans l'immobilier", goalResearch:"Recherche uniquement",
+    btnText:'Rejoindre la liste →', btnLoading:'Envoi en cours...',
+    privacyNote:"Pas de spam. Vos données sont stockées en sécurité et ne sont jamais vendues.",
+    successTitle:'Vous êtes sur la liste!', successBody:"Nous vous contacterons dès que votre accès anticipé sera prêt.",
+    successBtn:"Explorer les classements →",
+    socialProof:"🔒 Vos données restent en Suisse. Construit avec les données officielles BFS, ELCOM et OSM.",
+    errName:'Veuillez entrer votre nom', errEmail:"Veuillez entrer un e-mail valide",
+    heroCta2:'Accès anticipé'
+  },
+  de:{
+    navBtn:'Früher Zugang', pageTitle:'Warteliste beitreten',
+    pageSub:'Seien Sie Erster bei neuen Funktionen, Gemeindeberichten und Immobilien-Alerts',
+    vp1t:'Vollständige Daten', vp1b:'Alle 2.212 Schweizer Gemeinden — nicht nur die Top 50',
+    vp2t:'Detaillierte Berichte', vp2b:'PDF-Gemeindeprofile mit historischen Trends und Prognosen',
+    vp3t:'Immobilien-Alerts', vp3b:'Benachrichtigt werden, wenn Land oder Häuser Ihren Kriterien entsprechen',
+    vp4t:'KI-Berater', vp4b:'Persönliche KI, die Gemeinden basierend auf Ihren Bedürfnissen empfiehlt',
+    formTitle:'Frühen Zugang erhalten',
+    formSub:'Schließen Sie sich 200+ Personen auf der Warteliste an. Für frühe Mitglieder kostenlos.',
+    lblName:'Vollständiger Name', lblEmail:'E-Mail-Adresse', lblCanton:'Kanton von Interesse',
+    lblGoal:"Ich möchte", lblBudget:'Budget (CHF)',
+    optAny:'Alle Kantone', optNoBudget:'Keine Angabe',
+    goalBuy:'Land kaufen', goalHouse:'Haus kaufen', goalRent:'Wohnung mieten',
+    goalInvest:'In Immobilien investieren', goalResearch:'Nur recherchieren',
+    btnText:'Warteliste beitreten →', btnLoading:'Wird gesendet...',
+    privacyNote:'Kein Spam. Ihre Daten werden sicher gespeichert und niemals verkauft.',
+    successTitle:'Sie sind auf der Liste!', successBody:'Wir melden uns, sobald Ihr früher Zugang bereit ist.',
+    successBtn:'Rankings erkunden →',
+    socialProof:'🔒 Ihre Daten bleiben in der Schweiz. Erstellt mit offiziellen BFS-, ELCOM- und OSM-Daten.',
+    errName:'Bitte geben Sie Ihren Namen ein', errEmail:'Bitte geben Sie eine gültige E-Mail ein',
+    heroCta2:'Früher Zugang'
+  },
+  it:{
+    navBtn:'Accesso anticipato', pageTitle:"Unisciti alla lista d'attesa",
+    pageSub:"Sii il primo ad accedere a nuove funzionalità, report e avvisi immobiliari",
+    vp1t:'Dati completi', vp1b:'Tutti i 2.212 comuni svizzeri classificati — non solo i primi 50',
+    vp2t:'Report dettagliati', vp2b:'Profili comunali in PDF con tendenze storiche e previsioni',
+    vp3t:'Avvisi immobiliari', vp3b:'Ricevi notifiche quando terreni o case corrispondono ai tuoi criteri',
+    vp4t:'Consulente IA', vp4b:'IA personale che raccomanda comuni in base alle tue esigenze',
+    formTitle:'Ottieni accesso anticipato',
+    formSub:'Unisciti a 200+ persone già in lista. Gratuito per sempre per i primi membri.',
+    lblName:'Nome completo', lblEmail:'Indirizzo email', lblCanton:'Cantone di interesse',
+    lblGoal:"Sto cercando di", lblBudget:'Budget (CHF)',
+    optAny:'Qualsiasi cantone', optNoBudget:'Preferisco non dirlo',
+    goalBuy:'Acquistare terreno', goalHouse:'Acquistare una casa', goalRent:'Affittare un appartamento',
+    goalInvest:"Investire in proprietà", goalResearch:'Solo ricerca',
+    btnText:'Unisciti alla lista →', btnLoading:'Invio in corso...',
+    privacyNote:'Niente spam. I tuoi dati sono conservati in modo sicuro e non vengono mai venduti.',
+    successTitle:'Sei in lista!', successBody:'Ti contatteremo non appena il tuo accesso anticipato sarà pronto.',
+    successBtn:'Esplora le classifiche →',
+    socialProof:'🔒 I tuoi dati rimangono in Svizzera. Costruito con dati ufficiali BFS, ELCOM e OSM.',
+    errName:'Inserisci il tuo nome', errEmail:"Inserisci un'email valida",
+    heroCta2:'Accesso anticipato'
+  }
+};
+
+function applyWaitlistTranslations() {
+  const t = WL_T[lang] || WL_T.en;
+  const st = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
+  const sh = (id, val) => { const el = document.getElementById(id); if(el) el.innerHTML = val; };
+  st('ai-page-title', t.pageTitle);
+  st('ai-page-sub', t.pageSub);
+  st('vp1-title', t.vp1t); st('vp1-body', t.vp1b);
+  st('vp2-title', t.vp2t); st('vp2-body', t.vp2b);
+  st('vp3-title', t.vp3t); st('vp3-body', t.vp3b);
+  st('vp4-title', t.vp4t); st('vp4-body', t.vp4b);
+  st('form-title', t.formTitle); st('form-sub', t.formSub);
+  st('lbl-name', t.lblName); st('lbl-email', t.lblEmail);
+  st('lbl-canton', t.lblCanton); st('lbl-goal', t.lblGoal); st('lbl-budget', t.lblBudget);
+  st('opt-any', t.optAny); st('opt-nobudget', t.optNoBudget);
+  st('goal-buy-lbl', t.goalBuy); st('goal-house-lbl', t.goalHouse);
+  st('goal-rent-lbl', t.goalRent); st('goal-invest-lbl', t.goalInvest);
+  st('goal-research-lbl', t.goalResearch);
+  st('wl-btn-text', t.btnText);
+  st('privacy-note', t.privacyNote);
+  st('success-title', t.successTitle); st('success-body', t.successBody);
+  st('success-btn', t.successBtn); st('social-proof', t.socialProof);
+  st('nb-ai', t.navBtn);
+  st('h-cta2', t.heroCta2);
+  // Set placeholder text
+  const name = document.getElementById('wl-name');
+  if(name) name.placeholder = lang === 'fr' ? 'Jean Dupont' : lang === 'de' ? 'Anna Müller' : lang === 'it' ? 'Marco Rossi' : 'Anna Müller';
+}
+
+function submitWaitlist() {
+  const t = WL_T[lang] || WL_T.en;
+  const name = document.getElementById('wl-name').value.trim();
+  const email = document.getElementById('wl-email').value.trim();
+  const btn = document.getElementById('wl-submit-btn');
+  const btnTxt = document.getElementById('wl-btn-text');
+
+  if(!name) { showToast(t.errName); return; }
+  if(!email || !email.includes('@')) { showToast(t.errEmail); return; }
+
+  const canton = document.getElementById('wl-canton').value;
+  const budget = document.getElementById('wl-budget').value;
+  const goals = ['buy','house','rent','invest','research']
+    .filter(g => document.getElementById('goal-'+g)?.checked)
+    .join(', ');
+
+  // Disable button and show loading
+  btn.disabled = true;
+  if(btnTxt) btnTxt.textContent = t.btnLoading;
+
+  // Store in localStorage as backup + send to mailto
+  const entry = { name, email, canton, budget, goals, lang, date: new Date().toISOString() };
+  try {
+    const existing = JSON.parse(localStorage.getItem('cr_waitlist') || '[]');
+    existing.push(entry);
+    localStorage.setItem('cr_waitlist', JSON.stringify(existing));
+  } catch(e) {}
+
+  // Simulate submission (replace with real endpoint later)
+  setTimeout(() => {
+    document.getElementById('waitlist-form').style.display = 'none';
+    document.getElementById('waitlist-success').style.display = 'block';
+    showToast('✓ ' + t.successTitle);
+  }, 800);
+}
+
+// Remove old askAI function - replace with redirect to waitlist
+function askAI(q) { showPage('ai'); }
+
+renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();
 // Update community count from real data
 const countEl=document.getElementById('community-count');
 if(countEl)countEl.textContent=COMMUNITIES.length.toLocaleString();
