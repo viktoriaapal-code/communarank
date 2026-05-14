@@ -757,7 +757,15 @@ function toggleMobileNav() {
   initMobileNav();
   window.addEventListener('resize', initMobileNav);
 })();
-renderWeights();renderRanking();renderIndexPillars();renderCompare();applyWaitlistTranslations();applyRevTranslations();const ce=document.getElementById('community-count');if(ce)ce.textContent=COMMUNITIES.length.toLocaleString();if(document.getElementById('page-map').classList.contains('active'))renderMap();}
+renderWeights();renderRanking();
+// Profile button delegation on rank grid (runs once after init)
+(function() {
+  var grid = document.getElementById('rank-grid');
+  if(grid) grid.addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-action="profile"]');
+    if(btn && btn.dataset.name) openProfile(btn.dataset.name);
+  });
+})();renderIndexPillars();renderCompare();applyWaitlistTranslations();applyRevTranslations();const ce=document.getElementById('community-count');if(ce)ce.textContent=COMMUNITIES.length.toLocaleString();if(document.getElementById('page-map').classList.contains('active'))renderMap();}
 function applyTranslations(){const st=(id,val,attr)=>{const el=document.getElementById(id);if(!el)return;if(attr==='html')el.innerHTML=val;else if(attr==='ph')el.placeholder=val;else el.textContent=val;};st('h-tag',getT('heroTag'));st('h-title',getT('heroTitle'),'html');st('h-sub',getT('heroSub'));st('h-cta1',getT('heroCta1'));st('h-cta2',getT('heroCta2'));st('h-s1',getT('hS1'));st('h-s2',getT('hS2'));st('h-s3',getT('hS3'));st('h-s4',getT('hS4'));st('h-s5',getT('hS5')||'Resident reviews');st('rank-title',getT('rankTitle'));st('rank-sub',getT('rankSub'));st('w-title',getT('wTitle'));st('cmp-title',getT('cmpTitle'));st('cmp-sub',getT('cmpSub'));st('cmp-add-btn',getT('cmpAdd'));st('cmp-chart-title',getT('cmpChartTitle'));st('ai-title',getT('aiTitle'));st('ai-page-title',getT('aiPageTitle'));st('ai-page-sub',getT('aiPageSub'));st('search-input',getT('searchPlaceholder'),'ph');st('cmp-search',getT('cmpSearchPlaceholder'),'ph');st('chip-all',getT('chipAll'));st('chip-family',getT('chipFamily'));st('chip-affordable',getT('chipAffordable'));st('chip-sustainable',getT('chipSustainable'));st('chip-nature',getT('chipNature'));st('chip-urban',getT('chipUrban'));}
 function calcScore(c){let t=0,w=0;for(const[k,d]of Object.entries(WEIGHTS_DEF)){t+=c.scores[k]*d.val;w+=d.val}return Math.round(t/w)}
 function renderWeights(){const g=document.getElementById('weights-grid');g.innerHTML='';for(const[k,w]of Object.entries(WEIGHTS_DEF)){const d=document.createElement('div');d.className='weight-item';d.innerHTML=`<label><span>${w.icon} ${w.label[lang]||w.label.en}</span><span class="weight-badge" id="wb-${k}">${w.val}%</span></label><input type="range" min="0" max="30" step="1" value="${w.val}" oninput="updateWeight('${k}',this.value)">`;g.appendChild(d)}}
@@ -1103,6 +1111,9 @@ function renderMap() {
 
   // Draw the map
   drawChoropleth();
+  // Extra map setup
+  renderMapModeToggle();
+  updateHeroStats();
 }
 
 function setMapDim(dim) {
@@ -2647,27 +2658,11 @@ function getCantonScores(dim) {
 }
 
 // Patch renderMap to add toggle
-const _origRenderMap = renderMap;
-function renderMap() {
-  _origRenderMap();
-  renderMapModeToggle();
-  updateHeroStats();
-}
+
 
 // ─── "View Profile" button in rank cards ─────────────────────────────
 // Patch renderRanking to add profile button to action buttons
-const _origRenderRanking = renderRanking;
-function renderRanking() {
-  _origRenderRanking();
-  // Add profile button to all expanded cards via event delegation
-  document.getElementById('rank-grid').addEventListener('click', function(e) {
-    const profileBtn = e.target.closest('[data-action="profile"]');
-    if(profileBtn) {
-      const name = profileBtn.dataset.name;
-      if(name) openProfile(name);
-    }
-  }, {once: true});
-}
+
 
 seedSampleReviews();
 renderRevStarGrid();
