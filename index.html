@@ -137,7 +137,7 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
 <nav>
   <div class="nav-brand">Communa<span>Rank</span></div>
   <button class="hamburger" id="hamburger-btn" onclick="toggleMobileNav()"
-    style="display:none;background:none;border:none;color:var(--paper);cursor:pointer;padding:8px;flex-direction:column;gap:5px;align-items:center;justify-content:center;">
+    style="background:none;border:none;color:var(--paper);cursor:pointer;padding:8px;flex-direction:column;gap:5px;align-items:center;justify-content:center;">
     <span id="ham-line1" style="display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:all 0.2s;"></span>
     <span id="ham-line2" style="display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:all 0.2s;"></span>
     <span id="ham-line3" style="display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:all 0.2s;"></span>
@@ -1063,11 +1063,7 @@ function setMapDim(dim) {
 }
 
 function drawChoropleth() {
-  if (!mapTopoLoaded) {
-    loadMapTopo();
-    return;
-  }
-  _drawWithTopo(mapTopoData);
+  drawSVGMap();
 }
 
 function loadMapTopo() {
@@ -1243,6 +1239,98 @@ function _drawWithTopo(topo) {
     })
     .text(d => { const ab=getAb(d); return ab&&scores[ab]!=null ? scores[ab] : ''; });
 }
+
+function drawSVGMap() {
+  const container = document.getElementById('swiss-map');
+  if(!container) return;
+
+  const scores = getCantonScores(mapDimension);
+  const vals = Object.values(scores).filter(v=>v!==null);
+  if(!vals.length) return;
+  const minVal = Math.min(...vals), maxVal = Math.max(...vals);
+
+  function col(score) {
+    if(score===null) return '#ddd8cc';
+    const t = Math.max(0,Math.min(1,(score-minVal)/(maxVal-minVal||1)));
+    return 'rgb('+Math.round(200-t*160)+','+Math.round(232-t*80)+','+Math.round(194-t*155)+')';
+  }
+
+  const CP = {
+    ZH:'M430,82 L468,75 L490,88 L495,110 L480,130 L460,138 L440,125 L425,108Z',
+    BE:'M290,120 L330,108 L360,115 L370,145 L355,185 L320,210 L285,205 L260,180 L255,150Z',
+    LU:'M375,148 L405,140 L420,155 L415,175 L395,182 L372,172Z',
+    UR:'M400,175 L420,168 L435,185 L428,210 L408,215 L395,200Z',
+    SZ:'M435,148 L458,140 L472,155 L465,172 L445,178 L430,165Z',
+    OW:'M368,172 L390,165 L398,180 L385,195 L365,188Z',
+    NW:'M378,155 L395,150 L400,165 L385,170 L375,162Z',
+    GL:'M465,155 L482,148 L492,165 L480,178 L462,170Z',
+    ZG:'M430,148 L448,142 L452,158 L438,162 L428,155Z',
+    FR:'M252,148 L285,140 L295,160 L280,185 L255,180 L240,162Z',
+    SO:'M318,92 L348,85 L358,100 L345,118 L318,115 L308,102Z',
+    BS:'M310,68 L325,62 L330,72 L320,78 L308,74Z',
+    BL:'M295,72 L318,65 L325,80 L312,92 L295,88Z',
+    SH:'M398,45 L428,38 L435,52 L420,62 L398,58Z',
+    AR:'M510,108 L528,102 L535,115 L522,122 L508,118Z',
+    AI:'M518,115 L530,110 L535,120 L525,126 L515,122Z',
+    SG:'M468,98 L510,90 L525,105 L518,130 L495,138 L468,125Z',
+    GR:'M448,168 L510,158 L545,178 L540,225 L505,248 L462,238 L438,210Z',
+    AG:'M348,88 L388,80 L398,98 L385,115 L352,118 L338,102Z',
+    TG:'M435,72 L478,62 L488,78 L472,95 L438,98 L428,82Z',
+    TI:'M375,228 L420,220 L448,240 L440,285 L408,295 L375,278 L358,255Z',
+    VD:'M178,148 L245,138 L255,165 L238,200 L195,215 L160,195 L152,168Z',
+    VS:'M248,185 L320,215 L355,225 L355,258 L298,278 L250,255 L225,225Z',
+    NE:'M228,115 L258,108 L265,128 L250,142 L225,138Z',
+    GE:'M148,195 L172,188 L178,205 L162,212Z',
+    JU:'M248,88 L282,80 L290,98 L270,112 L245,105Z'
+  };
+
+  function ctr(path) {
+    const pts=(path.match(/[\d.]+,[\d.]+/g)||[]).map(p=>p.split(',').map(Number));
+    if(!pts.length) return [340,190];
+    return [pts.reduce((s,p)=>s+p[0],0)/pts.length, pts.reduce((s,p)=>s+p[1],0)/pts.length];
+  }
+
+  const W = container.parentElement.clientWidth||680;
+  const H = Math.round(W*0.56);
+  const sx=W/680, sy=H/380;
+
+  function sp(path) {
+    return path.replace(/([\d.]+),([\d.]+)/g,(_,x,y)=>(+x*sx).toFixed(1)+','+(+y*sy).toFixed(1));
+  }
+
+  const tooltip = document.getElementById('map-tooltip');
+  let svgOut = '';
+  let labOut = '';
+
+  Object.entries(CP).forEach(([ab,path]) => {
+    const score=scores[ab], fill=col(score);
+    const [cx,cy]=ctr(path);
+    const t=score!==null?(score-minVal)/(maxVal-minVal||1):0;
+    const tc=t>0.5?'#fff':'#2d5a27';
+    const cf=Object.entries(CANTON_KEYS||{}).find(([k,v])=>v===ab)?.[0]||'';
+    const nm=(CANTON_NAMES||{})[ab]||ab;
+    const dim=(DIM_LABELS[mapDimension]||{})[lang]||mapDimension;
+    const comms=(COMMUNITIES||[]).filter(c=>(CANTON_KEYS||{})[c.canton]===ab);
+
+    svgOut+=`<path d="${sp(path)}" fill="${fill}" stroke="white" stroke-width="1" style="cursor:pointer;"
+      onmouseover="(function(e,nm,ab,sc,dim,n){const t=document.getElementById('map-tooltip');if(!t)return;t.style.display='block';t.style.left=(e.clientX+14)+'px';t.style.top=(e.clientY-14)+'px';t.innerHTML='<div style=\"font-family:Fraunces,serif;font-size:14px;margin-bottom:3px;\">'+nm+'</div><div style=\"font-size:12px;color:rgba(245,242,235,0.75)\">'+dim+': <strong style=\"color:#7dbf6e;\">'+sc+'</strong></div><div style=\"font-size:11px;color:rgba(245,242,235,0.45);margin-top:2px;\">'+n+' commune'+(n!==1?'s':'')+'</div>';})(event,'${nm}','${ab}',${score??'n/a'},'${dim}',${comms.length})"
+      onmouseleave="const t=document.getElementById('map-tooltip');if(t)t.style.display='none';"
+      onclick="(function(cf){if(!cf)return;const s=document.getElementById('canton-filter');if(s)s.value=cf;filterCommunities();showPage('ranking');})('${cf}')"/>`;
+
+    labOut+=`<text x="${(cx*sx).toFixed(1)}" y="${(cy*sy-4).toFixed(1)}" text-anchor="middle" font-size="${W<500?7:9}" font-family="DM Sans,sans-serif" fill="${tc}" pointer-events="none">${ab}</text>`;
+    if(score!==null) labOut+=`<text x="${(cx*sx).toFixed(1)}" y="${(cy*sy+8).toFixed(1)}" text-anchor="middle" font-size="${W<500?7:9}" font-family="Fraunces,serif" font-weight="600" fill="${tc}" pointer-events="none">${score}</text>`;
+  });
+
+  container.setAttribute('width',W);
+  container.setAttribute('height',H);
+  container.setAttribute('viewBox','0 0 '+W+' '+H);
+  container.style.display='block';
+  container.innerHTML=svgOut+labOut;
+
+  const loading=document.getElementById('map-loading');
+  if(loading) loading.style.display='none';
+}
+
 
 // Map hooks integrated below
 
