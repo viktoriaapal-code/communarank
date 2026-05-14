@@ -708,6 +708,21 @@ function toggleMobileNav() {
 
 // Mobile nav closes on page selection (handled in showPage below)
 
+// Set hamburger visibility based on screen width
+(function(){
+  const ham = document.getElementById('hamburger-btn');
+  if(ham) {
+    if(window.innerWidth <= 700) {
+      ham.style.display = 'flex';
+    } else {
+      ham.style.display = 'none';
+    }
+  }
+  window.addEventListener('resize', function(){
+    const h = document.getElementById('hamburger-btn');
+    if(h) h.style.display = window.innerWidth <= 700 ? 'flex' : 'none';
+  });
+})();
 renderWeights();renderRanking();renderIndexPillars();renderCompare();applyWaitlistTranslations();applyRevTranslations();const ce=document.getElementById('community-count');if(ce)ce.textContent=COMMUNITIES.length.toLocaleString();if(document.getElementById('page-map').classList.contains('active'))renderMap();}
 function applyTranslations(){const st=(id,val,attr)=>{const el=document.getElementById(id);if(!el)return;if(attr==='html')el.innerHTML=val;else if(attr==='ph')el.placeholder=val;else el.textContent=val;};st('h-tag',getT('heroTag'));st('h-title',getT('heroTitle'),'html');st('h-sub',getT('heroSub'));st('h-cta1',getT('heroCta1'));st('h-cta2',getT('heroCta2'));st('h-s1',getT('hS1'));st('h-s2',getT('hS2'));st('h-s3',getT('hS3'));st('h-s4',getT('hS4'));st('h-s5',getT('hS5')||'Resident reviews');st('rank-title',getT('rankTitle'));st('rank-sub',getT('rankSub'));st('w-title',getT('wTitle'));st('cmp-title',getT('cmpTitle'));st('cmp-sub',getT('cmpSub'));st('cmp-add-btn',getT('cmpAdd'));st('cmp-chart-title',getT('cmpChartTitle'));st('ai-title',getT('aiTitle'));st('ai-page-title',getT('aiPageTitle'));st('ai-page-sub',getT('aiPageSub'));st('search-input',getT('searchPlaceholder'),'ph');st('cmp-search',getT('cmpSearchPlaceholder'),'ph');st('chip-all',getT('chipAll'));st('chip-family',getT('chipFamily'));st('chip-affordable',getT('chipAffordable'));st('chip-sustainable',getT('chipSustainable'));st('chip-nature',getT('chipNature'));st('chip-urban',getT('chipUrban'));}
 function calcScore(c){let t=0,w=0;for(const[k,d]of Object.entries(WEIGHTS_DEF)){t+=c.scores[k]*d.val;w+=d.val}return Math.round(t/w)}
@@ -1052,8 +1067,8 @@ function renderMap() {
     }).join('');
   }
 
-  // Draw the choropleth
-  drawChoropleth();
+  // Draw the choropleth - use setTimeout as extra safety for layout
+  setTimeout(() => drawChoropleth(), 50);
 }
 
 function setMapDim(dim) {
