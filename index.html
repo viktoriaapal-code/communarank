@@ -17,7 +17,7 @@ h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:500;line-height:1.2}
 nav{background:var(--ink);color:var(--paper);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
 .nav-brand{font-family:'Fraunces',serif;font-size:20px;color:var(--paper);letter-spacing:-0.3px}
 .nav-brand span{color:#7dbf6e}
-.nav-links{display:flex;gap:4px}
+
 .nav-btn{background:none;border:none;color:rgba(245,242,235,0.7);font-size:13px;padding:6px 12px;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s}
 .nav-btn:hover,.nav-btn.active{background:rgba(255,255,255,0.1);color:var(--paper)}
 .lang-sel{display:flex;gap:2px}
@@ -123,15 +123,47 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
 .ai-thinking span:nth-child(2){animation-delay:0.2s}
 .ai-thinking span:nth-child(3){animation-delay:0.4s}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-@media(max-width:700px){
-  .rank-card{grid-template-columns:36px 1fr}
+
   .rank-right{display:none}
-  nav .nav-links{display:none!important}
+  nav 
   nav .nav-links.mobile-open{display:flex!important;flex-direction:column;position:fixed;top:56px;left:0;right:0;background:var(--ink);z-index:999;padding:12px 20px 20px;gap:6px;border-top:1px solid rgba(255,255,255,0.15);box-shadow:0 8px 24px rgba(0,0,0,0.4);}
   nav .nav-links.mobile-open .nav-btn{padding:12px 16px;font-size:15px;text-align:left;border-radius:8px;}
-  .hamburger{display:flex!important;flex-direction:column;gap:5px;}
+  
 }
-@media(min-width:701px){.hamburger{display:none!important;}}
+}
+
+/* ── NAV ── */
+.nav-links{display:flex;gap:4px;}
+.hamburger{display:none;background:none;border:none;color:var(--paper);cursor:pointer;padding:6px;flex-direction:column;gap:5px;align-items:center;justify-content:center;margin-left:auto;}
+.ham-bar{display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:transform 0.2s,opacity 0.2s;}
+
+/* ── MOBILE (≤700px) ── */
+@media(max-width:700px){
+  .rank-card{grid-template-columns:36px 1fr;}
+  .rank-right{display:none;}
+  .hamburger{display:flex;}
+  .nav-links{display:none;}
+  .nav-links.is-open{
+    display:flex !important;
+    flex-direction:column;
+    position:fixed;
+    top:56px;left:0;right:0;
+    background:#1a1a18;
+    z-index:9999;
+    padding:16px 20px 24px;
+    gap:4px;
+    border-top:1px solid rgba(255,255,255,0.12);
+    box-shadow:0 12px 32px rgba(0,0,0,0.5);
+  }
+  .nav-links.is-open .nav-btn{
+    padding:13px 16px;
+    font-size:15px;
+    text-align:left;
+    border-radius:8px;
+    width:100%;
+    display:block;
+  }
+}
 </style>
 <!-- Vercel Analytics - free, privacy-friendly, no cookies -->
 <script defer src="/_vercel/insights/script.js"></script>
@@ -139,12 +171,6 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
 <body>
 <nav>
   <div class="nav-brand">Communa<span>Rank</span></div>
-  <button class="hamburger" id="hamburger-btn" onclick="toggleMobileNav()"
-    style="background:none;border:none;color:var(--paper);cursor:pointer;padding:8px;flex-direction:column;gap:5px;align-items:center;justify-content:center;">
-    <span id="ham-line1" style="display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:all 0.2s;"></span>
-    <span id="ham-line2" style="display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:all 0.2s;"></span>
-    <span id="ham-line3" style="display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:all 0.2s;"></span>
-  </button>
   <div class="nav-links" id="main-nav-links">
     <button class="nav-btn active" onclick="showPage('ranking')" id="nb-ranking">Ranking</button>
     <button class="nav-btn" onclick="showPage('compare')" id="nb-compare">Compare</button>
@@ -152,6 +178,7 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
     <button class="nav-btn" onclick="showPage('map')" id="nb-map">Map</button>
     <button class="nav-btn" onclick="showPage('reviews')" id="nb-reviews">Reviews</button>
     <button class="nav-btn" onclick="showPage('ai')" id="nb-ai">Early Access</button>
+    <button class="nav-btn" onclick="showPage('privacy')" id="nb-privacy" style="display:none;">Privacy</button>
   </div>
   <div class="lang-sel">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -159,6 +186,11 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
     <button class="lang-btn" onclick="setLang('de')">DE</button>
     <button class="lang-btn" onclick="setLang('it')">IT</button>
   </div>
+  <button class="hamburger" id="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu">
+    <span class="ham-bar" id="ham-line1"></span>
+    <span class="ham-bar" id="ham-line2"></span>
+    <span class="ham-bar" id="ham-line3"></span>
+  </button>
 </nav>
 <div class="hero">
   <div class="hero-tag" id="h-tag">Switzerland's Community Intelligence Platform</div>
@@ -695,32 +727,15 @@ const INDEX_PILLARS=[{key:'costOfLiving',icon:'💰',title:{en:'Cost of Living',
 function getT(k){return T[lang][k]||T.en[k]||''}
 function setLang(l){lang=l;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));applyTranslations();
 function toggleMobileNav() {
-  const links = document.getElementById('main-nav-links');
-  if(!links) return;
-  const isOpen = links.style.display === 'flex';
-  if(isOpen) {
-    links.style.display = 'none';
-    links.style.position = '';
-  } else {
-    links.style.display = 'flex';
-    links.style.flexDirection = 'column';
-    links.style.position = 'fixed';
-    links.style.top = '56px';
-    links.style.left = '0';
-    links.style.right = '0';
-    links.style.background = 'var(--ink)';
-    links.style.zIndex = '999';
-    links.style.padding = '12px 20px 20px';
-    links.style.gap = '4px';
-    links.style.borderTop = '1px solid rgba(255,255,255,0.15)';
-    links.style.boxShadow = '0 8px 24px rgba(0,0,0,0.5)';
-  }
-  const l1=document.getElementById('ham-line1');
-  const l2=document.getElementById('ham-line2');
-  const l3=document.getElementById('ham-line3');
-  if(l1) l1.style.transform = !isOpen ? 'rotate(45deg) translate(5px,5px)' : '';
-  if(l2) l2.style.opacity = !isOpen ? '0' : '1';
-  if(l3) l3.style.transform = !isOpen ? 'rotate(-45deg) translate(5px,-5px)' : '';
+  const nav = document.getElementById('main-nav-links');
+  if(!nav) return;
+  const open = nav.classList.toggle('is-open');
+  const l1 = document.getElementById('ham-line1');
+  const l2 = document.getElementById('ham-line2');
+  const l3 = document.getElementById('ham-line3');
+  if(l1) l1.style.transform = open ? 'rotate(45deg) translate(5px,5px)' : '';
+  if(l2) l2.style.opacity = open ? '0' : '1';
+  if(l3) l3.style.transform = open ? 'rotate(-45deg) translate(5px,-5px)' : '';
 }
 
 // Mobile nav closes on page selection (handled in showPage below)
@@ -1086,8 +1101,8 @@ function renderMap() {
     }).join('');
   }
 
-  // Draw the choropleth - use setTimeout as extra safety for layout
-  setTimeout(() => drawChoropleth(), 50);
+  // Draw the map
+  drawChoropleth();
 }
 
 function setMapDim(dim) {
@@ -1096,8 +1111,11 @@ function setMapDim(dim) {
 }
 
 function drawChoropleth() {
-  // Wait for DOM layout so clientWidth is non-zero
-  requestAnimationFrame(() => requestAnimationFrame(() => drawSVGMap()));
+  // Try immediate draw first, then retry after layout
+  if(document.getElementById('swiss-map')) {
+    drawSVGMap();
+    setTimeout(drawSVGMap, 100); // retry after layout
+  }
 }
 
 function loadMapTopo() {
