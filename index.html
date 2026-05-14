@@ -1301,157 +1301,137 @@ function _drawWithTopo(topo) {
 }
 
 function drawSVGMap() {
+  const cont = document.getElementById('swiss-map-container');
   const svgEl = document.getElementById('swiss-map');
-  if(!svgEl) return;
-  const loadingEl = document.getElementById('map-loading');
-  if(loadingEl) loadingEl.style.display = 'none';
+  if(!svgEl || !cont) { console.error('Map elements missing'); return; }
 
   const scores = getCantonScores(mapDimension);
   const vals = Object.values(scores).filter(v => v !== null);
-  if(!vals.length) return;
+  if(!vals.length) { console.warn('No scores'); return; }
+  
   const minVal = Math.min(...vals), maxVal = Math.max(...vals);
 
   function col(s) {
     if(s === null) return '#ddd8cc';
-    const t = Math.max(0, Math.min(1, (s - minVal) / (maxVal - minVal || 1)));
+    const t = Math.max(0, Math.min(1, (s-minVal)/(maxVal-minVal||1)));
     return 'rgb('+Math.round(200-t*160)+','+Math.round(232-t*80)+','+Math.round(194-t*155)+')';
   }
 
   const CP = {
-    ZH:'M430,82 L468,75 L490,88 L495,110 L480,130 L460,138 L440,125 L425,108Z',
-    BE:'M290,120 L330,108 L360,115 L370,145 L355,185 L320,210 L285,205 L260,180 L255,150Z',
-    LU:'M375,148 L405,140 L420,155 L415,175 L395,182 L372,172Z',
-    UR:'M400,175 L420,168 L435,185 L428,210 L408,215 L395,200Z',
-    SZ:'M435,148 L458,140 L472,155 L465,172 L445,178 L430,165Z',
-    OW:'M368,172 L390,165 L398,180 L385,195 L365,188Z',
-    NW:'M378,155 L395,150 L400,165 L385,170 L375,162Z',
-    GL:'M465,155 L482,148 L492,165 L480,178 L462,170Z',
-    ZG:'M430,148 L448,142 L452,158 L438,162 L428,155Z',
-    FR:'M252,148 L285,140 L295,160 L280,185 L255,180 L240,162Z',
-    SO:'M318,92 L348,85 L358,100 L345,118 L318,115 L308,102Z',
-    BS:'M310,68 L325,62 L330,72 L320,78 L308,74Z',
-    BL:'M295,72 L318,65 L325,80 L312,92 L295,88Z',
-    SH:'M398,45 L428,38 L435,52 L420,62 L398,58Z',
-    AR:'M510,108 L528,102 L535,115 L522,122 L508,118Z',
-    AI:'M518,115 L530,110 L535,120 L525,126 L515,122Z',
-    SG:'M468,98 L510,90 L525,105 L518,130 L495,138 L468,125Z',
-    GR:'M448,168 L510,158 L545,178 L540,225 L505,248 L462,238 L438,210Z',
-    AG:'M348,88 L388,80 L398,98 L385,115 L352,118 L338,102Z',
-    TG:'M435,72 L478,62 L488,78 L472,95 L438,98 L428,82Z',
-    TI:'M375,228 L420,220 L448,240 L440,285 L408,295 L375,278 L358,255Z',
-    VD:'M178,148 L245,138 L255,165 L238,200 L195,215 L160,195 L152,168Z',
-    VS:'M248,185 L320,215 L355,225 L355,258 L298,278 L250,255 L225,225Z',
-    NE:'M228,115 L258,108 L265,128 L250,142 L225,138Z',
-    GE:'M148,195 L172,188 L178,205 L162,212Z',
-    JU:'M248,88 L282,80 L290,98 L270,112 L245,105Z'
+    ZH:'M430,82L468,75L490,88L495,110L480,130L460,138L440,125L425,108Z',
+    BE:'M290,120L330,108L360,115L370,145L355,185L320,210L285,205L260,180L255,150Z',
+    LU:'M375,148L405,140L420,155L415,175L395,182L372,172Z',
+    UR:'M400,175L420,168L435,185L428,210L408,215L395,200Z',
+    SZ:'M435,148L458,140L472,155L465,172L445,178L430,165Z',
+    OW:'M368,172L390,165L398,180L385,195L365,188Z',
+    NW:'M378,155L395,150L400,165L385,170L375,162Z',
+    GL:'M465,155L482,148L492,165L480,178L462,170Z',
+    ZG:'M430,148L448,142L452,158L438,162L428,155Z',
+    FR:'M252,148L285,140L295,160L280,185L255,180L240,162Z',
+    SO:'M318,92L348,85L358,100L345,118L318,115L308,102Z',
+    BS:'M310,68L325,62L330,72L320,78L308,74Z',
+    BL:'M295,72L318,65L325,80L312,92L295,88Z',
+    SH:'M398,45L428,38L435,52L420,62L398,58Z',
+    AR:'M510,108L528,102L535,115L522,122L508,118Z',
+    AI:'M518,115L530,110L535,120L525,126L515,122Z',
+    SG:'M468,98L510,90L525,105L518,130L495,138L468,125Z',
+    GR:'M448,168L510,158L545,178L540,225L505,248L462,238L438,210Z',
+    AG:'M348,88L388,80L398,98L385,115L352,118L338,102Z',
+    TG:'M435,72L478,62L488,78L472,95L438,98L428,82Z',
+    TI:'M375,228L420,220L448,240L440,285L408,295L375,278L358,255Z',
+    VD:'M178,148L245,138L255,165L238,200L195,215L160,195L152,168Z',
+    VS:'M248,185L320,215L355,225L355,258L298,278L250,255L225,225Z',
+    NE:'M228,115L258,108L265,128L250,142L225,138Z',
+    GE:'M148,195L172,188L178,205L162,212Z',
+    JU:'M248,88L282,80L290,98L270,112L245,105Z'
   };
 
-  function ctr(path) {
-    const pts = (path.match(/[\d.]+,[\d.]+/g)||[]).map(p => p.split(',').map(Number));
-    if(!pts.length) return [340,190];
-    return [pts.reduce((s,p)=>s+p[0],0)/pts.length, pts.reduce((s,p)=>s+p[1],0)/pts.length];
+  function ctr(d) {
+    var m=d.match(/[\d.]+,[\d.]+/g)||[],pts=m.map(function(p){return p.split(',').map(Number)});
+    if(!pts.length)return[340,190];
+    return[pts.reduce(function(s,p){return s+p[0]},0)/pts.length,
+           pts.reduce(function(s,p){return s+p[1]},0)/pts.length];
   }
 
-  function sp(path, sx, sy) {
-    return path.replace(/([\d.]+),([\d.]+)/g, (_,x,y) =>
-      (+x*sx).toFixed(1) + ',' + (+y*sy).toFixed(1));
-  }
-
-  const mapCont = document.getElementById('swiss-map-container');
-  const W = Math.max(
-    mapCont ? mapCont.getBoundingClientRect().width : 0,
-    mapCont ? mapCont.clientWidth : 0,
-    window.innerWidth > 700 ? Math.min(window.innerWidth - 80, 1050) : window.innerWidth - 48,
-    300
-  );
-  const H = Math.round(W * 0.56);
-  const sx = W/680, sy = H/380;
-
-  // Build SVG as a string then set innerHTML on a wrapper
-  const NS = 'http://www.w3.org/2000/svg';
-  const svg = document.createElementNS(NS, 'svg');
-  svg.setAttribute('width', W);
-  svg.setAttribute('height', H);
-  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-  svg.style.display = 'block';
-
-  Object.entries(CP).forEach(([ab, path]) => {
-    const score = scores[ab];
-    const fill = col(score);
-    const [cx, cy] = ctr(path);
-    const t = score !== null ? (score - minVal)/(maxVal - minVal || 1) : 0;
-    const tc = t > 0.5 ? '#fff' : '#2d5a27';
-    const scaledPath = sp(path, sx, sy);
-    const cantonFull = Object.entries(CANTON_KEYS||{}).find(([k,v])=>v===ab)?.[0]||'';
-    const name = (CANTON_NAMES||{})[ab] || ab;
-
-    // Canton path
-    const p = document.createElementNS(NS, 'path');
-    p.setAttribute('d', scaledPath);
-    p.setAttribute('fill', fill);
-    p.setAttribute('stroke', 'white');
-    p.setAttribute('stroke-width', '1');
-    p.style.cursor = 'pointer';
-    p.addEventListener('mousemove', function(e) {
-      const tip = document.getElementById('map-tooltip');
-      if(!tip) return;
-      const dim = ((DIM_LABELS||{})[mapDimension]||{})[lang]||mapDimension;
-      const comms = (COMMUNITIES||[]).filter(c=>(CANTON_KEYS||{})[c.canton]===ab).length;
-      tip.style.display = 'block';
-      tip.style.left = (e.clientX+14)+'px';
-      tip.style.top = (e.clientY-14)+'px';
-      tip.innerHTML = '<div style="font-family:Fraunces,serif;font-size:14px;margin-bottom:3px;">'+name+'</div>'
-        +'<div style="font-size:12px;color:rgba(245,242,235,0.75);">'+dim+': <strong style="color:#7dbf6e;">'+(score??'n/a')+'</strong></div>'
-        +'<div style="font-size:11px;color:rgba(245,242,235,0.45);margin-top:2px;">'+comms+' commune'+(comms!==1?'s':'')+'</div>';
+  function sp(d,sx,sy){
+    return d.replace(/([\d.]+),([\d.]+)/g,function(_,x,y){
+      return(+x*sx).toFixed(1)+','+(+y*sy).toFixed(1);
     });
-    p.addEventListener('mouseleave', function() {
-      const tip = document.getElementById('map-tooltip');
+  }
+
+  var W = cont.offsetWidth || cont.clientWidth || 680;
+  if(W < 100) W = 680;
+  var H = Math.round(W * 0.56);
+  var sx = W/680, sy = H/380;
+
+  var html = '<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" style="display:block">';
+  
+  Object.keys(CP).forEach(function(ab) {
+    var path = CP[ab];
+    var score = scores[ab];
+    var fill = col(score);
+    var c2 = ctr(path);
+    var cx = c2[0], cy = c2[1];
+    var t = score!==null?(score-minVal)/(maxVal-minVal||1):0;
+    var tc = t>0.5?'#ffffff':'#2d5a27';
+    var sp2 = sp(path,sx,sy);
+    var nm = (CANTON_NAMES&&CANTON_NAMES[ab])||ab;
+    var cf = '';
+    Object.keys(CANTON_KEYS||{}).forEach(function(k){if(CANTON_KEYS[k]===ab)cf=k;});
+    var fs = W<500?'7':'9';
+
+    html += '<path d="'+sp2+'" fill="'+fill+'" stroke="white" stroke-width="1" style="cursor:pointer" data-ab="'+ab+'" data-cf="'+cf+'" data-score="'+score+'" data-nm="'+nm+'"/>';
+    html += '<text x="'+(cx*sx).toFixed(1)+'" y="'+(cy*sy-4).toFixed(1)+'" text-anchor="middle" font-size="'+fs+'" font-family="sans-serif" fill="'+tc+'" pointer-events="none">'+ab+'</text>';
+    if(score!==null) html+='<text x="'+(cx*sx).toFixed(1)+'" y="'+(cy*sy+9).toFixed(1)+'" text-anchor="middle" font-size="'+fs+'" font-family="serif" font-weight="bold" fill="'+tc+'" pointer-events="none">'+score+'</text>';
+  });
+  
+  html += '</svg>';
+
+  // Use a wrapper div - most reliable injection method
+  var wrapper = document.createElement('div');
+  wrapper.innerHTML = html;
+  var newSvg = wrapper.firstChild;
+  svgEl.parentNode.replaceChild(newSvg, svgEl);
+  newSvg.id = 'swiss-map';
+  
+  var loading = document.getElementById('map-loading');
+  if(loading) loading.style.display='none';
+  
+  // Add event delegation
+  var drawnSvg = document.getElementById('swiss-map');
+  if(drawnSvg) {
+    drawnSvg.addEventListener('click', function(e) {
+      var path = e.target.closest('path');
+      if(!path) return;
+      var cf = path.getAttribute('data-cf');
+      if(cf) {
+        var sel = document.getElementById('canton-filter');
+        if(sel) sel.value = cf;
+        filterCommunities();
+        showPage('ranking');
+      }
+    });
+    drawnSvg.addEventListener('mousemove', function(e) {
+      var path = e.target.closest('path');
+      var tip = document.getElementById('map-tooltip');
+      if(!tip) return;
+      if(path && path.getAttribute('data-ab')) {
+        var nm = path.getAttribute('data-nm');
+        var sc = path.getAttribute('data-score');
+        tip.style.display = 'block';
+        tip.style.left = (e.clientX+14)+'px';
+        tip.style.top = (e.clientY-14)+'px';
+        tip.innerHTML = '<div style="font-family:serif;font-size:14px;margin-bottom:3px;">'+nm+'</div><div style="font-size:12px;color:rgba(245,242,235,0.75);">Score: <strong style="color:#7dbf6e;">'+sc+'</strong></div>';
+      } else {
+        tip.style.display = 'none';
+      }
+    });
+    drawnSvg.addEventListener('mouseleave', function() {
+      var tip = document.getElementById('map-tooltip');
       if(tip) tip.style.display = 'none';
     });
-    p.addEventListener('click', function() {
-      if(!cantonFull) return;
-      const sel = document.getElementById('canton-filter');
-      if(sel) sel.value = cantonFull;
-      filterCommunities();
-      showPage('ranking');
-    });
-    svg.appendChild(p);
-
-    // Abbreviation label
-    const lbl = document.createElementNS(NS, 'text');
-    lbl.setAttribute('x', (cx*sx).toFixed(1));
-    lbl.setAttribute('y', (cy*sy - 4).toFixed(1));
-    lbl.setAttribute('text-anchor', 'middle');
-    lbl.setAttribute('font-size', W < 500 ? '7' : '9');
-    lbl.setAttribute('font-family', 'DM Sans,sans-serif');
-    lbl.setAttribute('fill', tc);
-    lbl.setAttribute('pointer-events', 'none');
-    lbl.textContent = ab;
-    svg.appendChild(lbl);
-
-    // Score label
-    if(score !== null) {
-      const scl = document.createElementNS(NS, 'text');
-      scl.setAttribute('x', (cx*sx).toFixed(1));
-      scl.setAttribute('y', (cy*sy + 8).toFixed(1));
-      scl.setAttribute('text-anchor', 'middle');
-      scl.setAttribute('font-size', W < 500 ? '7' : '9');
-      scl.setAttribute('font-family', 'Fraunces,serif');
-      scl.setAttribute('font-weight', '600');
-      scl.setAttribute('fill', tc);
-      scl.setAttribute('pointer-events', 'none');
-      scl.textContent = score;
-      svg.appendChild(scl);
-    }
-  });
-
-  // Clear and insert
-  svgEl.innerHTML = '';
-  svgEl.setAttribute('width', W);
-  svgEl.setAttribute('height', H);
-  svgEl.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-  svgEl.style.display = 'block';
-  while(svg.firstChild) svgEl.appendChild(svg.firstChild);
+  }
+  console.log('Map drawn OK: W='+W+' scores='+vals.length);
 }
 
 
