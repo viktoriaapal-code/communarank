@@ -1346,12 +1346,21 @@ function submitWaitlist() {
     localStorage.setItem('cr_waitlist', JSON.stringify(existing));
   } catch(e) {}
 
-  // Simulate submission (replace with real endpoint later)
-  setTimeout(() => {
+  // Save to Supabase
+  sbInsert('waitlist', {
+    name, email, canton, budget, goals, lang
+  }).then(() => {
+    console.log('Waitlist entry saved to Supabase ✓');
+  }).catch(e => {
+    console.warn('Supabase waitlist save failed:', e.message);
+  }).finally(() => {
+    // Always show success to user
     document.getElementById('waitlist-form').style.display = 'none';
     document.getElementById('waitlist-success').style.display = 'block';
     showToast('✓ ' + t.successTitle);
-  }, 800);
+    btn.disabled = false;
+    if(btnTxt) btnTxt.textContent = t.btnText;
+  });
 }
 
 // Remove old askAI function - replace with redirect to waitlist
@@ -1685,9 +1694,33 @@ function submitReview() {
     lang
   };
 
+  // Save to localStorage immediately (optimistic UI)
   const reviews = getReviews();
   reviews.unshift(review);
   saveReviews(reviews);
+
+  // Also save to Supabase database
+  sbInsert('reviews', {
+    community: review.community,
+    canton: review.canton,
+    overall: review.overall,
+    name: review.name,
+    text: review.text,
+    pros: review.pros || null,
+    cons: review.cons || null,
+    years: review.years || null,
+    profile: review.profile || null,
+    tenure: review.tenure || null,
+    proptype: review.proptype || null,
+    ratings: review.ratings,
+    lang: review.lang,
+    status: 'approved'
+  }).then(() => {
+    console.log('Review saved to Supabase ✓');
+    updateHeroStats();
+  }).catch(e => {
+    console.warn('Supabase save failed (stored locally):', e.message);
+  });
 
   // Reset form
   selectedCommunity = '';
@@ -2317,7 +2350,7 @@ function renderRanking() {
 
 seedSampleReviews();
 renderRevStarGrid();
-renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();applyRevTranslations();updateHeroStats();
+renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();applyRevTranslations();updateHeroStats();loadReviewsFromSupabase();
 // Update community count from real data
 const countEl=document.getElementById('community-count');
 if(countEl)countEl.textContent=COMMUNITIES.length.toLocaleString();
