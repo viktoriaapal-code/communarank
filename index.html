@@ -134,6 +134,7 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
     <button class="nav-btn" onclick="showPage('compare')" id="nb-compare">Compare</button>
     <button class="nav-btn" onclick="showPage('index')" id="nb-index">Our Index</button>
     <button class="nav-btn" onclick="showPage('map')" id="nb-map">Map</button>
+    <button class="nav-btn" onclick="showPage('reviews')" id="nb-reviews">Reviews</button>
     <button class="nav-btn" onclick="showPage('ai')" id="nb-ai">Early Access</button>
   </div>
   <div class="lang-sel">
@@ -244,6 +245,162 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
       <h4 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:14px;" id="map-communities-title">Communities in our index</h4>
       <div id="map-community-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;"></div>
     </div>
+  </div>
+</div>
+<div class="page" id="page-reviews">
+  <div class="section">
+
+    <!-- Header -->
+    <div class="section-header">
+      <h2 class="section-title" id="rev-title">Community Reviews</h2>
+      <p class="section-sub" id="rev-sub">Rate and review your community — help others find where they truly belong</p>
+    </div>
+
+    <!-- Tabs: Write Review / Browse Reviews / People's Ranking -->
+    <div class="tabs" style="margin-bottom:24px;">
+      <button class="tab active" id="rtab-write" onclick="switchRevTab('write')">
+        <span id="rtab-write-lbl">✍️ Write a Review</span>
+      </button>
+      <button class="tab" id="rtab-browse" onclick="switchRevTab('browse')">
+        <span id="rtab-browse-lbl">📋 Browse Reviews</span>
+      </button>
+      <button class="tab" id="rtab-ranking" onclick="switchRevTab('ranking')">
+        <span id="rtab-ranking-lbl">🏆 People's Ranking</span>
+      </button>
+    </div>
+
+    <!-- WRITE REVIEW TAB -->
+    <div id="rev-tab-write">
+      <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:28px;max-width:680px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:20px;" id="rev-form-title">Share your experience</h3>
+
+        <!-- Community selector -->
+        <div style="margin-bottom:18px;">
+          <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-community">Community</label>
+          <div style="position:relative;">
+            <input id="rev-community-input" type="text" oninput="showRevSuggestions()"
+              style="width:100%;padding:10px 16px;border:1px solid var(--border2);border-radius:var(--r);font-size:14px;font-family:'DM Sans',sans-serif;"
+              placeholder="Type your commune name...">
+            <div id="rev-suggestions" style="position:absolute;top:100%;left:0;right:0;background:white;border:1px solid var(--border2);border-radius:var(--r);z-index:50;display:none;max-height:200px;overflow-y:auto;box-shadow:0 4px 12px rgba(0,0,0,0.1);"></div>
+          </div>
+        </div>
+
+        <!-- Star ratings per dimension -->
+        <div style="margin-bottom:18px;">
+          <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:12px;" id="rev-lbl-ratings">Rate each dimension (1–5 stars)</label>
+          <div id="rev-star-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;"></div>
+        </div>
+
+        <!-- Overall impression -->
+        <div style="margin-bottom:18px;">
+          <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-overall">Overall impression</label>
+          <div style="display:flex;gap:8px;" id="rev-overall-stars">
+            <span class="rev-overall-star" data-val="1" style="font-size:28px;cursor:pointer;opacity:0.35;transition:all 0.15s;" onclick="setOverallStar(1)">★</span>
+            <span class="rev-overall-star" data-val="2" style="font-size:28px;cursor:pointer;opacity:0.35;transition:all 0.15s;" onclick="setOverallStar(2)">★</span>
+            <span class="rev-overall-star" data-val="3" style="font-size:28px;cursor:pointer;opacity:0.35;transition:all 0.15s;" onclick="setOverallStar(3)">★</span>
+            <span class="rev-overall-star" data-val="4" style="font-size:28px;cursor:pointer;opacity:0.35;transition:all 0.15s;" onclick="setOverallStar(4)">★</span>
+            <span class="rev-overall-star" data-val="5" style="font-size:28px;cursor:pointer;opacity:0.35;transition:all 0.15s;" onclick="setOverallStar(5)">★</span>
+          </div>
+        </div>
+
+        <!-- Pros & Cons -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+          <div>
+            <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-pros">👍 What I love</label>
+            <textarea id="rev-pros" rows="3"
+              style="width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:var(--r);font-size:13px;font-family:'DM Sans',sans-serif;resize:vertical;line-height:1.6;"
+              placeholder="e.g. Great schools, easy train access..."></textarea>
+          </div>
+          <div>
+            <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-cons">👎 What could improve</label>
+            <textarea id="rev-cons" rows="3"
+              style="width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:var(--r);font-size:13px;font-family:'DM Sans',sans-serif;resize:vertical;line-height:1.6;"
+              placeholder="e.g. Expensive parking, limited nightlife..."></textarea>
+          </div>
+        </div>
+
+        <!-- Written review -->
+        <div style="margin-bottom:18px;">
+          <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-text">Your review</label>
+          <textarea id="rev-text" rows="4"
+            style="width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:var(--r);font-size:14px;font-family:'DM Sans',sans-serif;resize:vertical;line-height:1.7;"
+            placeholder="Tell others what it's like to live here..."></textarea>
+        </div>
+
+        <!-- Resident info -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
+          <div>
+            <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-name">Your name</label>
+            <input id="rev-name" type="text"
+              style="width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:var(--r);font-size:13px;font-family:'DM Sans',sans-serif;"
+              placeholder="Anna M.">
+          </div>
+          <div>
+            <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-years">Years living there</label>
+            <select id="rev-years" style="width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:var(--r);font-size:13px;font-family:'DM Sans',sans-serif;">
+              <option value="<1">&lt; 1 year</option>
+              <option value="1-3">1–3 years</option>
+              <option value="3-5">3–5 years</option>
+              <option value="5-10">5–10 years</option>
+              <option value="10+">10+ years</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-profile">I am a</label>
+            <select id="rev-profile" style="width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:var(--r);font-size:13px;font-family:'DM Sans',sans-serif;">
+              <option id="rp-family">Family with children</option>
+              <option id="rp-couple">Couple</option>
+              <option id="rp-single">Single professional</option>
+              <option id="rp-retiree">Retiree</option>
+              <option id="rp-student">Student</option>
+              <option id="rp-expat">Expat</option>
+            </select>
+          </div>
+        </div>
+
+        <button onclick="submitReview()" id="rev-submit-btn"
+          style="background:var(--green);color:white;border:none;padding:12px 28px;border-radius:var(--r);font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;transition:all 0.2s;">
+          <span id="rev-submit-lbl">Submit review →</span>
+        </button>
+        <p style="font-size:11px;color:var(--ink3);margin-top:10px;" id="rev-privacy">Reviews are anonymous and publicly visible. We moderate for spam.</p>
+      </div>
+    </div>
+
+    <!-- BROWSE REVIEWS TAB -->
+    <div id="rev-tab-browse" style="display:none;">
+      <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+        <input id="rev-search" type="text" oninput="renderReviews()"
+          style="flex:1;min-width:200px;padding:10px 16px;border:1px solid var(--border2);border-radius:var(--r);font-size:14px;font-family:'DM Sans',sans-serif;"
+          placeholder="Search by commune...">
+        <select id="rev-sort" onchange="renderReviews()"
+          style="padding:10px 14px;border:1px solid var(--border2);border-radius:var(--r);font-size:13px;font-family:'DM Sans',sans-serif;">
+          <option value="recent" id="sort-recent">Most recent</option>
+          <option value="rating" id="sort-rating">Highest rated</option>
+          <option value="helpful" id="sort-helpful">Most helpful</option>
+        </select>
+      </div>
+      <div id="rev-list" style="display:flex;flex-direction:column;gap:14px;"></div>
+      <div id="rev-empty" style="text-align:center;padding:48px;color:var(--ink3);display:none;">
+        <div style="font-size:36px;margin-bottom:12px;">💬</div>
+        <p id="rev-empty-text">No reviews yet. Be the first to review your community!</p>
+        <button onclick="switchRevTab('write')" style="margin-top:14px;background:var(--green);color:white;border:none;padding:10px 20px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;" id="rev-empty-btn">Write the first review →</button>
+      </div>
+    </div>
+
+    <!-- PEOPLE'S RANKING TAB -->
+    <div id="rev-tab-ranking" style="display:none;">
+      <div style="background:var(--paper2);border-radius:var(--r2);padding:16px 20px;margin-bottom:20px;border:1px solid var(--border);">
+        <p style="font-size:13px;color:var(--ink2);line-height:1.7;" id="peoples-ranking-note">
+          ⭐ This ranking is based entirely on resident reviews. Unlike our data-driven index, it reflects lived experience — the things that don't show up in statistics.
+        </p>
+      </div>
+      <div id="peoples-ranking-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+      <div id="peoples-ranking-empty" style="text-align:center;padding:48px;color:var(--ink3);display:none;">
+        <div style="font-size:36px;margin-bottom:12px;">🏆</div>
+        <p id="peoples-empty-text">No reviews yet — the ranking will appear once people start reviewing communities.</p>
+      </div>
+    </div>
+
   </div>
 </div>
 <div class="page" id="page-ai">
@@ -392,7 +549,7 @@ const WEIGHTS_DEF={costOfLiving:{label:{en:'Cost of Living',fr:'Coût de vie',de
 const COMMUNITIES=[{name:'Zürich',canton:'Zurich (ZH)',type:'Urban',pop:45000,landPrice:3800,lat:47.3769,lon:8.5417,scores:{costOfLiving:32,infrastructure:95,education:95,healthcare:95,energy:86,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:58200,avgIncome:81400,salaryRatio:22},{name:'Genève',canton:'Geneva (GE)',type:'Urban',pop:45000,landPrice:4200,lat:46.2044,lon:6.1432,scores:{costOfLiving:21,infrastructure:95,education:95,healthcare:95,energy:75,sustainability:85,food:95,entertainment:80,nature:55},tags:['family','sustainable','urban'],medianIncome:62100,avgIncome:94200,salaryRatio:21},{name:'Basel',canton:'Basel (BS)',type:'Urban',pop:45000,landPrice:2800,lat:47.5596,lon:7.5886,scores:{costOfLiving:42,infrastructure:95,education:95,healthcare:95,energy:80,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:52800,avgIncome:74600,salaryRatio:30},{name:'Bern',canton:'Bern (BE)',type:'Urban',pop:45000,landPrice:2200,lat:46.9481,lon:7.4474,scores:{costOfLiving:51,infrastructure:95,education:95,healthcare:95,energy:82,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:54100,avgIncome:76300,salaryRatio:43},{name:'Lausanne',canton:'Vaud (VD)',type:'Urban',pop:45000,landPrice:3100,lat:46.5197,lon:6.6323,scores:{costOfLiving:38,infrastructure:95,education:95,healthcare:95,energy:81,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:55400,avgIncome:79800,salaryRatio:28},{name:'Winterthur',canton:'Zurich (ZH)',type:'Urban',pop:45000,landPrice:1800,lat:47.5001,lon:8.7238,scores:{costOfLiving:58,infrastructure:95,education:95,healthcare:95,energy:86,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:54600,avgIncome:72400,salaryRatio:56},{name:'Luzern',canton:'Lucerne (LU)',type:'Urban',pop:45000,landPrice:2600,lat:47.0502,lon:8.3093,scores:{costOfLiving:50,infrastructure:95,education:95,healthcare:95,energy:90,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:53200,avgIncome:71800,salaryRatio:34},{name:'St. Gallen',canton:'St. Gallen (SG)',type:'Urban',pop:45000,landPrice:1400,lat:47.4245,lon:9.3767,scores:{costOfLiving:68,infrastructure:95,education:95,healthcare:95,energy:87,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:51400,avgIncome:68900,salaryRatio:70},{name:'Lugano',canton:'Ticino (TI)',type:'Urban',pop:45000,landPrice:2000,lat:46.0037,lon:8.9511,scores:{costOfLiving:54,infrastructure:95,education:95,healthcare:95,energy:77,sustainability:85,food:95,entertainment:80,nature:55},tags:['family','sustainable','urban'],medianIncome:57800,avgIncome:82300,salaryRatio:53},{name:'Biel/Bienne',canton:'Bern (BE)',type:'Urban',pop:45000,landPrice:950,lat:47.1368,lon:7.2467,scores:{costOfLiving:68,infrastructure:95,education:95,healthcare:95,energy:82,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:44200,avgIncome:58700,salaryRatio:92},{name:'Thun',canton:'Bern (BE)',type:'Urban',pop:45000,landPrice:1300,lat:46.758,lon:7.628,scores:{costOfLiving:63,infrastructure:95,education:95,healthcare:95,energy:82,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:48600,avgIncome:64200,salaryRatio:71},{name:'Köniz',canton:'Bern (BE)',type:'Suburban',pop:18000,landPrice:1600,lat:46.9267,lon:7.4101,scores:{costOfLiving:59,infrastructure:78,education:95,healthcare:89,energy:82,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:52400,avgIncome:68900,salaryRatio:61},{name:'La Chaux-de-Fonds',canton:'Neuchâtel (NE)',type:'Urban',pop:45000,landPrice:750,lat:47.1001,lon:6.8262,scores:{costOfLiving:67,infrastructure:95,education:95,healthcare:95,energy:79,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:43800,avgIncome:56400,salaryRatio:100},{name:'Schaffhausen',canton:'Schaffhausen (SH)',type:'Urban',pop:45000,landPrice:1200,lat:47.6959,lon:8.6317,scores:{costOfLiving:69,infrastructure:95,education:95,healthcare:95,energy:87,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:49800,avgIncome:65400,salaryRatio:81},{name:'Fribourg',canton:'Fribourg (FR)',type:'Urban',pop:45000,landPrice:1400,lat:46.8065,lon:7.162,scores:{costOfLiving:62,infrastructure:95,education:95,healthcare:95,energy:84,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:48200,avgIncome:64800,salaryRatio:65},{name:'Chur',canton:'Graubünden (GR)',type:'Urban',pop:45000,landPrice:1500,lat:46.8508,lon:9.5329,scores:{costOfLiving:69,infrastructure:95,education:95,healthcare:95,energy:100,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:51600,avgIncome:69200,salaryRatio:65},{name:'Vernier',canton:'Geneva (GE)',type:'Suburban',pop:18000,landPrice:2800,lat:46.2167,lon:6.0833,scores:{costOfLiving:39,infrastructure:78,education:95,healthcare:89,energy:75,sustainability:90,food:95,entertainment:65,nature:70},tags:['family','sustainable'],medianIncome:47200,avgIncome:61800,salaryRatio:26},{name:'Uster',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:2200,lat:47.35,lon:8.7167,scores:{costOfLiving:53,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:62400,avgIncome:84200,salaryRatio:51},{name:'Sion',canton:'Valais (VS)',type:'Urban',pop:45000,landPrice:1100,lat:46.233,lon:7.3598,scores:{costOfLiving:67,infrastructure:95,education:95,healthcare:95,energy:100,sustainability:85,food:95,entertainment:80,nature:55},tags:['family','sustainable','urban'],medianIncome:47800,avgIncome:63400,salaryRatio:85},{name:'Emmen',canton:'Lucerne (LU)',type:'Suburban',pop:18000,landPrice:1300,lat:47.0833,lon:8.3,scores:{costOfLiving:67,infrastructure:78,education:95,healthcare:89,energy:90,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:46800,avgIncome:61200,salaryRatio:68},{name:'Küsnacht',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:3800,lat:47.3167,lon:8.5833,scores:{costOfLiving:32,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:104200,avgIncome:198400,salaryRatio:49},{name:'Zug',canton:'Zug (ZG)',type:'Urban',pop:45000,landPrice:3200,lat:47.166,lon:8.516,scores:{costOfLiving:54,infrastructure:95,education:95,healthcare:95,energy:96,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:88400,avgIncome:162800,salaryRatio:50},{name:'Nyon',canton:'Vaud (VD)',type:'Urban',pop:45000,landPrice:2400,lat:46.3833,lon:6.2333,scores:{costOfLiving:47,infrastructure:95,education:95,healthcare:95,energy:81,sustainability:85,food:95,entertainment:80,nature:55},tags:['family','sustainable','urban'],medianIncome:74800,avgIncome:112400,salaryRatio:58},{name:'Morges',canton:'Vaud (VD)',type:'Urban',pop:45000,landPrice:2100,lat:46.5167,lon:6.5,scores:{costOfLiving:51,infrastructure:95,education:95,healthcare:95,energy:81,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:68400,avgIncome:98600,salaryRatio:61},{name:'Rapperswil-Jona',canton:'St. Gallen (SG)',type:'Suburban',pop:18000,landPrice:1700,lat:47.2263,lon:8.8182,scores:{costOfLiving:64,infrastructure:78,education:95,healthcare:89,energy:87,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:61200,avgIncome:82400,salaryRatio:68},{name:'Davos',canton:'Graubünden (GR)',type:'Alpine',pop:5000,landPrice:2200,lat:46.8008,lon:9.8355,scores:{costOfLiving:60,infrastructure:58,education:68,healthcare:60,energy:100,sustainability:73,food:60,entertainment:70,nature:95},tags:['nature'],medianIncome:54800,avgIncome:74200,salaryRatio:44},{name:'Verbier',canton:'Valais (VS)',type:'Alpine',pop:5000,landPrice:4500,lat:46.0964,lon:7.2278,scores:{costOfLiving:22,infrastructure:58,education:68,healthcare:60,energy:100,sustainability:73,food:60,entertainment:70,nature:100},tags:['nature'],medianIncome:72400,avgIncome:118600,salaryRatio:24},{name:'Gruyères',canton:'Fribourg (FR)',type:'Rural',pop:3500,landPrice:750,lat:46.5833,lon:7.0833,scores:{costOfLiving:71,infrastructure:58,education:68,healthcare:60,energy:84,sustainability:68,food:60,entertainment:55,nature:85},tags:['nature'],medianIncome:42800,avgIncome:56200,salaryRatio:100},{name:'Spiez',canton:'Bern (BE)',type:'Suburban',pop:18000,landPrice:1000,lat:46.6833,lon:7.6833,scores:{costOfLiving:66,infrastructure:78,education:95,healthcare:89,energy:82,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:48200,avgIncome:63800,salaryRatio:96},{name:'Solothurn',canton:'Solothurn (SO)',type:'Urban',pop:45000,landPrice:900,lat:47.2088,lon:7.5323,scores:{costOfLiving:71,infrastructure:95,education:95,healthcare:95,energy:84,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:47400,avgIncome:62800,salaryRatio:100},{name:'Carouge',canton:'Geneva (GE)',type:'Urban',pop:45000,landPrice:3500,lat:46.1833,lon:6.1333,scores:{costOfLiving:30,infrastructure:95,education:95,healthcare:95,energy:75,sustainability:85,food:95,entertainment:80,nature:55},tags:['family','sustainable','urban'],medianIncome:58800,avgIncome:79200,salaryRatio:26},{name:'Aarau',canton:'Aargau (AG)',type:'Urban',pop:45000,landPrice:1500,lat:47.3925,lon:8.04,scores:{costOfLiving:66,infrastructure:95,education:95,healthcare:95,energy:85,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:52400,avgIncome:70800,salaryRatio:66},{name:'Frenkendorf',canton:'Basel (BL)',type:'Suburban',pop:18000,landPrice:1400,lat:47.5,lon:7.7167,scores:{costOfLiving:61,infrastructure:78,education:95,healthcare:89,energy:81,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:56200,avgIncome:74600,salaryRatio:78},{name:'Arlesheim',canton:'Basel (BL)',type:'Suburban',pop:18000,landPrice:1900,lat:47.4833,lon:7.6167,scores:{costOfLiving:55,infrastructure:78,education:95,healthcare:89,energy:81,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:72800,avgIncome:108400,salaryRatio:74},{name:'Riehen',canton:'Basel (BS)',type:'Suburban',pop:18000,landPrice:2800,lat:47.5833,lon:7.65,scores:{costOfLiving:42,infrastructure:78,education:95,healthcare:89,energy:80,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:78400,avgIncome:128600,salaryRatio:51},{name:'Küssnacht',canton:'Schwyz (SZ)',type:'Suburban',pop:18000,landPrice:1600,lat:47.0833,lon:8.4333,scores:{costOfLiving:72,infrastructure:78,education:95,healthcare:89,energy:94,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:58400,avgIncome:78200,salaryRatio:70},{name:'Wollerau',canton:'Schwyz (SZ)',type:'Suburban',pop:18000,landPrice:3200,lat:47.1833,lon:8.7167,scores:{costOfLiving:52,infrastructure:78,education:95,healthcare:89,energy:94,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:124800,avgIncome:248600,salaryRatio:75},{name:'Freienbach',canton:'Schwyz (SZ)',type:'Suburban',pop:18000,landPrice:2800,lat:47.2,lon:8.75,scores:{costOfLiving:57,infrastructure:78,education:95,healthcare:89,energy:94,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:94200,avgIncome:162400,salaryRatio:63},{name:'Muri bei Bern',canton:'Bern (BE)',type:'Suburban',pop:18000,landPrice:1800,lat:46.9167,lon:7.4833,scores:{costOfLiving:56,infrastructure:78,education:95,healthcare:89,energy:82,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:68400,avgIncome:92800,salaryRatio:73},{name:'Binningen',canton:'Basel (BL)',type:'Suburban',pop:18000,landPrice:2000,lat:47.5333,lon:7.5667,scores:{costOfLiving:53,infrastructure:78,education:95,healthcare:89,energy:81,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:72800,avgIncome:104600,salaryRatio:69},{name:'Männedorf',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:2300,lat:47.2667,lon:8.7167,scores:{costOfLiving:52,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:76400,avgIncome:108200,salaryRatio:62},{name:'Thalwil',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:2900,lat:47.2833,lon:8.5667,scores:{costOfLiving:44,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:84200,avgIncome:124800,salaryRatio:53},{name:'Horgen',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:2400,lat:47.25,lon:8.5833,scores:{costOfLiving:50,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:78600,avgIncome:112400,salaryRatio:61},{name:'Volketswil',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:1800,lat:47.3833,lon:8.75,scores:{costOfLiving:58,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:68400,avgIncome:92600,salaryRatio:73},{name:'Muttenz',canton:'Basel (BL)',type:'Suburban',pop:18000,landPrice:1500,lat:47.5167,lon:7.65,scores:{costOfLiving:60,infrastructure:78,education:95,healthcare:89,energy:81,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:58400,avgIncome:78600,salaryRatio:75},{name:'Allschwil',canton:'Basel (BL)',type:'Suburban',pop:18000,landPrice:1600,lat:47.55,lon:7.5333,scores:{costOfLiving:58,infrastructure:78,education:95,healthcare:89,energy:81,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:56800,avgIncome:74800,salaryRatio:67},{name:'Kriens',canton:'Lucerne (LU)',type:'Suburban',pop:18000,landPrice:1400,lat:47.0333,lon:8.2667,scores:{costOfLiving:66,infrastructure:78,education:95,healthcare:89,energy:90,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:49800,avgIncome:65400,salaryRatio:67},{name:'Baar',canton:'Zug (ZG)',type:'Suburban',pop:18000,landPrice:2400,lat:47.1967,lon:8.5233,scores:{costOfLiving:64,infrastructure:78,education:95,healthcare:89,energy:96,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:82400,avgIncome:138600,salaryRatio:65},{name:'Steinhausen',canton:'Zug (ZG)',type:'Suburban',pop:18000,landPrice:2200,lat:47.1833,lon:8.4833,scores:{costOfLiving:67,infrastructure:78,education:95,healthcare:89,energy:96,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:76800,avgIncome:112400,salaryRatio:66},{name:'Opfikon',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:2600,lat:47.4333,lon:8.5667,scores:{costOfLiving:48,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:54200,avgIncome:72800,salaryRatio:35}];
 const INDEX_PILLARS=[{key:'costOfLiving',icon:'💰',title:{en:'Cost of Living',fr:'Coût de vie',de:'Lebenshaltung',it:'Costo vita'},desc:{en:'Property prices, rental index, local tax rates, grocery costs, transport costs',fr:"Prix immobiliers, indice de loyer, taux d'imposition",de:'Immobilienpreise, Mietindex, Steuerbelastung',it:'Prezzi immobili, indice affitti, aliquote fiscali'},weight:'20%'},{key:'infrastructure',icon:'🏗',title:{en:'Infrastructure',fr:'Infrastructure',de:'Infrastruktur',it:'Infrastruttura'},desc:{en:'Road quality, public transport frequency, broadband coverage',fr:'Qualité des routes, fréquence des transports, couverture haut débit',de:'Straßenqualität, ÖPNV-Häufigkeit, Breitbandabdeckung',it:'Qualità strade, frequenza trasporti, copertura banda larga'},weight:'15%'},{key:'education',icon:'📚',title:{en:'Education',fr:'Éducation',de:'Bildung',it:'Istruzione'},desc:{en:'School ratings, international schools, universities, childcare',fr:'Notation des écoles, écoles internationales, garderies',de:'Schulbewertungen, internationale Schulen, Kinderbetreuung',it:'Valutazioni scuole, scuole internazionali, asili nido'},weight:'15%'},{key:'healthcare',icon:'🏥',title:{en:'Healthcare',fr:'Santé',de:'Gesundheit',it:'Sanità'},desc:{en:'Hospital proximity, GP availability, specialist density',fr:'Proximité hôpitaux, disponibilité médecins',de:'Krankenhauszugänglichkeit, Hausarztverfügbarkeit',it:'Prossimità ospedali, disponibilità medici'},weight:'12%'},{key:'energy',icon:'⚡',title:{en:'Energy & Utilities',fr:'Énergie & Services',de:'Energie & Versorgung',it:'Energia & Servizi'},desc:{en:'Electricity tariffs (ELCOM data), renewable energy share, heating costs',fr:'Tarifs électricité (données ELCOM), énergies renouvelables',de:'Stromtarife (ELCOM-Daten), Anteil erneuerbarer Energie',it:'Tariffe energia (dati ELCOM), energie rinnovabili'},weight:'10%'},{key:'sustainability',icon:'🌿',title:{en:'Sustainability',fr:'Durabilité',de:'Nachhaltigkeit',it:'Sostenibilità'},desc:{en:'Green spaces per capita, recycling rates, EV charging, solar installations',fr:'Espaces verts, taux de recyclage, recharge VE',de:'Grünflächen pro Kopf, Recyclingquoten, E-Ladeinfrastruktur',it:'Spazi verdi, tassi di riciclo, ricarica EV'},weight:'10%'},{key:'food',icon:'🛒',title:{en:'Food & Commerce',fr:'Alimentation & Commerce',de:'Lebensmittel & Handel',it:'Alimentari & Commercio'},desc:{en:'Supermarket density, farmers markets, restaurant variety',fr:'Densité supermarchés, marchés fermiers, restaurants',de:'Supermarktdichte, Wochenmärkte, Gastronomie',it:'Densità supermercati, mercati contadini, ristoranti'},weight:'8%'},{key:'entertainment',icon:'🎭',title:{en:'Entertainment',fr:'Loisirs',de:'Freizeit',it:'Svago'},desc:{en:'Cultural venues, sports facilities, nightlife, family activities',fr:'Lieux culturels, équipements sportifs, vie nocturne',de:'Kultureinrichtungen, Sportanlagen, Nachtleben',it:'Luoghi culturali, impianti sportivi, vita notturna'},weight:'5%'},{key:'nature',icon:'🏔',title:{en:'Nature Access',fr:'Accès à la nature',de:'Naturzugang',it:'Accesso natura'},desc:{en:'Hiking trails, lakes, air quality index, biodiversity, altitude',fr:"Sentiers de randonnée, lacs et rivières, qualité de l'air",de:'Wanderwege, Seen und Flüsse, Luftqualität',it:'Sentieri, laghi e fiumi, qualità aria'},weight:'5%'}];
 function getT(k){return T[lang][k]||T.en[k]||''}
-function setLang(l){lang=l;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));applyTranslations();renderWeights();renderRanking();renderIndexPillars();renderCompare();applyWaitlistTranslations();const ce=document.getElementById('community-count');if(ce)ce.textContent=COMMUNITIES.length.toLocaleString();if(document.getElementById('page-map').classList.contains('active'))renderMap();}
+function setLang(l){lang=l;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));applyTranslations();renderWeights();renderRanking();renderIndexPillars();renderCompare();applyWaitlistTranslations();applyRevTranslations();const ce=document.getElementById('community-count');if(ce)ce.textContent=COMMUNITIES.length.toLocaleString();if(document.getElementById('page-map').classList.contains('active'))renderMap();}
 function applyTranslations(){const st=(id,val,attr)=>{const el=document.getElementById(id);if(!el)return;if(attr==='html')el.innerHTML=val;else if(attr==='ph')el.placeholder=val;else el.textContent=val;};st('h-tag',getT('heroTag'));st('h-title',getT('heroTitle'),'html');st('h-sub',getT('heroSub'));st('h-cta1',getT('heroCta1'));st('h-cta2',getT('heroCta2'));st('h-s1',getT('hS1'));st('h-s2',getT('hS2'));st('h-s3',getT('hS3'));st('h-s4',getT('hS4'));st('rank-title',getT('rankTitle'));st('rank-sub',getT('rankSub'));st('w-title',getT('wTitle'));st('cmp-title',getT('cmpTitle'));st('cmp-sub',getT('cmpSub'));st('cmp-add-btn',getT('cmpAdd'));st('cmp-chart-title',getT('cmpChartTitle'));st('ai-title',getT('aiTitle'));st('ai-page-title',getT('aiPageTitle'));st('ai-page-sub',getT('aiPageSub'));st('search-input',getT('searchPlaceholder'),'ph');st('cmp-search',getT('cmpSearchPlaceholder'),'ph');st('chip-all',getT('chipAll'));st('chip-family',getT('chipFamily'));st('chip-affordable',getT('chipAffordable'));st('chip-sustainable',getT('chipSustainable'));st('chip-nature',getT('chipNature'));st('chip-urban',getT('chipUrban'));}
 function calcScore(c){let t=0,w=0;for(const[k,d]of Object.entries(WEIGHTS_DEF)){t+=c.scores[k]*d.val;w+=d.val}return Math.round(t/w)}
 function renderWeights(){const g=document.getElementById('weights-grid');g.innerHTML='';for(const[k,w]of Object.entries(WEIGHTS_DEF)){const d=document.createElement('div');d.className='weight-item';d.innerHTML=`<label><span>${w.icon} ${w.label[lang]||w.label.en}</span><span class="weight-badge" id="wb-${k}">${w.val}%</span></label><input type="range" min="0" max="30" step="1" value="${w.val}" oninput="updateWeight('${k}',this.value)">`;g.appendChild(d)}}
@@ -630,7 +787,7 @@ function addToCompare(n){if(!n)return;const c=COMMUNITIES.find(c=>c.name===n);if
 function removeFromCompare(n){cmpSelected=cmpSelected.filter(x=>x!==n);renderCompare()}
 function renderCompare(){const sel=document.getElementById('cmp-selected');sel.innerHTML=cmpSelected.map(n=>`<span style="background:var(--green3);color:var(--green);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;" onclick="removeFromCompare('${n}')">${n} ×</span>`).join('');const g=document.getElementById('compare-grid');if(!cmpSelected.length){g.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--ink3);font-size:14px;">Add communities above to compare</div>`;return}const cs=cmpSelected.map(n=>COMMUNITIES.find(c=>c.name===n)).filter(Boolean);g.innerHTML=cs.map(c=>{const sc=calcScore(c);const _salLbl=lang==='fr'?'Revenu médian':lang==='de'?'Medianeinkommen':lang==='it'?'Reddito mediano':'Median Income';const _ratLbl=lang==='fr'?'Pouvoir d achat':lang==='de'?'Kaufkraft':lang==='it'?'Acquisto':'Purchasing Power';const salRows=c.medianIncome?`<div class="compare-row" style="background:var(--gold2);padding:4px 0;border-radius:4px;margin-bottom:4px;"><span class="compare-row-label">💵 ${_salLbl}</span><span style="font-weight:600;font-size:12px;color:#7a5a00;">CHF ${(c.medianIncome/1000).toFixed(0)}k</span></div><div class="compare-row" style="background:${c.salaryRatio>=60?'var(--green3)':c.salaryRatio>=40?'var(--gold2)':'#fde8e8'};padding:4px 0;border-radius:4px;margin-bottom:8px;"><span class="compare-row-label">⚖️ ${_ratLbl}</span><span class="badge ${c.salaryRatio>=60?'badge-green':c.salaryRatio>=40?'badge-gold':'badge-red'}">${c.salaryRatio}/100</span></div>`:'';const rows=INDEX_PILLARS.map(p=>{const v=c.scores[p.key];const cl=v>=80?'badge-green':v>=60?'badge-gold':'badge-red';return`<div class="compare-row"><span class="compare-row-label">${p.icon} ${p.title[lang]||p.title.en}</span><span class="badge ${cl}">${v}</span></div>`}).join('');return`<div class="compare-card"><h4>${c.name} <span style="color:var(--green);font-family:'Fraunces',serif;">${sc}</span></h4><div style="font-size:11px;color:var(--ink3);margin-bottom:10px;">${c.canton} · ${c.type} · ${c.landPrice} ${getT('cost')}</div>${salaryRow}${salRows}${rows}</div>`}).join('');const wrap=document.getElementById('cmp-chart-wrap');wrap.style.display=cs.length>=2?'block':'none';if(cs.length>=2)renderRadar(cs)}
 function renderRadar(cs){if(cmpChart){cmpChart.destroy();cmpChart=null}const labels=INDEX_PILLARS.map(p=>p.title[lang]||p.title.en);const colors=['#2d5a27','#c8960c','#1a3a5c','#8b2020'];const datasets=cs.map((c,i)=>({label:c.name,data:INDEX_PILLARS.map(p=>c.scores[p.key]),borderColor:colors[i],backgroundColor:colors[i]+'22',borderWidth:2,pointRadius:3}));cmpChart=new Chart(document.getElementById('cmpChart'),{type:'radar',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,ticks:{stepSize:20,font:{size:9}},pointLabels:{font:{size:10}}}},plugins:{legend:{display:true,labels:{font:{size:11}}}}}})}
-function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+n).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.id==='nb-'+n));if(n==='compare')renderCompare();if(n==='index')renderIndexPillars();if(n==='map')renderMap();if(n==='ai')applyWaitlistTranslations();}
+function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+n).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.id==='nb-'+n));if(n==='compare')renderCompare();if(n==='index')renderIndexPillars();if(n==='map')renderMap();if(n==='ai')applyWaitlistTranslations();if(n==='reviews'){applyRevTranslations();renderRevStarGrid();};}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
 
 // ─── MAP ───────────────────────────────────────────────
@@ -1067,7 +1224,453 @@ function submitWaitlist() {
 // Remove old askAI function - replace with redirect to waitlist
 function askAI(q) { showPage('ai'); }
 
-renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();
+// ─── REVIEWS SYSTEM ─────────────────────────────────────────
+const REV_DIMS = [
+  {key:'costOfLiving', icon:'💰', en:'Cost of Living', fr:'Coût de vie', de:'Lebenshaltung', it:'Costo vita'},
+  {key:'infrastructure', icon:'🏗', en:'Infrastructure', fr:'Infrastructure', de:'Infrastruktur', it:'Infrastruttura'},
+  {key:'education', icon:'📚', en:'Education', fr:'Éducation', de:'Bildung', it:'Istruzione'},
+  {key:'healthcare', icon:'🏥', en:'Healthcare', fr:'Santé', de:'Gesundheit', it:'Sanità'},
+  {key:'safety', icon:'🛡', en:'Safety', fr:'Sécurité', de:'Sicherheit', it:'Sicurezza'},
+  {key:'nature', icon:'🏔', en:'Nature Access', fr:'Nature', de:'Natur', it:'Natura'},
+  {key:'community', icon:'🤝', en:'Community Feel', fr:'Vie communautaire', de:'Gemeinschaftsgefühl', it:'Comunità'},
+  {key:'transport', icon:'🚆', en:'Transport', fr:'Transports', de:'Verkehr', it:'Trasporti'},
+];
+
+const REV_T = {
+  en:{
+    navBtn:'Reviews', title:'Community Reviews', sub:'Rate and review your community — help others find where they truly belong',
+    tabWrite:'✍️ Write a Review', tabBrowse:'📋 Browse Reviews', tabRanking:"🏆 People's Ranking",
+    formTitle:'Share your experience', lblCommunity:'Community', lblRatings:'Rate each dimension (1–5 stars)',
+    lblOverall:'Overall impression', lblPros:'👍 What I love', lblCons:'👎 What could improve',
+    lblText:'Your review', lblName:'Your name', lblYears:'Years living there', lblProfile:'I am a',
+    submitBtn:'Submit review →', submitting:'Submitting...', privacy:'Reviews are publicly visible. We moderate for spam.',
+    rpFamily:'Family with children', rpCouple:'Couple', rpSingle:'Single professional',
+    rpRetiree:'Retiree', rpStudent:'Student', rpExpat:'Expat',
+    sortRecent:'Most recent', sortRating:'Highest rated', sortHelpful:'Most helpful',
+    searchPlaceholder:'Search by commune...',
+    emptyText:'No reviews yet. Be the first to review your community!',
+    emptyBtn:'Write the first review →',
+    rankingNote:'⭐ This ranking is based entirely on resident reviews — the things that don\'t show up in statistics.',
+    peoplesEmptyText:'No reviews yet — the ranking will appear once people start reviewing.',
+    helpful:'Helpful', reviewsCount:'reviews', yearsLabel:'years',
+    errCommunity:'Please select a community', errName:'Please enter your name',
+    errOverall:'Please give an overall rating', errText:'Please write a short review',
+    successMsg:'Review submitted! Thank you for helping your community.',
+    verified:'Resident', anonymous:'Anonymous',
+    searchCommunity:'Type your commune name...',
+    prosPlaceholder:'e.g. Great schools, easy train access...',
+    consPlaceholder:'e.g. Expensive parking, limited nightlife...',
+    textPlaceholder:'Tell others what it\'s like to live here...',
+  },
+  fr:{
+    navBtn:'Avis', title:'Avis sur les communes', sub:'Notez et commentez votre commune — aidez les autres à trouver leur lieu de vie',
+    tabWrite:'✍️ Écrire un avis', tabBrowse:'📋 Parcourir les avis', tabRanking:'🏆 Classement populaire',
+    formTitle:'Partagez votre expérience', lblCommunity:'Commune', lblRatings:'Notez chaque dimension (1–5 étoiles)',
+    lblOverall:'Impression générale', lblPros:'👍 Ce que j\'aime', lblCons:'👎 Ce qui pourrait s\'améliorer',
+    lblText:'Votre avis', lblName:'Votre nom', lblYears:'Années de résidence', lblProfile:'Je suis',
+    submitBtn:'Soumettre l\'avis →', submitting:'Envoi en cours...', privacy:'Les avis sont publics. Nous modérons le spam.',
+    rpFamily:'Famille avec enfants', rpCouple:'Couple', rpSingle:'Professionnel célibataire',
+    rpRetiree:'Retraité', rpStudent:'Étudiant', rpExpat:'Expatrié',
+    sortRecent:'Plus récents', sortRating:'Mieux notés', sortHelpful:'Plus utiles',
+    searchPlaceholder:'Rechercher une commune...',
+    emptyText:'Aucun avis pour l\'instant. Soyez le premier à noter votre commune!',
+    emptyBtn:'Écrire le premier avis →',
+    rankingNote:'⭐ Ce classement est basé uniquement sur les avis des résidents — ce que les statistiques ne montrent pas.',
+    peoplesEmptyText:'Aucun avis encore — le classement apparaîtra dès que les habitants commenceront à noter.',
+    helpful:'Utile', reviewsCount:'avis', yearsLabel:'ans',
+    errCommunity:'Veuillez sélectionner une commune', errName:'Veuillez entrer votre nom',
+    errOverall:'Veuillez donner une note globale', errText:'Veuillez écrire un court avis',
+    successMsg:'Avis soumis! Merci d\'aider votre commune.',
+    verified:'Résident', anonymous:'Anonyme',
+    searchCommunity:'Tapez le nom de votre commune...',
+    prosPlaceholder:'Ex. Bonnes écoles, accès facile au train...',
+    consPlaceholder:'Ex. Parking cher, peu de vie nocturne...',
+    textPlaceholder:'Dites aux autres ce que c\'est de vivre ici...',
+  },
+  de:{
+    navBtn:'Bewertungen', title:'Gemeindebewertungen', sub:'Bewerten Sie Ihre Gemeinde — helfen Sie anderen, ihren idealen Wohnort zu finden',
+    tabWrite:'✍️ Bewertung schreiben', tabBrowse:'📋 Bewertungen durchsuchen', tabRanking:'🏆 Volksranking',
+    formTitle:'Teilen Sie Ihre Erfahrung', lblCommunity:'Gemeinde', lblRatings:'Bewerten Sie jede Dimension (1–5 Sterne)',
+    lblOverall:'Gesamteindruck', lblPros:'👍 Was mir gefällt', lblCons:'👎 Was verbessert werden könnte',
+    lblText:'Ihre Bewertung', lblName:'Ihr Name', lblYears:'Jahre dort wohnhaft', lblProfile:'Ich bin',
+    submitBtn:'Bewertung einreichen →', submitting:'Wird gesendet...', privacy:'Bewertungen sind öffentlich sichtbar. Spam wird moderiert.',
+    rpFamily:'Familie mit Kindern', rpCouple:'Paar', rpSingle:'Single/Berufstätige',
+    rpRetiree:'Rentner/in', rpStudent:'Student/in', rpExpat:'Expat',
+    sortRecent:'Neueste', sortRating:'Höchste Bewertung', sortHelpful:'Hilfreichste',
+    searchPlaceholder:'Gemeinde suchen...',
+    emptyText:'Noch keine Bewertungen. Seien Sie Erste/r und bewerten Sie Ihre Gemeinde!',
+    emptyBtn:'Erste Bewertung schreiben →',
+    rankingNote:'⭐ Dieses Ranking basiert ausschließlich auf Bewohnerbewertungen — Dinge, die in Statistiken nicht auftauchen.',
+    peoplesEmptyText:'Noch keine Bewertungen — das Ranking erscheint, sobald Einwohner anfangen zu bewerten.',
+    helpful:'Hilfreich', reviewsCount:'Bewertungen', yearsLabel:'Jahre',
+    errCommunity:'Bitte wählen Sie eine Gemeinde', errName:'Bitte geben Sie Ihren Namen ein',
+    errOverall:'Bitte geben Sie eine Gesamtbewertung', errText:'Bitte schreiben Sie eine kurze Bewertung',
+    successMsg:'Bewertung eingereicht! Vielen Dank.',
+    verified:'Einwohner', anonymous:'Anonym',
+    searchCommunity:'Gemeindenamen eingeben...',
+    prosPlaceholder:'z.B. Gute Schulen, einfacher Bahnanschluss...',
+    consPlaceholder:'z.B. Teures Parken, wenig Nachtleben...',
+    textPlaceholder:'Erzählen Sie anderen, wie es ist, hier zu leben...',
+  },
+  it:{
+    navBtn:'Recensioni', title:'Recensioni dei comuni', sub:'Valuta e recensisci il tuo comune — aiuta gli altri a trovare dove appartenere',
+    tabWrite:'✍️ Scrivi recensione', tabBrowse:'📋 Sfoglia recensioni', tabRanking:'🏆 Classifica popolare',
+    formTitle:'Condividi la tua esperienza', lblCommunity:'Comune', lblRatings:'Valuta ogni dimensione (1–5 stelle)',
+    lblOverall:'Impressione generale', lblPros:'👍 Cosa amo', lblCons:'👎 Cosa potrebbe migliorare',
+    lblText:'La tua recensione', lblName:'Il tuo nome', lblYears:'Anni di residenza', lblProfile:'Sono',
+    submitBtn:'Invia recensione →', submitting:'Invio in corso...', privacy:'Le recensioni sono pubbliche. Moderiamo lo spam.',
+    rpFamily:'Famiglia con figli', rpCouple:'Coppia', rpSingle:'Professionista single',
+    rpRetiree:'Pensionato/a', rpStudent:'Studente', rpExpat:'Expat',
+    sortRecent:'Più recenti', sortRating:'Più votate', sortHelpful:'Più utili',
+    searchPlaceholder:'Cerca comune...',
+    emptyText:'Nessuna recensione ancora. Sii il primo a recensire il tuo comune!',
+    emptyBtn:'Scrivi la prima recensione →',
+    rankingNote:'⭐ Questa classifica si basa esclusivamente sulle recensioni dei residenti — le cose che non compaiono nelle statistiche.',
+    peoplesEmptyText:'Nessuna recensione ancora — la classifica apparirà quando le persone inizieranno a recensire.',
+    helpful:'Utile', reviewsCount:'recensioni', yearsLabel:'anni',
+    errCommunity:'Seleziona un comune', errName:'Inserisci il tuo nome',
+    errOverall:'Dai una valutazione complessiva', errText:'Scrivi una breve recensione',
+    successMsg:'Recensione inviata! Grazie per aver aiutato la tua comunità.',
+    verified:'Residente', anonymous:'Anonimo',
+    searchCommunity:'Digita il nome del comune...',
+    prosPlaceholder:'es. Ottime scuole, accesso facile al treno...',
+    consPlaceholder:'es. Parcheggio costoso, poca vita notturna...',
+    textPlaceholder:'Racconta agli altri com\'è vivere qui...',
+  }
+};
+
+// Reviews storage (localStorage)
+function getReviews() {
+  try { return JSON.parse(localStorage.getItem('cr_reviews') || '[]'); }
+  catch(e) { return []; }
+}
+function saveReviews(reviews) {
+  try { localStorage.setItem('cr_reviews', JSON.stringify(reviews)); } catch(e) {}
+}
+
+// Seed some sample reviews so page isn't empty on first visit
+function seedSampleReviews() {
+  if(getReviews().length > 0) return;
+  const samples = [
+    {id:'r1',community:'Zürich',canton:'Zurich (ZH)',overall:4,ratings:{costOfLiving:2,infrastructure:5,education:5,healthcare:5,safety:5,nature:3,community:4,transport:5},pros:'World-class public transport, amazing cultural scene, incredibly safe',cons:'Very expensive rent and food, competitive housing market',text:'Zürich is one of the most liveable cities in the world for good reason. The infrastructure is exceptional — trams always on time, spotless streets, excellent healthcare. The main downside is cost: you need a solid income to live comfortably.',name:'Thomas B.',years:'5-10',profile:'Single professional',helpful:12,date:'2024-11-15',lang:'en'},
+    {id:'r2',community:'Zug',canton:'Zug (ZG)',overall:5,ratings:{costOfLiving:4,infrastructure:5,education:5,healthcare:5,safety:5,nature:4,community:4,transport:4},pros:'Lowest taxes in Switzerland, beautiful lake, excellent schools',cons:'Small city feel, limited nightlife',text:'Moving to Zug was the best financial decision I made. The tax savings are real and significant. Beautiful lake views, great schools for kids, and very safe. It does feel a bit quiet if you\'re used to a big city.',name:'Sarah K.',years:'3-5',profile:'Family with children',helpful:18,date:'2024-12-01',lang:'en'},
+    {id:'r3',community:'Nyon',canton:'Vaud (VD)',overall:5,ratings:{costOfLiving:3,infrastructure:4,education:5,healthcare:4,safety:5,nature:5,community:5,transport:4},pros:'Lake Geneva views, international community, great schools',cons:'A bit expensive, can feel like a Geneva suburb',text:'Nyon is a hidden gem. The lakeside location is stunning, there\'s a strong international community (great for expats), excellent French-speaking schools. The train to Geneva takes 20 minutes. Highly recommend for families.',name:'Marie L.',years:'3-5',profile:'Expat',helpful:24,date:'2025-01-10',lang:'en'},
+    {id:'r4',community:'Thun',canton:'Bern (BE)',overall:4,ratings:{costOfLiving:5,infrastructure:4,education:4,healthcare:4,safety:5,nature:5,community:5,transport:3},pros:'Stunning Alps views, affordable, strong community spirit',cons:'Less international, limited job market compared to Zurich',text:'Thun is genuinely underrated. The mountains are right there, the Thunersee is beautiful, and it\'s far more affordable than Zurich or Geneva. People are friendly and there\'s a real community feel. Perfect if you work remotely.',name:'Andreas M.',years:'1-3',profile:'Single professional',helpful:9,date:'2025-02-20',lang:'en'},
+    {id:'r5',community:'Lugano',canton:'Ticino (TI)',overall:4,ratings:{costOfLiving:3,infrastructure:4,education:4,healthcare:5,safety:5,nature:5,community:4,transport:3},pros:'Mediterranean climate, beautiful lake, Italian culture',cons:'Isolated from rest of Switzerland, limited public transport',text:'Lugano feels like Italy but with Swiss efficiency. The climate is genuinely different — palm trees, warm summers, mild winters. The lake is gorgeous. Healthcare is excellent. The downside is distance: it\'s a 3-hour train to Zurich.',name:'Claudia R.',years:'5-10',profile:'Retiree',helpful:15,date:'2025-03-05',lang:'en'},
+  ];
+  saveReviews(samples);
+}
+
+// State
+let currentRevTab = 'write';
+let overallStar = 0;
+let dimStars = {};
+let selectedCommunity = '';
+
+function switchRevTab(tab) {
+  currentRevTab = tab;
+  ['write','browse','ranking'].forEach(t => {
+    const panel = document.getElementById('rev-tab-'+t);
+    const btn = document.getElementById('rtab-'+t);
+    if(panel) panel.style.display = t === tab ? 'block' : 'none';
+    if(btn) btn.classList.toggle('active', t === tab);
+  });
+  if(tab === 'browse') renderReviews();
+  if(tab === 'ranking') renderPeoplesRanking();
+}
+
+function renderRevStarGrid() {
+  const grid = document.getElementById('rev-star-grid');
+  if(!grid) return;
+  const t = REV_T[lang] || REV_T.en;
+  grid.innerHTML = REV_DIMS.map(d => {
+    const label = d[lang] || d.en;
+    const stars = [1,2,3,4,5].map(n =>
+      `<span class="dim-star" data-dim="${d.key}" data-val="${n}"
+        style="cursor:pointer;font-size:18px;color:${(dimStars[d.key]||0)>=n?'#c8960c':'#ddd'};transition:color 0.1s;"
+        onclick="setDimStar('${d.key}',${n})">★</span>`
+    ).join('');
+    return `<div style="background:var(--paper);border-radius:var(--r);padding:10px 12px;">
+      <div style="font-size:11px;color:var(--ink3);margin-bottom:4px;">${d.icon} ${label}</div>
+      <div>${stars}</div>
+    </div>`;
+  }).join('');
+}
+
+function setDimStar(dim, val) {
+  dimStars[dim] = val;
+  renderRevStarGrid();
+}
+
+function setOverallStar(val) {
+  overallStar = val;
+  document.querySelectorAll('.rev-overall-star').forEach(s => {
+    const sv = parseInt(s.dataset.val);
+    s.style.opacity = sv <= val ? '1' : '0.25';
+    s.style.color = sv <= val ? '#c8960c' : 'inherit';
+  });
+}
+
+function showRevSuggestions() {
+  const input = document.getElementById('rev-community-input');
+  const div = document.getElementById('rev-suggestions');
+  if(!input || !div) return;
+  const q = input.value.toLowerCase();
+  if(!q) { div.style.display = 'none'; return; }
+
+  // Search in our communities + allow free text
+  const matches = COMMUNITIES.filter(c =>
+    c.name.toLowerCase().includes(q) || c.canton.toLowerCase().includes(q)
+  ).slice(0, 8);
+
+  if(!matches.length) { div.style.display = 'none'; return; }
+  div.style.display = 'block';
+  div.innerHTML = matches.map(c =>
+    `<div style="padding:10px 14px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;"
+      onmouseover="this.style.background='var(--paper)'" onmouseout="this.style.background=''"
+      onclick="selectRevCommunity('${c.name}','${c.canton}')">
+      <span>${c.name}</span>
+      <span style="color:var(--ink3);font-size:11px;">${c.canton}</span>
+    </div>`
+  ).join('');
+}
+
+function selectRevCommunity(name, canton) {
+  selectedCommunity = name;
+  const input = document.getElementById('rev-community-input');
+  if(input) input.value = name + ' (' + canton + ')';
+  const div = document.getElementById('rev-suggestions');
+  if(div) div.style.display = 'none';
+}
+
+function submitReview() {
+  const t = REV_T[lang] || REV_T.en;
+  const name = document.getElementById('rev-name')?.value.trim() || '';
+  const text = document.getElementById('rev-text')?.value.trim() || '';
+  const pros = document.getElementById('rev-pros')?.value.trim() || '';
+  const cons = document.getElementById('rev-cons')?.value.trim() || '';
+  const years = document.getElementById('rev-years')?.value || '';
+  const profile = document.getElementById('rev-profile')?.value || '';
+
+  if(!selectedCommunity) { showToast(t.errCommunity); return; }
+  if(!name) { showToast(t.errName); return; }
+  if(!overallStar) { showToast(t.errOverall); return; }
+  if(!text) { showToast(t.errText); return; }
+
+  const community = COMMUNITIES.find(c => c.name === selectedCommunity);
+  const review = {
+    id: 'r' + Date.now(),
+    community: selectedCommunity,
+    canton: community ? community.canton : '',
+    overall: overallStar,
+    ratings: {...dimStars},
+    pros, cons, text, name, years, profile,
+    helpful: 0,
+    date: new Date().toISOString().split('T')[0],
+    lang
+  };
+
+  const reviews = getReviews();
+  reviews.unshift(review);
+  saveReviews(reviews);
+
+  // Reset form
+  selectedCommunity = '';
+  overallStar = 0;
+  dimStars = {};
+  ['rev-name','rev-text','rev-pros','rev-cons','rev-community-input'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = '';
+  });
+  document.querySelectorAll('.rev-overall-star').forEach(s => {
+    s.style.opacity = '0.35'; s.style.color = 'inherit';
+  });
+  renderRevStarGrid();
+
+  showToast(t.successMsg);
+  setTimeout(() => switchRevTab('browse'), 800);
+}
+
+function starsHTML(n, size) {
+  size = size || 14;
+  return [1,2,3,4,5].map(i =>
+    `<span style="color:${i<=n?'#c8960c':'#ddd'};font-size:${size}px;">★</span>`
+  ).join('');
+}
+
+function markHelpful(id) {
+  const reviews = getReviews();
+  const rev = reviews.find(r => r.id === id);
+  if(rev) {
+    rev.helpful = (rev.helpful || 0) + 1;
+    saveReviews(reviews);
+    renderReviews();
+  }
+}
+
+function renderReviews() {
+  const t = REV_T[lang] || REV_T.en;
+  const list = document.getElementById('rev-list');
+  const empty = document.getElementById('rev-empty');
+  if(!list) return;
+
+  const q = (document.getElementById('rev-search')?.value || '').toLowerCase();
+  const sort = document.getElementById('rev-sort')?.value || 'recent';
+  let reviews = getReviews();
+
+  if(q) reviews = reviews.filter(r =>
+    r.community.toLowerCase().includes(q) ||
+    (r.text||'').toLowerCase().includes(q)
+  );
+
+  if(sort === 'rating') reviews = [...reviews].sort((a,b) => b.overall - a.overall);
+  else if(sort === 'helpful') reviews = [...reviews].sort((a,b) => (b.helpful||0) - (a.helpful||0));
+  else reviews = [...reviews].sort((a,b) => b.date > a.date ? 1 : -1);
+
+  if(!reviews.length) {
+    list.innerHTML = '';
+    if(empty) { empty.style.display = 'block';
+      const et = document.getElementById('rev-empty-text');
+      if(et) et.textContent = t.emptyText;
+      const eb = document.getElementById('rev-empty-btn');
+      if(eb) eb.textContent = t.emptyBtn;
+    }
+    return;
+  }
+  if(empty) empty.style.display = 'none';
+
+  list.innerHTML = reviews.map(r => {
+    const dimBars = REV_DIMS.filter(d => r.ratings[d.key]).map(d =>
+      `<div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink3);">
+        <span style="width:70px;">${d.icon} ${d[lang]||d.en}</span>
+        ${starsHTML(r.ratings[d.key], 11)}
+      </div>`
+    ).join('');
+
+    return `<div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+        <div>
+          <span style="font-family:'Fraunces',serif;font-size:16px;font-weight:500;">${r.community}</span>
+          <span style="font-size:12px;color:var(--ink3);margin-left:8px;">${r.canton||''}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          ${starsHTML(r.overall, 16)}
+          <span style="font-size:11px;color:var(--ink3);">${r.date}</span>
+        </div>
+      </div>
+      ${r.pros || r.cons ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+        ${r.pros?`<div style="background:var(--green3);border-radius:var(--r);padding:8px 12px;font-size:12px;color:var(--green);"><strong>👍</strong> ${r.pros}</div>`:''}
+        ${r.cons?`<div style="background:#fde8e8;border-radius:var(--r);padding:8px 12px;font-size:12px;color:var(--red);"><strong>👎</strong> ${r.cons}</div>`:''}
+      </div>`:''}
+      <p style="font-size:14px;color:var(--ink2);line-height:1.7;margin-bottom:12px;">${r.text}</p>
+      ${dimBars ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">${dimBars}</div>` : ''}
+      <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border);">
+        <div style="font-size:12px;color:var(--ink3);">
+          <strong style="color:var(--ink2);">${r.name||t.anonymous}</strong>
+          ${r.profile ? `· ${r.profile}` : ''}
+          ${r.years ? `· ${r.years} ${t.yearsLabel}` : ''}
+        </div>
+        <button onclick="markHelpful('${r.id}')"
+          style="font-size:11px;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;color:var(--ink3);font-family:'DM Sans',sans-serif;">
+          👍 ${t.helpful} ${r.helpful ? '('+r.helpful+')' : ''}
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderPeoplesRanking() {
+  const t = REV_T[lang] || REV_T.en;
+  const list = document.getElementById('peoples-ranking-list');
+  const empty = document.getElementById('peoples-ranking-empty');
+  const note = document.getElementById('peoples-ranking-note');
+  if(note) note.textContent = t.rankingNote;
+
+  const reviews = getReviews();
+  if(!reviews.length) {
+    if(list) list.innerHTML = '';
+    if(empty) { empty.style.display = 'block';
+      const et = document.getElementById('peoples-empty-text');
+      if(et) et.textContent = t.peoplesEmptyText;
+    }
+    return;
+  }
+  if(empty) empty.style.display = 'none';
+
+  // Aggregate by community
+  const agg = {};
+  reviews.forEach(r => {
+    if(!agg[r.community]) agg[r.community] = { community: r.community, canton: r.canton, total: 0, count: 0, dimTotals: {}, dimCounts: {} };
+    agg[r.community].total += r.overall;
+    agg[r.community].count++;
+    REV_DIMS.forEach(d => {
+      if(r.ratings[d.key]) {
+        agg[r.community].dimTotals[d.key] = (agg[r.community].dimTotals[d.key]||0) + r.ratings[d.key];
+        agg[r.community].dimCounts[d.key] = (agg[r.community].dimCounts[d.key]||0) + 1;
+      }
+    });
+  });
+
+  const ranked = Object.values(agg)
+    .map(a => ({ ...a, avg: a.total / a.count }))
+    .sort((a,b) => b.avg - a.avg);
+
+  if(!list) return;
+  list.innerHTML = ranked.map((a, i) => {
+    const pct = (a.avg / 5 * 100).toFixed(0);
+    const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
+    const dimScores = REV_DIMS.filter(d => a.dimTotals[d.key]).map(d => {
+      const avg = a.dimTotals[d.key] / a.dimCounts[d.key];
+      return `<div style="font-size:11px;color:var(--ink3);display:flex;align-items:center;gap:4px;">
+        ${d.icon} ${starsHTML(Math.round(avg),10)}
+      </div>`;
+    }).join('');
+
+    return `<div style="background:white;border:1px solid ${i<3?'var(--gold)':'var(--border)'};border-radius:var(--r2);padding:16px 20px;display:grid;grid-template-columns:40px 1fr auto;gap:14px;align-items:center;">
+      <div style="font-family:'Fraunces',serif;font-size:22px;text-align:center;color:${i<3?'var(--gold)':'var(--ink3)'};">${medal}</div>
+      <div>
+        <div style="font-family:'Fraunces',serif;font-size:16px;margin-bottom:3px;">${a.community}</div>
+        <div style="font-size:12px;color:var(--ink3);margin-bottom:6px;">${a.canton} · ${a.count} ${t.reviewsCount}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">${dimScores}</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'Fraunces',serif;font-size:26px;color:var(--green);">${a.avg.toFixed(1)}</div>
+        <div style="font-size:11px;color:var(--ink3);">/5 ★</div>
+        <div style="margin-top:4px;height:4px;width:60px;background:var(--paper2);border-radius:2px;overflow:hidden;margin-left:auto;">
+          <div style="height:100%;width:${pct}%;background:var(--green2);border-radius:2px;"></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function applyRevTranslations() {
+  const t = REV_T[lang] || REV_T.en;
+  const st = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+  const sp = (id,v) => { const el=document.getElementById(id); if(el) el.placeholder=v; };
+  st('rev-title', t.title); st('rev-sub', t.sub);
+  st('rtab-write-lbl', t.tabWrite); st('rtab-browse-lbl', t.tabBrowse); st('rtab-ranking-lbl', t.tabRanking);
+  st('rev-form-title', t.formTitle);
+  st('rev-lbl-community', t.lblCommunity); st('rev-lbl-ratings', t.lblRatings);
+  st('rev-lbl-overall', t.lblOverall); st('rev-lbl-pros', t.lblPros); st('rev-lbl-cons', t.lblCons);
+  st('rev-lbl-text', t.lblText); st('rev-lbl-name', t.lblName);
+  st('rev-lbl-years', t.lblYears); st('rev-lbl-profile', t.lblProfile);
+  st('rev-submit-lbl', t.submitBtn); st('rev-privacy', t.privacy);
+  st('nb-reviews', t.navBtn);
+  st('sort-recent', t.sortRecent); st('sort-rating', t.sortRating); st('sort-helpful', t.sortHelpful);
+  sp('rev-community-input', t.searchCommunity);
+  sp('rev-search', t.searchPlaceholder);
+  sp('rev-pros', t.prosPlaceholder); sp('rev-cons', t.consPlaceholder); sp('rev-text', t.textPlaceholder);
+  st('rp-family', t.rpFamily); st('rp-couple', t.rpCouple); st('rp-single', t.rpSingle);
+  st('rp-retiree', t.rpRetiree); st('rp-student', t.rpStudent); st('rp-expat', t.rpExpat);
+  renderRevStarGrid();
+  if(currentRevTab === 'browse') renderReviews();
+  if(currentRevTab === 'ranking') renderPeoplesRanking();
+}
+
+seedSampleReviews();
+renderRevStarGrid();
+renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();applyRevTranslations();
 // Update community count from real data
 const countEl=document.getElementById('community-count');
 if(countEl)countEl.textContent=COMMUNITIES.length.toLocaleString();
