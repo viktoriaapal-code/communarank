@@ -328,6 +328,38 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
         </div>
 
         <!-- Resident info -->
+        <!-- Housing situation -->
+        <div style="margin-bottom:18px;">
+          <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:10px;" id="rev-lbl-housing">🏠 Housing situation</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div>
+              <label style="font-size:11px;color:var(--ink3);display:block;margin-bottom:6px;" id="rev-lbl-tenure">Own or rent?</label>
+              <div style="display:flex;gap:8px;">
+                <label style="flex:1;display:flex;align-items:center;gap:6px;background:var(--paper);border:2px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;font-size:13px;transition:all 0.15s;" id="tenure-own-lbl">
+                  <input type="radio" name="rev-tenure" id="tenure-own" value="owner" style="accent-color:var(--green2);">
+                  <span>🏡 <span id="tenure-own-txt">Owner</span></span>
+                </label>
+                <label style="flex:1;display:flex;align-items:center;gap:6px;background:var(--paper);border:2px solid var(--border);border-radius:8px;padding:9px 12px;cursor:pointer;font-size:13px;transition:all 0.15s;" id="tenure-rent-lbl">
+                  <input type="radio" name="rev-tenure" id="tenure-rent" value="renter" style="accent-color:var(--green2);">
+                  <span>🔑 <span id="tenure-rent-txt">Renter</span></span>
+                </label>
+              </div>
+            </div>
+            <div>
+              <label style="font-size:11px;color:var(--ink3);display:block;margin-bottom:6px;" id="rev-lbl-proptype">Property type</label>
+              <select id="rev-proptype" style="width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:var(--r);font-size:13px;font-family:'DM Sans',sans-serif;background:white;">
+                <option value="apartment" id="pt-apartment">🏢 Apartment</option>
+                <option value="house" id="pt-house">🏠 House</option>
+                <option value="chalet" id="pt-chalet">🏔 Chalet</option>
+                <option value="studio" id="pt-studio">🚪 Studio</option>
+                <option value="villa" id="pt-villa">🏛 Villa</option>
+                <option value="other" id="pt-other">⬜ Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resident info -->
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
           <div>
             <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-name">Your name</label>
@@ -358,11 +390,50 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
           </div>
         </div>
 
+        <!-- Encouragement & privacy consent -->
+        <div style="background:linear-gradient(135deg,var(--green3),#f0f8ee);border:1px solid rgba(45,90,39,0.15);border-radius:var(--r2);padding:16px 18px;margin-bottom:18px;">
+          <div style="display:flex;gap:12px;align-items:flex-start;">
+            <div style="font-size:28px;line-height:1;">💬</div>
+            <div>
+              <div style="font-family:'Fraunces',serif;font-size:14px;color:var(--green);margin-bottom:4px;" id="encourage-title">Your voice shapes Switzerland's communities</div>
+              <p style="font-size:12px;color:var(--ink2);line-height:1.7;margin-bottom:8px;" id="encourage-body">Real residents know things no dataset can capture — the noise level on weekends, how welcoming the neighbours are, whether kids can walk to school safely. Your review helps thousands of people make one of the most important decisions of their life.</p>
+              <div style="display:flex;gap:16px;flex-wrap:wrap;">
+                <span style="font-size:11px;color:var(--green);font-weight:500;">✓ <span id="enc-stat1">Helps real people find their home</span></span>
+                <span style="font-size:11px;color:var(--green);font-weight:500;">✓ <span id="enc-stat2">Improves the community index</span></span>
+                <span style="font-size:11px;color:var(--green);font-weight:500;">✓ <span id="enc-stat3">Takes only 2 minutes</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Privacy notice (nDSG / GDPR compliant) -->
+        <div style="background:var(--paper);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:16px;">
+          <div style="display:flex;gap:10px;align-items:flex-start;">
+            <span style="font-size:16px;">🔒</span>
+            <div>
+              <div style="font-size:12px;font-weight:500;color:var(--ink2);margin-bottom:4px;" id="privacy-title">Your privacy is protected</div>
+              <p style="font-size:11px;color:var(--ink3);line-height:1.7;margin-bottom:6px;" id="privacy-body">CommunaRank collects only the information you provide in this form. Your name is displayed as you write it (e.g. "Anna M."). We never collect email addresses or contact details through reviews. No data is sold or shared with third parties. Reviews are stored locally in your browser and shared publicly only after moderation. CommunaRank complies with Swiss data protection law (nDSG) and the EU General Data Protection Regulation (GDPR).</p>
+              <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                <span style="font-size:10px;color:var(--ink3);">🇨🇭 <span id="prv-ndsg">Swiss nDSG compliant</span></span>
+                <span style="font-size:10px;color:var(--ink3);">🇪🇺 <span id="prv-gdpr">EU GDPR compliant</span></span>
+                <span style="font-size:10px;color:var(--ink3);">🚫 <span id="prv-nosell">Data never sold</span></span>
+                <span style="font-size:10px;color:var(--ink3);">👤 <span id="prv-anon">Name shown as you write it</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Consent checkbox -->
+        <label style="display:flex;align-items:flex-start;gap:10px;margin-bottom:18px;cursor:pointer;">
+          <input type="checkbox" id="rev-consent" style="margin-top:2px;accent-color:var(--green2);width:16px;height:16px;flex-shrink:0;">
+          <span style="font-size:12px;color:var(--ink2);line-height:1.6;" id="consent-text">I agree that my review will be publicly visible on CommunaRank. I confirm this review reflects my genuine personal experience. I understand I can request deletion at any time by contacting info@communarank.ch.</span>
+        </label>
+
         <button onclick="submitReview()" id="rev-submit-btn"
-          style="background:var(--green);color:white;border:none;padding:12px 28px;border-radius:var(--r);font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;transition:all 0.2s;">
-          <span id="rev-submit-lbl">Submit review →</span>
+          style="background:var(--green);color:white;border:none;padding:14px 28px;border-radius:var(--r);font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;transition:all 0.2s;width:100%;">
+          <span id="rev-submit-lbl">Submit my review →</span>
         </button>
-        <p style="font-size:11px;color:var(--ink3);margin-top:10px;" id="rev-privacy">Reviews are anonymous and publicly visible. We moderate for spam.</p>
+        <p style="font-size:11px;color:var(--ink3);margin-top:8px;text-align:center;" id="rev-privacy">Reviews are moderated within 24h. Spam and offensive content is removed.</p>
       </div>
     </div>
 
@@ -536,7 +607,11 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
 <footer>
   <div class="footer-brand">CommunaRank</div>
   <p>Smart Community Index for Switzerland · Data updated quarterly · Not investment advice</p>
-  <p style="margin-top:6px;">© 2025 CommunaRank · communarank.ch · communarank.com · FR · DE · IT · EN</p>
+  <p style="margin-top:8px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+    <a href="#" onclick="showPage('privacy');return false;" style="color:rgba(245,242,235,0.5);font-size:11px;text-decoration:underline;" id="footer-privacy">Privacy Policy</a>
+    <a href="mailto:info@communarank.ch" style="color:rgba(245,242,235,0.5);font-size:11px;">info@communarank.ch</a>
+    <span style="color:rgba(245,242,235,0.3);font-size:11px;">© 2025 CommunaRank</span>
+  </p>
 </footer>
 <div class="toast" id="toast"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -1266,6 +1341,19 @@ const REV_T = {
     prosPlaceholder:'e.g. Great schools, easy train access...',
     consPlaceholder:'e.g. Expensive parking, limited nightlife...',
     textPlaceholder:'Tell others what it\'s like to live here...',
+    lblHousing:'🏠 Housing situation',lblTenure:'Own or rent?',
+    tenureOwner:'Owner',tenureRenter:'Renter',lblProptype:'Property type',
+    ptApartment:'🏢 Apartment',ptHouse:'🏠 House',ptChalet:'🏔 Chalet',
+    ptStudio:'🚪 Studio',ptVilla:'🏛 Villa',ptOther:'⬜ Other',
+    encourageTitle:'Your voice shapes Switzerland communities',
+    encourageBody:'Real residents know things no dataset captures — noise, neighbours, safety. Your review helps thousands make the most important decision of their life.',
+    encStat1:'Helps real people find their home',encStat2:'Improves the community index',encStat3:'Takes only 2 minutes',
+    privacyTitle:'Your privacy is protected',
+    privacyBody:'We collect only what you write here. Name shown as written. No email required. Swiss nDSG and EU GDPR compliant. Data never sold.',
+    privNdsg:'Swiss nDSG compliant',privGdpr:'EU GDPR compliant',privNosell:'Data never sold',privAnon:'Name shown as you write it',
+    consentText:'I agree my review will be public. I confirm it reflects my genuine experience. I can request deletion anytime at info@communarank.ch.',
+    errConsent:'Please accept the privacy terms to submit',
+    submitBtn:'Submit my review →'
   },
   fr:{
     navBtn:'Avis', title:'Avis sur les communes', sub:'Notez et commentez votre commune — aidez les autres à trouver leur lieu de vie',
@@ -1291,6 +1379,19 @@ const REV_T = {
     prosPlaceholder:'Ex. Bonnes écoles, accès facile au train...',
     consPlaceholder:'Ex. Parking cher, peu de vie nocturne...',
     textPlaceholder:'Dites aux autres ce que c\'est de vivre ici...',
+    lblHousing:'🏠 Situation de logement',lblTenure:'Propriétaire ou locataire?',
+    tenureOwner:'Propriétaire',tenureRenter:'Locataire',lblProptype:'Type de bien',
+    ptApartment:'🏢 Appartement',ptHouse:'🏠 Maison',ptChalet:'🏔 Chalet',
+    ptStudio:'🚪 Studio',ptVilla:'🏛 Villa',ptOther:'⬜ Autre',
+    encourageTitle:'Votre avis façonne les communes suisses',
+    encourageBody:'Les résidents connaissent des choses que les données ne capturent pas — bruit, voisins, sécurité. Votre avis aide des milliers de personnes.',
+    encStat1:'Aide à trouver sa maison',encStat2:"Améliore l'indice communautaire",encStat3:'Prend seulement 2 minutes',
+    privacyTitle:'Votre vie privée est protégée',
+    privacyBody:'Nous collectons uniquement ce que vous écrivez ici. Nom affiché tel que saisi. Conforme LPD et RGPD. Données jamais vendues.',
+    privNdsg:'Conforme LPD suisse',privGdpr:'Conforme RGPD UE',privNosell:'Données jamais vendues',privAnon:'Nom affiché tel que saisi',
+    consentText:"J'accepte que mon avis soit public. Je confirme qu'il est authentique. Suppression possible à info@communarank.ch.",
+    errConsent:'Veuillez accepter les conditions de confidentialité',
+    submitBtn:'Soumettre mon avis →'
   },
   de:{
     navBtn:'Bewertungen', title:'Gemeindebewertungen', sub:'Bewerten Sie Ihre Gemeinde — helfen Sie anderen, ihren idealen Wohnort zu finden',
@@ -1316,6 +1417,19 @@ const REV_T = {
     prosPlaceholder:'z.B. Gute Schulen, einfacher Bahnanschluss...',
     consPlaceholder:'z.B. Teures Parken, wenig Nachtleben...',
     textPlaceholder:'Erzählen Sie anderen, wie es ist, hier zu leben...',
+    lblHousing:'🏠 Wohnsituation',lblTenure:'Eigentümer oder Mieter?',
+    tenureOwner:'Eigentümer',tenureRenter:'Mieter',lblProptype:'Immobilientyp',
+    ptApartment:'🏢 Wohnung',ptHouse:'🏠 Haus',ptChalet:'🏔 Chalet',
+    ptStudio:'🚪 Studio',ptVilla:'🏛 Villa',ptOther:'⬜ Sonstiges',
+    encourageTitle:'Ihre Stimme gestaltet Schweizer Gemeinden',
+    encourageBody:'Bewohner wissen Dinge, die keine Daten erfassen können. Ihre Bewertung hilft Tausenden bei einer der wichtigsten Entscheidungen ihres Lebens.',
+    encStat1:'Hilft Menschen, ihr Zuhause zu finden',encStat2:'Verbessert den Gemeindeindex',encStat3:'Dauert nur 2 Minuten',
+    privacyTitle:'Ihre Privatsphäre ist geschützt',
+    privacyBody:'Wir erfassen nur Ihre Eingaben. Name wird so angezeigt wie eingegeben. Konform mit DSG und DSGVO. Daten werden nie verkauft.',
+    privNdsg:'Schweizer DSG konform',privGdpr:'EU DSGVO konform',privNosell:'Daten nie verkauft',privAnon:'Name wie eingegeben',
+    consentText:'Ich stimme zu, dass meine Bewertung öffentlich ist. Sie entspricht meiner echten Erfahrung. Löschung jederzeit unter info@communarank.ch.',
+    errConsent:'Bitte akzeptieren Sie die Datenschutzbedingungen',
+    submitBtn:'Bewertung einreichen →'
   },
   it:{
     navBtn:'Recensioni', title:'Recensioni dei comuni', sub:'Valuta e recensisci il tuo comune — aiuta gli altri a trovare dove appartenere',
@@ -1341,6 +1455,19 @@ const REV_T = {
     prosPlaceholder:'es. Ottime scuole, accesso facile al treno...',
     consPlaceholder:'es. Parcheggio costoso, poca vita notturna...',
     textPlaceholder:'Racconta agli altri com\'è vivere qui...',
+    lblHousing:'🏠 Situazione abitativa',lblTenure:'Proprietario o inquilino?',
+    tenureOwner:'Proprietario',tenureRenter:'Inquilino',lblProptype:'Tipo di immobile',
+    ptApartment:'🏢 Appartamento',ptHouse:'🏠 Casa',ptChalet:'🏔 Chalet',
+    ptStudio:'🚪 Monolocale',ptVilla:'🏛 Villa',ptOther:'⬜ Altro',
+    encourageTitle:'La tua voce plasma le comunità svizzere',
+    encourageBody:'I residenti conoscono cose che nessun dato cattura. La tua recensione aiuta migliaia di persone nella decisione più importante della loro vita.',
+    encStat1:'Aiuta a trovare casa',encStat2:"Migliora l'indice comunitario",encStat3:'Richiede solo 2 minuti',
+    privacyTitle:'La tua privacy è protetta',
+    privacyBody:'Raccogliamo solo ciò che scrivi qui. Nome mostrato come scritto. Conforme LPD e GDPR. Dati mai venduti.',
+    privNdsg:'Conforme LPD svizzera',privGdpr:'Conforme GDPR UE',privNosell:'Dati mai venduti',privAnon:'Nome mostrato come scritto',
+    consentText:"Accetto che la mia recensione sia pubblica. Confermo che è autentica. Cancellazione possibile a info@communarank.ch.",
+    errConsent:'Accetta i termini sulla privacy per inviare',
+    submitBtn:'Invia la mia recensione →'
   }
 };
 
@@ -1482,11 +1609,15 @@ function submitReview() {
   const cons = document.getElementById('rev-cons')?.value.trim() || '';
   const years = document.getElementById('rev-years')?.value || '';
   const profile = document.getElementById('rev-profile')?.value || '';
+  const proptype = document.getElementById('rev-proptype')?.value || '';
+  const tenure = document.querySelector('input[name="rev-tenure"]:checked')?.value || '';
+  const consent = document.getElementById('rev-consent')?.checked || false;
 
   if(!selectedCommunity) { showToast(t.errCommunity); return; }
   if(!name) { showToast(t.errName); return; }
   if(!overallStar) { showToast(t.errOverall); return; }
   if(!text) { showToast(t.errText); return; }
+  if(!consent) { showToast(t.errConsent||'Please accept privacy terms'); return; }
 
   const community = COMMUNITIES.find(c => c.name === selectedCommunity) || selectedCommunityData;
   const review = {
@@ -1495,7 +1626,7 @@ function submitReview() {
     canton: community ? community.canton : '',
     overall: overallStar,
     ratings: {...dimStars},
-    pros, cons, text, name, years, profile,
+    pros, cons, text, name, years, profile, tenure, proptype,
     helpful: 0,
     date: new Date().toISOString().split('T')[0],
     lang
@@ -1509,6 +1640,7 @@ function submitReview() {
   selectedCommunity = '';
   overallStar = 0;
   dimStars = {};
+  const ce=document.getElementById('rev-consent');if(ce)ce.checked=false;
   ['rev-name','rev-text','rev-pros','rev-cons','rev-community-input'].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.value = '';
@@ -1598,8 +1730,10 @@ function renderReviews() {
       <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border);">
         <div style="font-size:12px;color:var(--ink3);">
           <strong style="color:var(--ink2);">${r.name||t.anonymous}</strong>
-          ${r.profile ? `· ${r.profile}` : ''}
-          ${r.years ? `· ${r.years} ${t.yearsLabel}` : ''}
+          ${r.tenure?`· <span style="background:${r.tenure==='owner'?'var(--gold2)':'#e8f0ff'};color:${r.tenure==='owner'?'#7a5a00':'#1a3a5c'};font-size:10px;padding:1px 6px;border-radius:3px;font-weight:500;">${r.tenure==='owner'?'🏡 '+(t.tenureOwner||'Owner'):'🔑 '+(t.tenureRenter||'Renter')}</span>`:''}
+          ${r.proptype&&r.proptype!=='other'?`· <span style="font-size:11px;color:var(--ink3);">${r.proptype==='apartment'?'🏢':r.proptype==='house'?'🏠':r.proptype==='chalet'?'🏔':r.proptype==='studio'?'🚪':'🏛'} ${r.proptype}</span>`:''}
+          ${r.profile?`· ${r.profile}`:''}
+          ${r.years?`· ${r.years} ${t.yearsLabel}`:''}
         </div>
         <button onclick="markHelpful('${r.id}')"
           style="font-size:11px;background:none;border:1px solid var(--border);border-radius:6px;padding:4px 10px;cursor:pointer;color:var(--ink3);font-family:'DM Sans',sans-serif;">
@@ -1728,6 +1862,22 @@ function applyRevTranslations() {
   renderRevStarGrid();
   if(currentRevTab === 'browse') renderReviews();
   if(currentRevTab === 'ranking') renderPeoplesRanking();
+  const sf=(id,v)=>{const el=document.getElementById(id);if(el&&v)el.textContent=v;};
+  const sv=(id,v)=>{const el=document.getElementById(id);if(el&&v)el.value=v;};
+  sf('rev-lbl-housing',t.lblHousing);sf('rev-lbl-tenure',t.lblTenure);
+  sf('tenure-own-txt',t.tenureOwner);sf('tenure-rent-txt',t.tenureRenter);
+  sf('rev-lbl-proptype',t.lblProptype);
+  sf('pt-apartment',t.ptApartment);sf('pt-house',t.ptHouse);sf('pt-chalet',t.ptChalet);
+  sf('pt-studio',t.ptStudio);sf('pt-villa',t.ptVilla);sf('pt-other',t.ptOther);
+  sf('encourage-title',t.encourageTitle);sf('encourage-body',t.encourageBody);
+  sf('enc-stat1',t.encStat1);sf('enc-stat2',t.encStat2);sf('enc-stat3',t.encStat3);
+  sf('privacy-title',t.privacyTitle);sf('privacy-body',t.privacyBody);
+  sf('prv-ndsg',t.privNdsg);sf('prv-gdpr',t.privGdpr);
+  sf('prv-nosell',t.privNosell);sf('prv-anon',t.privAnon);
+  sf('consent-text',t.consentText);
+  sf('rev-submit-lbl',t.submitBtn||'Submit my review →');
+  const fp=document.getElementById('footer-privacy');
+  if(fp)fp.textContent=lang==='fr'?'Politique de confidentialité':lang==='de'?'Datenschutz':lang==='it'?'Privacy':'Privacy Policy';
 }
 
 // ALL_SWISS_COMMUNES is built dynamically from TopoJSON + supplement
