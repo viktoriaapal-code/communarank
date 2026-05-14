@@ -1111,11 +1111,19 @@ function setMapDim(dim) {
 }
 
 function drawChoropleth() {
-  // Try immediate draw first, then retry after layout
-  if(document.getElementById('swiss-map')) {
-    drawSVGMap();
-    setTimeout(drawSVGMap, 100); // retry after layout
-  }
+  // Retry with increasing delays to ensure layout is complete
+  [0, 50, 200, 500].forEach(delay => {
+    setTimeout(() => {
+      const cont = document.getElementById('swiss-map-container');
+      const svg = document.getElementById('swiss-map');
+      if(svg && cont && cont.clientWidth > 50) {
+        drawSVGMap();
+      } else if(svg && delay === 500) {
+        // Force draw with window width as fallback
+        drawSVGMap();
+      }
+    }, delay);
+  });
 }
 
 function loadMapTopo() {
@@ -1349,7 +1357,13 @@ function drawSVGMap() {
       (+x*sx).toFixed(1) + ',' + (+y*sy).toFixed(1));
   }
 
-  const W = Math.max(document.getElementById('swiss-map-container')?.clientWidth || 0, window.innerWidth > 700 ? 600 : window.innerWidth - 48, 300);
+  const mapCont = document.getElementById('swiss-map-container');
+  const W = Math.max(
+    mapCont ? mapCont.getBoundingClientRect().width : 0,
+    mapCont ? mapCont.clientWidth : 0,
+    window.innerWidth > 700 ? Math.min(window.innerWidth - 80, 1050) : window.innerWidth - 48,
+    300
+  );
   const H = Math.round(W * 0.56);
   const sx = W/680, sy = H/380;
 
@@ -2678,6 +2692,12 @@ function renderRanking() {
 seedSampleReviews();
 renderRevStarGrid();
 renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();applyRevTranslations();updateHeroStats();loadReviewsFromSupabase();
+// Redraw map on window resize
+window.addEventListener('resize', function() {
+  if(document.getElementById('page-map').classList.contains('active')) {
+    drawSVGMap();
+  }
+});
 // Update community count from real data
 const countEl=document.getElementById('community-count');
 if(countEl)countEl.textContent=COMMUNITIES.length.toLocaleString();
