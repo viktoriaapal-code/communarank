@@ -1060,21 +1060,7 @@ let mapDimension = 'overall';
 let mapTopoLoaded = false;
 let mapTopoData = null;
 
-function getCantonScores(dim) {
-  const scores = {};
-  Object.keys(CANTON_NAMES).forEach(ab => { scores[ab] = []; });
-  COMMUNITIES.forEach(c => {
-    const ab = CANTON_KEYS[c.canton];
-    if (!ab) return;
-    const val = dim === 'overall' ? calcScore(c) : c.scores[dim];
-    if (val !== undefined) scores[ab].push(val);
-  });
-  const result = {};
-  Object.entries(scores).forEach(([ab, vals]) => {
-    result[ab] = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : null;
-  });
-  return result;
-}
+
 
 function renderMap() {
   const mt = MAP_T[lang] || MAP_T.en;
@@ -2636,25 +2622,37 @@ function setMapMode(mode) {
 }
 
 // Patch getCantonScores to support people mode
-const _origGetCantonScores = getCantonScores;
 function getCantonScores(dim) {
   if(mapMode === 'people') {
     const reviews = getReviews();
-    const scores = {};
-    Object.keys(CANTON_NAMES||{}).forEach(ab => { scores[ab] = []; });
+    const agg = {};
     reviews.forEach(r => {
       const ab = CANTON_KEYS[r.canton];
       if(!ab) return;
-      scores[ab] = scores[ab] || [];
-      scores[ab].push(r.overall * 20); // convert 1-5 to 0-100
+      if(!agg[ab]) agg[ab] = {total:0,count:0};
+      agg[ab].total += r.overall * 20;
+      agg[ab].count++;
     });
     const result = {};
-    Object.entries(scores).forEach(([ab, vals]) => {
-      result[ab] = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : null;
+    Object.keys(CANTON_NAMES||{}).forEach(ab => {
+      result[ab] = agg[ab] ? Math.round(agg[ab].total/agg[ab].count) : null;
     });
     return result;
   }
-  return _origGetCantonScores(dim);
+  // Data mode - original logic
+  const scores = {};
+  Object.keys(CANTON_NAMES).forEach(ab => { scores[ab] = []; });
+  COMMUNITIES.forEach(c => {
+    const ab = CANTON_KEYS[c.canton];
+    if (!ab) return;
+    const val = dim === 'overall' ? calcScore(c) : c.scores[dim];
+    if (val !== undefined) scores[ab].push(val);
+  });
+  const result = {};
+  Object.entries(scores).forEach(([ab, vals]) => {
+    result[ab] = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : null;
+  });
+  return result;
 }
 
 // Patch renderMap to add toggle
