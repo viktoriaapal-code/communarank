@@ -1289,7 +1289,7 @@ function _drawWithTopo(topo) {
 
 let _mapDrawing = false;
 function drawSVGMap() {
-  if(_mapDrawing) return; // prevent concurrent draws
+  if(_mapDrawing) return;
   _mapDrawing = true;
   const cont = document.getElementById('swiss-map-container');
   const svgEl = document.getElementById('swiss-map');
@@ -1297,32 +1297,34 @@ function drawSVGMap() {
 
   const W = Math.max(cont.getBoundingClientRect().width || cont.offsetWidth, 300);
   const H = Math.round(W * 0.62);
-
   svgEl.setAttribute('width', W);
   svgEl.setAttribute('height', H);
   svgEl.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
   svgEl.style.cssText = 'display:block;';
+  svgEl.innerHTML = '';
 
   const scores = getCantonScores(mapDimension);
-  const vals = Object.values(scores).filter(v => v !== null);
-  if(!vals.length) return;
-  const minVal = Math.min(...vals), maxVal = Math.max(...vals);
+  const vals = Object.values(scores).filter(v => v !== null && v !== undefined);
+  const minVal = vals.length ? Math.min(...vals) : 0;
+  const maxVal = vals.length ? Math.max(...vals) : 100;
 
   function col(s) {
     if(s === null || s === undefined || isNaN(s)) return '#ddd8cc';
     const t = Math.max(0, Math.min(1, (s - minVal) / (maxVal - minVal || 1)));
-    return 'rgb(' + Math.round(200-t*160) + ',' + Math.round(232-t*80) + ',' + Math.round(194-t*155) + ')';
+    return 'rgb('+Math.round(200-t*160)+','+Math.round(232-t*80)+','+Math.round(194-t*155)+')';
   }
 
-  // Show loading
-  svgEl.innerHTML = '<text x="' + (W/2) + '" y="' + (H/2) + '" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="14" fill="#999">Loading map...</text>';
+  // Known canton centroids in WGS84 (lon, lat)
+  const CC = {
+    ZH:[8.65,47.41], BE:[7.45,46.93], LU:[8.11,47.07], UR:[8.63,46.88],
+    SZ:[8.65,47.02], OW:[8.24,46.87], NW:[8.36,46.93], GL:[9.00,46.98],
+    ZG:[8.52,47.16], FR:[7.10,46.73], SO:[7.63,47.33], BS:[7.59,47.56],
+    BL:[7.73,47.44], SH:[8.63,47.70], AR:[9.36,47.37], AI:[9.41,47.27],
+    SG:[9.37,47.14], GR:[9.53,46.66], AG:[8.08,47.38], TG:[9.00,47.57],
+    TI:[8.95,46.17], VD:[6.61,46.57], VS:[7.60,46.18], NE:[6.90,47.00],
+    GE:[6.15,46.21], JU:[7.20,47.37]
+  };
 
-  // Canton abbreviation mapping from swiss-maps KTNR
-  const ktnrToAb = {1:'ZH',2:'BE',3:'LU',4:'UR',5:'SZ',6:'OW',7:'NW',8:'GL',9:'ZG',
-    10:'FR',11:'SO',12:'BS',13:'BL',14:'SH',15:'AR',16:'AI',17:'SG',18:'GR',19:'AG',
-    20:'TG',21:'TI',22:'VD',23:'VS',24:'NE',25:'GE',26:'JU'};
-
-  // Try to fetch from jsdelivr first, then unpkg
   const sources = [
     'https://cdn.jsdelivr.net/npm/swiss-maps@4/2021/ch-combined.json',
     'https://unpkg.com/swiss-maps@4/2021/ch-combined.json'
@@ -1330,110 +1332,94 @@ function drawSVGMap() {
 
   async function tryFetch(urls) {
     for(const url of urls) {
-      try {
-        const r = await fetch(url, {cache: 'force-cache'});
-        if(r.ok) return r.json();
-      } catch(e) {}
+      try { const r = await fetch(url, {cache:'force-cache'}); if(r.ok) return r.json(); } catch(e) {}
     }
-    throw new Error('All sources failed');
+    throw new Error('Failed');
   }
 
   tryFetch(sources).then(topo => {
-    // Use D3 to project and render
     const cantons = topojson.feature(topo, topo.objects.cantons);
-    const mesh = topojson.mesh(topo, topo.objects.cantons, (a, b) => a !== b);
-
-    // D3 projection: Swiss coordinate system (LV95) or geographic
     const projection = d3.geoMercator().fitSize([W, H], cantons);
-    const path = d3.geoPath().projection(projection);
+    const pathGen = d3.geoPath().projection(projection);
 
-    // Build SVG
+    // Pre-compute SVG positions of known canton centroids
+    const cantonSVGPos = {};
+    Object.entries(CC).forEach(([ab, [lon, lat]]) => {
+      cantonSVGPos[ab] = projection([lon, lat]);
+    });
+
+    // Match each feature to a canton by finding closest known centroid
     let html = '';
-
-    // Canton fills
-
     cantons.features.forEach(f => {
-      const p = f.properties || {};
-    // Try numeric KTNR first
-    const ktnr = p.KTNR || p.ktnr || p.kan_nr || p.KT_NR || p.id;
-    // Try direct abbreviation from properties
-    const propAbbr = (p.ABBR || p.abbr || p.KT || p.kt || p.kan_abbr || '').toUpperCase();
-      // Get canton abbreviation - try numeric lookup first, then direct abbr
-    let ab = ktnrToAb[ktnr] || propAbbr || null;
-    // Validate it's a real canton code
-    if(ab && !CANTON_NAMES[ab]) ab = null;
+      const pathD = pathGen(f);
+      if(!pathD) return;
+      const svgCen = pathGen.centroid(f);
+      if(!svgCen || isNaN(svgCen[0])) return;
+
+      // Find closest canton centroid in SVG space
+      let ab = null, minDist = Infinity;
+      Object.entries(cantonSVGPos).forEach(([code, pos]) => {
+        const dx = svgCen[0] - pos[0], dy = svgCen[1] - pos[1];
+        const d = dx*dx + dy*dy;
+        if(d < minDist) { minDist = d; ab = code; }
+      });
+
       const score = ab ? scores[ab] : null;
       const fill = col(score);
-      const name = (CANTON_NAMES || {})[ab] || ab || '';
-      const cf = Object.entries(CANTON_KEYS || {}).find(([k,v]) => v === ab)?.[0] || '';
-      const n = (COMMUNITIES || []).filter(c => (CANTON_KEYS || {})[c.canton] === ab).length;
-      const pathD = path(f);
-      if(!pathD) return;
+      const name = ab ? ((CANTON_NAMES||{})[ab] || ab) : '';
+      const cf = ab ? (Object.entries(CANTON_KEYS||{}).find(([k,v])=>v===ab)||[])[0]||'' : '';
+      const n = ab ? (COMMUNITIES||[]).filter(c=>(CANTON_KEYS||{})[c.canton]===ab).length : 0;
+      const t = (score !== null && score !== undefined) ? (score-minVal)/(maxVal-minVal||1) : 0;
+      const tc = t > 0.5 ? '#fff' : '#2d5a27';
+      const fs = W < 600 ? 8 : 10;
 
-      // Centroid for label
-      const cen = path.centroid(f);
-
-      html += '<path d="' + pathD + '" fill="' + fill + '" stroke="white" stroke-width="0.8" style="cursor:pointer"'
-        + ' data-ab="' + (ab||'') + '" data-name="' + name + '" data-score="' + (score??'') + '" data-cf="' + cf + '" data-n="' + n + '"/>';
+      html += '<path d="'+pathD+'" fill="'+fill+'" stroke="white" stroke-width="0.8" style="cursor:pointer"'
+        +' data-ab="'+(ab||'')+'" data-name="'+name+'" data-score="'+(score??'')+'" data-cf="'+cf+'" data-n="'+n+'"/>';
 
       if(ab) {
-        html += '<text x="' + cen[0].toFixed(1) + '" y="' + (cen[1]-5).toFixed(1) + '" text-anchor="middle" font-size="' + (W<600?8:10) + '" font-family="DM Sans,sans-serif" fill="' + (score&&(score-minVal)/(maxVal-minVal||1)>0.5?'#fff':'#2d5a27') + '" pointer-events="none">' + ab + '</text>';
-        if(score !== null) {
-          html += '<text x="' + cen[0].toFixed(1) + '" y="' + (cen[1]+9).toFixed(1) + '" text-anchor="middle" font-size="' + (W<600?8:10) + '" font-family="Fraunces,serif" font-weight="bold" fill="' + (score&&(score-minVal)/(maxVal-minVal||1)>0.5?'#fff':'#2d5a27') + '" pointer-events="none">' + score + '</text>';
-        }
+        html += '<text x="'+svgCen[0].toFixed(1)+'" y="'+(svgCen[1]-5).toFixed(1)+'" text-anchor="middle"'
+          +' font-size="'+fs+'" font-family="DM Sans,sans-serif" fill="'+tc+'" pointer-events="none">'+ab+'</text>';
+        if(score !== null && score !== undefined)
+          html += '<text x="'+svgCen[0].toFixed(1)+'" y="'+(svgCen[1]+9).toFixed(1)+'" text-anchor="middle"'
+            +' font-size="'+fs+'" font-family="Georgia,serif" font-weight="bold" fill="'+tc+'" pointer-events="none">'+score+'</text>';
       }
     });
 
     svgEl.innerHTML = html;
 
-    // Event delegation
+    // Events
     svgEl.onclick = function(e) {
-      const p = e.target.closest('path');
+      const p = e.target.closest('path[data-cf]');
       if(!p) return;
       const cf = p.getAttribute('data-cf');
-      if(cf) {
-        const sel = document.getElementById('canton-filter');
-        if(sel) sel.value = cf;
-        filterCommunities();
-        showPage('ranking');
-      }
+      if(cf) { const s=document.getElementById('canton-filter'); if(s)s.value=cf; filterCommunities(); showPage('ranking'); }
     };
-
     svgEl.onmousemove = function(e) {
       const p = e.target.closest('path[data-ab]');
       const tip = document.getElementById('map-tooltip');
       if(!tip) return;
-      if(p) {
-        tip.style.display = 'block';
-        tip.style.left = (e.clientX + 14) + 'px';
-        tip.style.top = (e.clientY - 14) + 'px';
-        const dim = ((DIM_LABELS || {})[mapDimension] || {})[lang] || mapDimension;
-        tip.innerHTML = '<div style="font-family:Georgia,serif;font-size:14px;margin-bottom:3px;">' + p.getAttribute('data-name') + '</div>'
-          + '<div style="font-size:12px;color:rgba(245,242,235,0.75)">' + dim + ': <strong style="color:#7dbf6e">' + (p.getAttribute('data-score')||'n/a') + '</strong></div>'
-          + '<div style="font-size:11px;color:rgba(245,242,235,0.45);margin-top:2px">' + p.getAttribute('data-n') + ' communes in index</div>';
-      } else {
-        tip.style.display = 'none';
-      }
+      if(p && p.getAttribute('data-ab')) {
+        const dim = ((DIM_LABELS||{})[mapDimension]||{})[lang]||mapDimension;
+        tip.style.display='block'; tip.style.left=(e.clientX+14)+'px'; tip.style.top=(e.clientY-14)+'px';
+        tip.innerHTML='<div style="font-family:Georgia,serif;font-size:14px;margin-bottom:3px;">'+p.getAttribute('data-name')+'</div>'
+          +'<div style="font-size:12px;color:rgba(245,242,235,0.75)">'+dim+': <strong style="color:#7dbf6e">'+(p.getAttribute('data-score')||'n/a')+'</strong></div>'
+          +'<div style="font-size:11px;color:rgba(245,242,235,0.45);margin-top:2px">'+p.getAttribute('data-n')+' communes in index</div>';
+      } else tip.style.display='none';
     };
-    svgEl.onmouseleave = function() {
-      const tip = document.getElementById('map-tooltip');
-      if(tip) tip.style.display = 'none';
-    };
+    svgEl.onmouseleave = function() { const t=document.getElementById('map-tooltip'); if(t)t.style.display='none'; };
 
     const loading = document.getElementById('map-loading');
-    if(loading) loading.style.display = 'none';
+    if(loading) loading.style.display='none';
     _mapDrawing = false;
-    console.log('Map drawn OK: W=' + W + ' scores=' + vals.length);
+    console.log('Map drawn OK: W='+W+' scores='+vals.length);
 
-    // Cache topo for commune list
-    if(typeof buildCommuneListFromTopo === 'function' && ALL_SWISS_COMMUNES.length < 100) {
+    if(typeof buildCommuneListFromTopo==='function' && ALL_SWISS_COMMUNES.length<100)
       ALL_SWISS_COMMUNES = buildCommuneListFromTopo(topo);
-    }
 
   }).catch(err => {
-    console.error('Map load failed:', err);
     _mapDrawing = false;
-    svgEl.innerHTML = '<text x="' + (W/2) + '" y="' + (H/2) + '" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" fill="#999">Map unavailable — check connection</text>';
+    console.error('Map error:', err);
+    svgEl.innerHTML = '<text x="'+(W/2)+'" y="'+(H/2)+'" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#999">Map unavailable</text>';
   });
 }
 
