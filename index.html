@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%232d5a27'/><text y='.9em' font-size='90'>🇨🇭</text></svg>">
 <title>CommunaRank — Smart Community Index Switzerland</title>
 <meta name="description" content="Switzerland's most comprehensive community ranking platform. Find the best Swiss community to buy land, purchase a home, or rent — ranked by cost of living, infrastructure, education, sustainability and more.">
 <meta property="og:title" content="CommunaRank — Smart Community Index Switzerland">
@@ -18,7 +17,7 @@ h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:500;line-height:1.2}
 nav{background:var(--ink);color:var(--paper);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
 .nav-brand{font-family:'Fraunces',serif;font-size:20px;color:var(--paper);letter-spacing:-0.3px}
 .nav-brand span{color:#7dbf6e}
-
+.nav-links{display:flex;gap:4px}
 .nav-btn{background:none;border:none;color:rgba(245,242,235,0.7);font-size:13px;padding:6px 12px;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s}
 .nav-btn:hover,.nav-btn.active{background:rgba(255,255,255,0.1);color:var(--paper)}
 .lang-sel{display:flex;gap:2px}
@@ -124,79 +123,31 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
 .ai-thinking span:nth-child(2){animation-delay:0.2s}
 .ai-thinking span:nth-child(3){animation-delay:0.4s}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-
+@media(max-width:600px){
+  .rank-card{grid-template-columns:36px 1fr}
   .rank-right{display:none}
-  nav 
-  
-  
-  
+  nav .nav-links{display:none}
+  nav .nav-links.open{display:flex;flex-direction:column;position:fixed;top:56px;left:0;right:0;background:var(--ink);z-index:99;padding:8px 16px 16px;gap:4px;border-top:1px solid rgba(255,255,255,0.1);}
+  .hamburger{display:flex!important;}
 }
-}
-
-/* ── NAV ── */
-.nav-links{display:flex;gap:4px;}
-
-
-
-/* ── MOBILE (≤700px) ── */
-
-  .rank-right{display:none;}
-  
-  .nav-links{display:none;}
-  
-  
-}
-
-/* ── HAMBURGER MOBILE NAV ── */
-.hamburger{display:none;background:none;border:none;color:var(--paper);cursor:pointer;padding:8px;flex-direction:column;gap:5px;align-items:center;justify-content:center;margin-left:12px;min-width:36px;min-height:36px;}
-.ham-bar{display:block;width:22px;height:2px;background:var(--paper);border-radius:2px;transition:transform 0.25s,opacity 0.25s;}
-@media(max-width:700px){
-  .rank-card{grid-template-columns:36px 1fr;}
-  .rank-right{display:none;}
-  .nav-links{display:none;}
-  .hamburger{display:flex;}
-  .nav-links.nav-open{
-    display:flex!important;
-    flex-direction:column;
-    position:fixed;
-    top:56px;left:0;right:0;bottom:0;
-    background:var(--ink);
-    z-index:9999;
-    padding:20px;
-    gap:8px;
-    overflow-y:auto;
-    border-top:1px solid rgba(255,255,255,0.15);
-  }
-  .nav-links.nav-open .nav-btn{
-    padding:14px 18px!important;
-    font-size:16px!important;
-    text-align:left!important;
-    border-radius:10px!important;
-    width:100%!important;
-    display:block!important;
-    color:var(--paper)!important;
-    background:rgba(255,255,255,0.05)!important;
-  }
-  .nav-links.nav-open .nav-btn:hover,
-  .nav-links.nav-open .nav-btn.active{
-    background:rgba(255,255,255,0.12)!important;
-  }
-}
-@media(min-width:701px){.hamburger{display:none!important;}}
+@media(min-width:601px){.hamburger{display:none!important;}}
 </style>
-<!-- Vercel Analytics - free, privacy-friendly, no cookies -->
-<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <nav>
   <div class="nav-brand">Communa<span>Rank</span></div>
-  <div class="nav-links" id="main-nav-links">
+  <button class="hamburger" id="hamburger-btn" onclick="toggleMobileNav()"
+    style="display:none;background:none;border:none;color:var(--paper);cursor:pointer;padding:8px;flex-direction:column;gap:5px;align-items:center;justify-content:center;">
+    <span id="ham-line1" style="display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:all 0.2s;"></span>
+    <span id="ham-line2" style="display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:all 0.2s;"></span>
+    <span id="ham-line3" style="display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:all 0.2s;"></span>
+  </button>
+  <div class="nav-links">
     <button class="nav-btn active" onclick="showPage('ranking')" id="nb-ranking">Ranking</button>
     <button class="nav-btn" onclick="showPage('compare')" id="nb-compare">Compare</button>
     <button class="nav-btn" onclick="showPage('index')" id="nb-index">Our Index</button>
     <button class="nav-btn" onclick="showPage('map')" id="nb-map">Map</button>
     <button class="nav-btn" onclick="showPage('reviews')" id="nb-reviews">Reviews</button>
-    <button class="nav-btn" onclick="showPage('privacy')" id="nb-privacy" style="display:none;">Privacy</button>
   </div>
   <div class="lang-sel">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -204,11 +155,6 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
     <button class="lang-btn" onclick="setLang('de')">DE</button>
     <button class="lang-btn" onclick="setLang('it')">IT</button>
   </div>
-  <button class="hamburger" id="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu">
-    <span class="ham-bar" id="ham-line1"></span>
-    <span class="ham-bar" id="ham-line2"></span>
-    <span class="ham-bar" id="ham-line3"></span>
-  </button>
 </nav>
 <div class="hero">
   <div class="hero-tag" id="h-tag">Switzerland's Community Intelligence Platform</div>
@@ -216,7 +162,7 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
   <p class="hero-sub" id="h-sub">Our proprietary Smart Community Index evaluates Swiss communities across 9 dimensions — from cost of living to sustainability — so you can choose where to buy land, a home, or rent with confidence.</p>
   <div class="hero-actions">
     <button class="btn-primary" onclick="showPage('ranking')" id="h-cta1">Explore Rankings</button>
-    <button class="btn-outline" onclick="showPage('ai')" id="h-cta2">Get Early Access</button>
+    
   </div>
   <div class="hero-stats">
     <div class="stat-item"><div class="stat-num" id="community-count">50</div><div class="stat-label" id="h-s1">Communities ranked</div></div>
@@ -247,7 +193,14 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
         <option>Urban</option><option>Suburban</option><option>Rural</option><option>Alpine</option>
       </select>
     </div>
-    
+    <div class="filter-chips" id="filter-chips">
+      <span class="chip active" onclick="setChip(this,'all')" id="chip-all">All</span>
+      <span class="chip" onclick="setChip(this,'family')" id="chip-family">Family-friendly</span>
+      <span class="chip" onclick="setChip(this,'affordable')" id="chip-affordable">Affordable</span>
+      <span class="chip" onclick="setChip(this,'sustainable')" id="chip-sustainable">Sustainable</span>
+      <span class="chip" onclick="setChip(this,'nature')" id="chip-nature">Near nature</span>
+      <span class="chip" onclick="setChip(this,'urban')" id="chip-urban">Urban lifestyle</span>
+    </div>
     <div class="weights-panel">
       <div class="weights-title">
         <span id="w-title">Personalize index weights</span>
@@ -295,9 +248,8 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
         </div>
       </div>
       <div id="swiss-map-container" style="width:100%;min-height:380px;position:relative;">
-        <div id="map-loading" style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:13px;color:var(--ink3);">Loading map...</div>
+        <div id="map-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--ink3);">Loading map...</div>
         <svg id="swiss-map" style="width:100%;display:block;"></svg>
-        <div id="map-debug" style="display:none;position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,0.7);color:#fff;font-size:10px;padding:6px 10px;border-radius:4px;max-width:90%;word-break:break-all;z-index:10;"></div>
       </div>
       <div id="map-tooltip" style="position:fixed;background:var(--ink);color:var(--paper);padding:10px 14px;border-radius:8px;font-size:13px;pointer-events:none;display:none;z-index:999;max-width:200px;"></div>
     </div>
@@ -423,10 +375,10 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
         <!-- Resident info -->
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
           <div>
-            <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-name">Your name</label>
+            <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-name">Nickname</label>
             <input id="rev-name" type="text"
               style="width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:var(--r);font-size:13px;font-family:'DM Sans',sans-serif;"
-              placeholder="Anna M.">
+              placeholder="e.g. SwissHiker42">
           </div>
           <div>
             <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-years">Years living there</label>
@@ -739,53 +691,30 @@ const INDEX_PILLARS=[{key:'costOfLiving',icon:'💰',title:{en:'Cost of Living',
 function getT(k){return T[lang][k]||T.en[k]||''}
 function setLang(l){lang=l;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));applyTranslations();
 function toggleMobileNav() {
-  const nav = document.getElementById('main-nav-links');
-  if(!nav) return;
-  const isOpen = nav.classList.toggle('nav-open');
-  const l1 = document.getElementById('ham-line1');
-  const l2 = document.getElementById('ham-line2');
-  const l3 = document.getElementById('ham-line3');
-  if(l1) l1.style.transform = isOpen ? 'rotate(45deg) translate(5px,5px)' : '';
-  if(l2) l2.style.opacity = isOpen ? '0' : '1';
-  if(l3) l3.style.transform = isOpen ? 'rotate(-45deg) translate(5px,-5px)' : '';
-  // Prevent body scroll when menu open
-  document.body.style.overflow = isOpen ? 'hidden' : '';
+  const links = document.querySelector('.nav-links');
+  const btn = document.getElementById('hamburger-btn');
+  const isOpen = links.classList.toggle('open');
+  // Animate to X
+  document.getElementById('ham-line1').style.cssText = isOpen ?
+    'display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transform:rotate(45deg) translate(5px,5px);' :
+    'display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:all 0.2s;';
+  document.getElementById('ham-line2').style.cssText = isOpen ?
+    'display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;opacity:0;' :
+    'display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:all 0.2s;';
+  document.getElementById('ham-line3').style.cssText = isOpen ?
+    'display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transform:rotate(-45deg) translate(5px,-5px);' :
+    'display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:all 0.2s;';
 }
 
 // Mobile nav closes on page selection (handled in showPage below)
 
-// Mobile nav init - pure JS approach
-(function(){
-  function initMobileNav() {
-    const ham = document.getElementById('hamburger-btn');
-    const nav = document.getElementById('main-nav-links');
-    if(!ham || !nav) return;
-    if(window.innerWidth <= 700) {
-      ham.style.display = 'flex';
-      nav.style.display = 'none'; // hidden by default on mobile
-    } else {
-      ham.style.display = 'none';
-      nav.style.display = ''; // reset to CSS default on desktop
-    }
-  }
-  initMobileNav();
-  window.addEventListener('resize', initMobileNav);
-})();
-renderWeights();renderRanking();
-// Profile button delegation on rank grid (runs once after init)
-(function() {
-  var grid = document.getElementById('rank-grid');
-  if(grid) grid.addEventListener('click', function(e) {
-    var btn = e.target.closest('[data-action="profile"]');
-    if(btn && btn.dataset.name) openProfile(btn.dataset.name);
-  });
-})();renderIndexPillars();renderCompare();applyWaitlistTranslations();applyRevTranslations();const ce=document.getElementById('community-count');if(ce)ce.textContent=COMMUNITIES.length.toLocaleString();if(document.getElementById('page-map').classList.contains('active'))renderMap();}
+renderWeights();renderRanking();renderIndexPillars();renderCompare();applyWaitlistTranslations();applyRevTranslations();const ce=document.getElementById('community-count');if(ce)ce.textContent=COMMUNITIES.length.toLocaleString();if(document.getElementById('page-map').classList.contains('active'))renderMap();}
 function applyTranslations(){const st=(id,val,attr)=>{const el=document.getElementById(id);if(!el)return;if(attr==='html')el.innerHTML=val;else if(attr==='ph')el.placeholder=val;else el.textContent=val;};st('h-tag',getT('heroTag'));st('h-title',getT('heroTitle'),'html');st('h-sub',getT('heroSub'));st('h-cta1',getT('heroCta1'));st('h-cta2',getT('heroCta2'));st('h-s1',getT('hS1'));st('h-s2',getT('hS2'));st('h-s3',getT('hS3'));st('h-s4',getT('hS4'));st('h-s5',getT('hS5')||'Resident reviews');st('rank-title',getT('rankTitle'));st('rank-sub',getT('rankSub'));st('w-title',getT('wTitle'));st('cmp-title',getT('cmpTitle'));st('cmp-sub',getT('cmpSub'));st('cmp-add-btn',getT('cmpAdd'));st('cmp-chart-title',getT('cmpChartTitle'));st('ai-title',getT('aiTitle'));st('ai-page-title',getT('aiPageTitle'));st('ai-page-sub',getT('aiPageSub'));st('search-input',getT('searchPlaceholder'),'ph');st('cmp-search',getT('cmpSearchPlaceholder'),'ph');st('chip-all',getT('chipAll'));st('chip-family',getT('chipFamily'));st('chip-affordable',getT('chipAffordable'));st('chip-sustainable',getT('chipSustainable'));st('chip-nature',getT('chipNature'));st('chip-urban',getT('chipUrban'));}
 function calcScore(c){let t=0,w=0;for(const[k,d]of Object.entries(WEIGHTS_DEF)){t+=c.scores[k]*d.val;w+=d.val}return Math.round(t/w)}
 function renderWeights(){const g=document.getElementById('weights-grid');g.innerHTML='';for(const[k,w]of Object.entries(WEIGHTS_DEF)){const d=document.createElement('div');d.className='weight-item';d.innerHTML=`<label><span>${w.icon} ${w.label[lang]||w.label.en}</span><span class="weight-badge" id="wb-${k}">${w.val}%</span></label><input type="range" min="0" max="30" step="1" value="${w.val}" oninput="updateWeight('${k}',this.value)">`;g.appendChild(d)}}
 function updateWeight(k,v){WEIGHTS_DEF[k].val=parseInt(v);document.getElementById('wb-'+k).textContent=v+'%';renderRanking()}
 function getSorted(){const q=(document.getElementById('search-input')?.value||'').toLowerCase();const canton=document.getElementById('canton-filter')?.value||'';const type=document.getElementById('type-filter')?.value||'';return[...COMMUNITIES].filter(c=>{if(q&&!c.name.toLowerCase().includes(q)&&!c.canton.toLowerCase().includes(q))return false;if(canton&&c.canton!==canton)return false;if(type&&c.type!==type)return false;if(currentFilter!=='all'&&!c.tags.includes(currentFilter))return false;return true}).map(c=>({...c,score:calcScore(c)})).sort((a,b)=>b.score-a.score)}
-function renderRanking(){const g=document.getElementById('rank-grid');const s=getSorted();g.innerHTML='';s.forEach((c,i)=>{const rank=i+1;const card=document.createElement('div');card.className='rank-card'+(rank===1?' top1':'');card.dataset.id=c.name;const mk=['costOfLiving','education','healthcare','sustainability'];const mb=mk.map(k=>`<div class="mini-bar"><span class="mini-bar-label">${k.slice(0,6)}</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${c.scores[k]}%"></div></div></div>`).join('');const met=Object.entries(c.scores).map(([k,v])=>{const p=INDEX_PILLARS.find(p=>p.key===k);return`<div class="detail-metric"><div class="dm-label">${p?p.icon:''} ${p?(p.title[lang]||p.title.en):k}</div><div class="dm-val">${v}</div><div class="dm-sub">/100</div></div>`}).join('');card.innerHTML=`<div class="rank-num ${rank===1?'gold':''}">${rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':rank}</div><div class="rank-info"><h3>${c.name}</h3><div class="rank-meta"><span>📍 ${c.canton}</span><span>🏘 ${c.type}</span><span>👥 ${c.pop.toLocaleString()}</span><span>💰 ${c.landPrice} ${getT('cost')}</span>${c.medianIncome?`<span>💵 CHF ${(c.medianIncome/1000).toFixed(0)}k/yr</span>`:''}</div><div style="margin-top:8px;">${mb}</div></div><div class="rank-right"><div class="score-big">${c.score}</div><div class="score-label">${getT('score')}</div></div><div class="detail-panel"><div class="detail-grid">${met}</div><div class="detail-actions"><button class="action-btn" data-action="save" data-name="${c.name}">${getT('detailSave')}</button><button class="action-btn" data-action="profile" data-name="${c.name}">${getT('detailMore')}</button></div></div>`;card.addEventListener('click',(e)=>{const btn=e.target.closest('[data-action]');if(btn){e.stopPropagation();const action=btn.dataset.action,name=btn.dataset.name;if(action==='buy')askAI('Tell me about buying land in '+name);else if(action==='rent')askAI('What is the rental market like in '+name+'?');else if(action==='save'){addToCompare(name);return;}else if(action==='profile'){openProfile(name);return;}return;}const was=card.classList.contains('expanded');document.querySelectorAll('.rank-card.expanded').forEach(el=>el.classList.remove('expanded'));if(!was)card.classList.add('expanded');});g.appendChild(card)})}
+function renderRanking(){const g=document.getElementById('rank-grid');const s=getSorted();g.innerHTML='';s.forEach((c,i)=>{const rank=i+1;const card=document.createElement('div');card.className='rank-card'+(rank===1?' top1':'');card.dataset.id=c.name;const mk=['costOfLiving','education','healthcare','sustainability'];const mb=mk.map(k=>`<div class="mini-bar"><span class="mini-bar-label">${k.slice(0,6)}</span><div class="mini-bar-track"><div class="mini-bar-fill" style="width:${c.scores[k]}%"></div></div></div>`).join('');const met=Object.entries(c.scores).map(([k,v])=>{const p=INDEX_PILLARS.find(p=>p.key===k);return`<div class="detail-metric"><div class="dm-label">${p?p.icon:''} ${p?(p.title[lang]||p.title.en):k}</div><div class="dm-val">${v}</div><div class="dm-sub">/100</div></div>`}).join('');card.innerHTML=`<div class="rank-num ${rank===1?'gold':''}">${rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':rank}</div><div class="rank-info"><h3>${c.name}</h3><div class="rank-meta"><span>📍 ${c.canton}</span><span>🏘 ${c.type}</span><span>👥 ${c.pop.toLocaleString()}</span><span>💰 ${c.landPrice} ${getT('cost')}</span>${c.medianIncome?`<span>💵 CHF ${(c.medianIncome/1000).toFixed(0)}k/yr</span>`:''}</div><div style="margin-top:8px;">${mb}</div></div><div class="rank-right"><div class="score-big">${c.score}</div><div class="score-label">${getT('score')}</div></div><div class="detail-panel"><div class="detail-grid">${met}</div><div class="detail-actions"><button class="action-btn primary" data-action="buy" data-name="${c.name}">${getT('detailBuy')}</button><button class="action-btn" data-action="rent" data-name="${c.name}">${getT('detailRent')}</button><button class="action-btn" data-action="save" data-name="${c.name}">${getT('detailSave')}</button><button class="action-btn" data-action="profile" data-name="${c.name}">${getT('detailMore')}</button></div></div>`;card.addEventListener('click',(e)=>{const btn=e.target.closest('[data-action]');if(btn){e.stopPropagation();const action=btn.dataset.action,name=btn.dataset.name;if(action==='buy')askAI('Tell me about buying land in '+name);else if(action==='rent')askAI('What is the rental market like in '+name+'?');else if(action==='save'){addToCompare(name);return;}else if(action==='profile'){openProfile(name);return;}return;}const was=card.classList.contains('expanded');document.querySelectorAll('.rank-card.expanded').forEach(el=>el.classList.remove('expanded'));if(!was)card.classList.add('expanded');});g.appendChild(card)})}
 function filterCommunities(){renderRanking()}
 function setChip(el,f){currentFilter=f;document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderRanking()}
 function renderIndexPillars(){
@@ -1015,9 +944,9 @@ function selectCmpItem(n){document.getElementById('cmp-search').value=n;document
 function addSelectedToCompare(){const n=document.getElementById('cmp-search').value.trim();addToCompare(n);document.getElementById('cmp-search').value=''}
 function addToCompare(n){if(!n)return;const c=COMMUNITIES.find(c=>c.name===n);if(!c){showToast('Community not found');return}if(cmpSelected.includes(n)){showToast('Already in comparison');return}if(cmpSelected.length>=4){showToast('Max 4 communities');return}cmpSelected.push(n);renderCompare();showToast(n+' added')}
 function removeFromCompare(n){cmpSelected=cmpSelected.filter(x=>x!==n);renderCompare()}
-function renderCompare(){const sel=document.getElementById('cmp-selected');sel.innerHTML=cmpSelected.map(n=>`<span style="background:var(--green3);color:var(--green);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;" onclick="removeFromCompare('${n}')">${n} ×</span>`).join('');const g=document.getElementById('compare-grid');if(!cmpSelected.length){g.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--ink3);font-size:14px;">Add communities above to compare</div>`;return}const cs=cmpSelected.map(n=>COMMUNITIES.find(c=>c.name===n)).filter(Boolean);g.innerHTML=cs.map(c=>{const sc=calcScore(c);const _salLbl=lang==='fr'?'Revenu médian':lang==='de'?'Medianeinkommen':lang==='it'?'Reddito mediano':'Median Income';const _ratLbl=lang==='fr'?'Pouvoir d achat':lang==='de'?'Kaufkraft':lang==='it'?'Acquisto':'Purchasing Power';const salRows=c.medianIncome?`<div class="compare-row" style="background:var(--gold2);padding:4px 0;border-radius:4px;margin-bottom:4px;"><span class="compare-row-label">💵 ${_salLbl}</span><span style="font-weight:600;font-size:12px;color:#7a5a00;">CHF ${(c.medianIncome/1000).toFixed(0)}k</span></div><div class="compare-row" style="background:${c.salaryRatio>=60?'var(--green3)':c.salaryRatio>=40?'var(--gold2)':'#fde8e8'};padding:4px 0;border-radius:4px;margin-bottom:8px;"><span class="compare-row-label">⚖️ ${_ratLbl}</span><span class="badge ${c.salaryRatio>=60?'badge-green':c.salaryRatio>=40?'badge-gold':'badge-red'}">${c.salaryRatio}/100</span></div>`:'';const rows=INDEX_PILLARS.map(p=>{const v=c.scores[p.key];const cl=v>=80?'badge-green':v>=60?'badge-gold':'badge-red';return`<div class="compare-row"><span class="compare-row-label">${p.icon} ${p.title[lang]||p.title.en}</span><span class="badge ${cl}">${v}</span></div>`}).join('');return`<div class="compare-card"><h4>${c.name} <span style="color:var(--green);font-family:'Fraunces',serif;">${sc}</span></h4><div style="font-size:11px;color:var(--ink3);margin-bottom:10px;">${c.canton} · ${c.type} · ${c.landPrice} ${getT('cost')}</div>${salRows}${rows}</div>`}).join('');const wrap=document.getElementById('cmp-chart-wrap');wrap.style.display=cs.length>=2?'block':'none';if(cs.length>=2)renderRadar(cs)}
+function renderCompare(){const sel=document.getElementById('cmp-selected');sel.innerHTML=cmpSelected.map(n=>`<span style="background:var(--green3);color:var(--green);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;" onclick="removeFromCompare('${n}')">${n} ×</span>`).join('');const g=document.getElementById('compare-grid');if(!cmpSelected.length){g.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--ink3);font-size:14px;">Add communities above to compare</div>`;return}const cs=cmpSelected.map(n=>COMMUNITIES.find(c=>c.name===n)).filter(Boolean);g.innerHTML=cs.map(c=>{const sc=calcScore(c);const _salLbl=lang==='fr'?'Revenu médian':lang==='de'?'Medianeinkommen':lang==='it'?'Reddito mediano':'Median Income';const _ratLbl=lang==='fr'?'Pouvoir d achat':lang==='de'?'Kaufkraft':lang==='it'?'Acquisto':'Purchasing Power';const salRows=c.medianIncome?`<div class="compare-row" style="background:var(--gold2);padding:4px 0;border-radius:4px;margin-bottom:4px;"><span class="compare-row-label">💵 ${_salLbl}</span><span style="font-weight:600;font-size:12px;color:#7a5a00;">CHF ${(c.medianIncome/1000).toFixed(0)}k</span></div><div class="compare-row" style="background:${c.salaryRatio>=60?'var(--green3)':c.salaryRatio>=40?'var(--gold2)':'#fde8e8'};padding:4px 0;border-radius:4px;margin-bottom:8px;"><span class="compare-row-label">⚖️ ${_ratLbl}</span><span class="badge ${c.salaryRatio>=60?'badge-green':c.salaryRatio>=40?'badge-gold':'badge-red'}">${c.salaryRatio}/100</span></div>`:'';const rows=INDEX_PILLARS.map(p=>{const v=c.scores[p.key];const cl=v>=80?'badge-green':v>=60?'badge-gold':'badge-red';return`<div class="compare-row"><span class="compare-row-label">${p.icon} ${p.title[lang]||p.title.en}</span><span class="badge ${cl}">${v}</span></div>`}).join('');return`<div class="compare-card"><h4>${c.name} <span style="color:var(--green);font-family:'Fraunces',serif;">${sc}</span></h4><div style="font-size:11px;color:var(--ink3);margin-bottom:10px;">${c.canton} · ${c.type} · ${c.landPrice} ${getT('cost')}</div>${salaryRow}${salRows}${rows}</div>`}).join('');const wrap=document.getElementById('cmp-chart-wrap');wrap.style.display=cs.length>=2?'block':'none';if(cs.length>=2)renderRadar(cs)}
 function renderRadar(cs){if(cmpChart){cmpChart.destroy();cmpChart=null}const labels=INDEX_PILLARS.map(p=>p.title[lang]||p.title.en);const colors=['#2d5a27','#c8960c','#1a3a5c','#8b2020'];const datasets=cs.map((c,i)=>({label:c.name,data:INDEX_PILLARS.map(p=>c.scores[p.key]),borderColor:colors[i],backgroundColor:colors[i]+'22',borderWidth:2,pointRadius:3}));cmpChart=new Chart(document.getElementById('cmpChart'),{type:'radar',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,ticks:{stepSize:20,font:{size:9}},pointLabels:{font:{size:10}}}},plugins:{legend:{display:true,labels:{font:{size:11}}}}}})}
-function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+n).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.id==='nb-'+n));if(n==='compare')renderCompare();if(n==='index')renderIndexPillars();if(n==='map')renderMap();if(n==='ai')applyWaitlistTranslations();if(n==='reviews'){applyRevTranslations();renderRevStarGrid();if(ALL_SWISS_COMMUNES.length<100)loadCommuneListAsync();};const navLinks=document.getElementById('main-nav-links');if(navLinks&&navLinks.style.display==='flex'&&window.innerWidth<=700){navLinks.style.display='none';navLinks.style.position='';document.body.style.overflow='';const h1=document.getElementById('ham-line1');const h2=document.getElementById('ham-line2');const h3=document.getElementById('ham-line3');if(h1)h1.style.transform='';if(h2)h2.style.opacity='1';if(h3)h3.style.transform='';}}
+function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+n).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.id==='nb-'+n));if(n==='compare')renderCompare();if(n==='index')renderIndexPillars();if(n==='map')renderMap();if(n==='ai')applyWaitlistTranslations();if(n==='reviews'){applyRevTranslations();renderRevStarGrid();if(ALL_SWISS_COMMUNES.length<100)loadCommuneListAsync();};const navLinks=document.querySelector('.nav-links');if(navLinks&&navLinks.classList.contains('open')){navLinks.classList.remove('open');const h1=document.getElementById('ham-line1');const h2=document.getElementById('ham-line2');const h3=document.getElementById('ham-line3');if(h1)h1.style.transform='';if(h2)h2.style.opacity='1';if(h3)h3.style.transform='';}}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
 
 // ─── MAP ───────────────────────────────────────────────
@@ -1074,7 +1003,21 @@ let mapDimension = 'overall';
 let mapTopoLoaded = false;
 let mapTopoData = null;
 
-
+function getCantonScores(dim) {
+  const scores = {};
+  Object.keys(CANTON_NAMES).forEach(ab => { scores[ab] = []; });
+  COMMUNITIES.forEach(c => {
+    const ab = CANTON_KEYS[c.canton];
+    if (!ab) return;
+    const val = dim === 'overall' ? calcScore(c) : c.scores[dim];
+    if (val !== undefined) scores[ab].push(val);
+  });
+  const result = {};
+  Object.entries(scores).forEach(([ab, vals]) => {
+    result[ab] = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : null;
+  });
+  return result;
+}
 
 function renderMap() {
   const mt = MAP_T[lang] || MAP_T.en;
@@ -1109,11 +1052,8 @@ function renderMap() {
     }).join('');
   }
 
-  // Draw the map
+  // Draw the choropleth
   drawChoropleth();
-  // Extra map setup
-  renderMapModeToggle();
-  updateHeroStats();
 }
 
 function setMapDim(dim) {
@@ -1122,8 +1062,11 @@ function setMapDim(dim) {
 }
 
 function drawChoropleth() {
-  // Single draw with small delay to ensure layout
-  setTimeout(drawSVGMap, 80);
+  if (!mapTopoLoaded) {
+    loadMapTopo();
+    return;
+  }
+  _drawWithTopo(mapTopoData);
 }
 
 function loadMapTopo() {
@@ -1299,143 +1242,6 @@ function _drawWithTopo(topo) {
     })
     .text(d => { const ab=getAb(d); return ab&&scores[ab]!=null ? scores[ab] : ''; });
 }
-
-let _mapDrawing = false;
-function drawSVGMap() {
-  if(_mapDrawing) return;
-  _mapDrawing = true;
-  const cont = document.getElementById('swiss-map-container');
-  const svgEl = document.getElementById('swiss-map');
-  if(!cont || !svgEl) { _mapDrawing = false; return; }
-
-  const W = Math.max(cont.getBoundingClientRect().width || cont.offsetWidth, 300);
-  const H = Math.round(W * 0.62);
-  svgEl.setAttribute('width', W);
-  svgEl.setAttribute('height', H);
-  svgEl.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-  svgEl.style.cssText = 'display:block;';
-  svgEl.innerHTML = '';
-
-  const scores = getCantonScores(mapDimension);
-  const vals = Object.values(scores).filter(v => v !== null && v !== undefined);
-  const minVal = vals.length ? Math.min(...vals) : 0;
-  const maxVal = vals.length ? Math.max(...vals) : 100;
-
-  function col(s) {
-    if(s === null || s === undefined || isNaN(s)) return '#ddd8cc';
-    const t = Math.max(0, Math.min(1, (s - minVal) / (maxVal - minVal || 1)));
-    return 'rgb('+Math.round(200-t*160)+','+Math.round(232-t*80)+','+Math.round(194-t*155)+')';
-  }
-
-  // Known canton centroids in WGS84 (lon, lat)
-  const CC = {
-    ZH:[8.65,47.41], BE:[7.45,46.93], LU:[8.11,47.07], UR:[8.63,46.88],
-    SZ:[8.65,47.02], OW:[8.24,46.87], NW:[8.36,46.93], GL:[9.00,46.98],
-    ZG:[8.52,47.16], FR:[7.10,46.73], SO:[7.63,47.33], BS:[7.59,47.56],
-    BL:[7.73,47.44], SH:[8.63,47.70], AR:[9.36,47.37], AI:[9.41,47.27],
-    SG:[9.37,47.14], GR:[9.53,46.66], AG:[8.08,47.38], TG:[9.00,47.57],
-    TI:[8.95,46.17], VD:[6.61,46.57], VS:[7.60,46.18], NE:[6.90,47.00],
-    GE:[6.15,46.21], JU:[7.20,47.37]
-  };
-
-  const sources = [
-    'https://cdn.jsdelivr.net/npm/swiss-maps@4/2021/ch-combined.json',
-    'https://unpkg.com/swiss-maps@4/2021/ch-combined.json'
-  ];
-
-  async function tryFetch(urls) {
-    for(const url of urls) {
-      try { const r = await fetch(url, {cache:'force-cache'}); if(r.ok) return r.json(); } catch(e) {}
-    }
-    throw new Error('Failed');
-  }
-
-  tryFetch(sources).then(topo => {
-    const cantons = topojson.feature(topo, topo.objects.cantons);
-    const projection = d3.geoMercator().fitSize([W, H], cantons);
-    const pathGen = d3.geoPath().projection(projection);
-
-    // Pre-compute SVG positions of known canton centroids
-    const cantonSVGPos = {};
-    Object.entries(CC).forEach(([ab, [lon, lat]]) => {
-      cantonSVGPos[ab] = projection([lon, lat]);
-    });
-
-    // Match each feature to a canton by finding closest known centroid
-    let html = '';
-    cantons.features.forEach(f => {
-      const pathD = pathGen(f);
-      if(!pathD) return;
-      const svgCen = pathGen.centroid(f);
-      if(!svgCen || isNaN(svgCen[0])) return;
-
-      // Find closest canton centroid in SVG space
-      let ab = null, minDist = Infinity;
-      Object.entries(cantonSVGPos).forEach(([code, pos]) => {
-        const dx = svgCen[0] - pos[0], dy = svgCen[1] - pos[1];
-        const d = dx*dx + dy*dy;
-        if(d < minDist) { minDist = d; ab = code; }
-      });
-
-      const score = ab ? scores[ab] : null;
-      const fill = col(score);
-      const name = ab ? ((CANTON_NAMES||{})[ab] || ab) : '';
-      const cf = ab ? (Object.entries(CANTON_KEYS||{}).find(([k,v])=>v===ab)||[])[0]||'' : '';
-      const n = ab ? (COMMUNITIES||[]).filter(c=>(CANTON_KEYS||{})[c.canton]===ab).length : 0;
-      const t = (score !== null && score !== undefined) ? (score-minVal)/(maxVal-minVal||1) : 0;
-      const tc = t > 0.5 ? '#fff' : '#2d5a27';
-      const fs = W < 600 ? 8 : 10;
-
-      html += '<path d="'+pathD+'" fill="'+fill+'" stroke="white" stroke-width="0.8" style="cursor:pointer"'
-        +' data-ab="'+(ab||'')+'" data-name="'+name+'" data-score="'+(score??'')+'" data-cf="'+cf+'" data-n="'+n+'"/>';
-
-      if(ab) {
-        html += '<text x="'+svgCen[0].toFixed(1)+'" y="'+(svgCen[1]-5).toFixed(1)+'" text-anchor="middle"'
-          +' font-size="'+fs+'" font-family="DM Sans,sans-serif" fill="'+tc+'" pointer-events="none">'+ab+'</text>';
-        if(score !== null && score !== undefined)
-          html += '<text x="'+svgCen[0].toFixed(1)+'" y="'+(svgCen[1]+9).toFixed(1)+'" text-anchor="middle"'
-            +' font-size="'+fs+'" font-family="Georgia,serif" font-weight="bold" fill="'+tc+'" pointer-events="none">'+score+'</text>';
-      }
-    });
-
-    svgEl.innerHTML = html;
-
-    // Events
-    svgEl.onclick = function(e) {
-      const p = e.target.closest('path[data-cf]');
-      if(!p) return;
-      const cf = p.getAttribute('data-cf');
-      if(cf) { const s=document.getElementById('canton-filter'); if(s)s.value=cf; filterCommunities(); showPage('ranking'); }
-    };
-    svgEl.onmousemove = function(e) {
-      const p = e.target.closest('path[data-ab]');
-      const tip = document.getElementById('map-tooltip');
-      if(!tip) return;
-      if(p && p.getAttribute('data-ab')) {
-        const dim = ((DIM_LABELS||{})[mapDimension]||{})[lang]||mapDimension;
-        tip.style.display='block'; tip.style.left=(e.clientX+14)+'px'; tip.style.top=(e.clientY-14)+'px';
-        tip.innerHTML='<div style="font-family:Georgia,serif;font-size:14px;margin-bottom:3px;">'+p.getAttribute('data-name')+'</div>'
-          +'<div style="font-size:12px;color:rgba(245,242,235,0.75)">'+dim+': <strong style="color:#7dbf6e">'+(p.getAttribute('data-score')||'n/a')+'</strong></div>'
-          +'<div style="font-size:11px;color:rgba(245,242,235,0.45);margin-top:2px">'+p.getAttribute('data-n')+' communes in index</div>';
-      } else tip.style.display='none';
-    };
-    svgEl.onmouseleave = function() { const t=document.getElementById('map-tooltip'); if(t)t.style.display='none'; };
-
-    const loading = document.getElementById('map-loading');
-    if(loading) loading.style.display='none';
-    _mapDrawing = false;
-    console.log('Map drawn OK: W='+W+' scores='+vals.length);
-
-    if(typeof buildCommuneListFromTopo==='function' && ALL_SWISS_COMMUNES.length<100)
-      ALL_SWISS_COMMUNES = buildCommuneListFromTopo(topo);
-
-  }).catch(err => {
-    _mapDrawing = false;
-    console.error('Map error:', err);
-    svgEl.innerHTML = '<text x="'+(W/2)+'" y="'+(H/2)+'" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#999">Map unavailable</text>';
-  });
-}
-
 
 // Map hooks integrated below
 
@@ -1669,7 +1475,7 @@ const REV_T = {
     tabWrite:'✍️ Write a Review', tabBrowse:'📋 Browse Reviews', tabRanking:"🏆 People's Ranking",
     formTitle:'Share your experience', lblCommunity:'Community', lblRatings:'Rate each dimension (1–5 stars)',
     lblOverall:'Overall impression', lblPros:'👍 What I love', lblCons:'👎 What could improve',
-    lblText:'Your review', lblName:'Your name', lblYears:'Years living there', lblProfile:'I am a',
+    lblText:'Your review', lblName:'Nickname', lblYears:'Years living there', lblProfile:'I am a',
     submitBtn:'Submit review →', submitting:'Submitting...', privacy:'Reviews are publicly visible. We moderate for spam.',
     rpFamily:'Family with children', rpCouple:'Couple', rpSingle:'Single professional',
     rpRetiree:'Retiree', rpStudent:'Student', rpExpat:'Expat',
@@ -1707,7 +1513,7 @@ const REV_T = {
     tabWrite:'✍️ Écrire un avis', tabBrowse:'📋 Parcourir les avis', tabRanking:'🏆 Classement populaire',
     formTitle:'Partagez votre expérience', lblCommunity:'Commune', lblRatings:'Notez chaque dimension (1–5 étoiles)',
     lblOverall:'Impression générale', lblPros:'👍 Ce que j\'aime', lblCons:'👎 Ce qui pourrait s\'améliorer',
-    lblText:'Votre avis', lblName:'Votre nom', lblYears:'Années de résidence', lblProfile:'Je suis',
+    lblText:'Votre avis', lblName:'Pseudonyme', lblYears:'Années de résidence', lblProfile:'Je suis',
     submitBtn:'Soumettre l\'avis →', submitting:'Envoi en cours...', privacy:'Les avis sont publics. Nous modérons le spam.',
     rpFamily:'Famille avec enfants', rpCouple:'Couple', rpSingle:'Professionnel célibataire',
     rpRetiree:'Retraité', rpStudent:'Étudiant', rpExpat:'Expatrié',
@@ -1745,7 +1551,7 @@ const REV_T = {
     tabWrite:'✍️ Bewertung schreiben', tabBrowse:'📋 Bewertungen durchsuchen', tabRanking:'🏆 Volksranking',
     formTitle:'Teilen Sie Ihre Erfahrung', lblCommunity:'Gemeinde', lblRatings:'Bewerten Sie jede Dimension (1–5 Sterne)',
     lblOverall:'Gesamteindruck', lblPros:'👍 Was mir gefällt', lblCons:'👎 Was verbessert werden könnte',
-    lblText:'Ihre Bewertung', lblName:'Ihr Name', lblYears:'Jahre dort wohnhaft', lblProfile:'Ich bin',
+    lblText:'Ihre Bewertung', lblName:'Spitzname', lblYears:'Jahre dort wohnhaft', lblProfile:'Ich bin',
     submitBtn:'Bewertung einreichen →', submitting:'Wird gesendet...', privacy:'Bewertungen sind öffentlich sichtbar. Spam wird moderiert.',
     rpFamily:'Familie mit Kindern', rpCouple:'Paar', rpSingle:'Single/Berufstätige',
     rpRetiree:'Rentner/in', rpStudent:'Student/in', rpExpat:'Expat',
@@ -1783,7 +1589,7 @@ const REV_T = {
     tabWrite:'✍️ Scrivi recensione', tabBrowse:'📋 Sfoglia recensioni', tabRanking:'🏆 Classifica popolare',
     formTitle:'Condividi la tua esperienza', lblCommunity:'Comune', lblRatings:'Valuta ogni dimensione (1–5 stelle)',
     lblOverall:'Impressione generale', lblPros:'👍 Cosa amo', lblCons:'👎 Cosa potrebbe migliorare',
-    lblText:'La tua recensione', lblName:'Il tuo nome', lblYears:'Anni di residenza', lblProfile:'Sono',
+    lblText:'La tua recensione', lblName:'Soprannome', lblYears:'Anni di residenza', lblProfile:'Sono',
     submitBtn:'Invia recensione →', submitting:'Invio in corso...', privacy:'Le recensioni sono pubbliche. Moderiamo lo spam.',
     rpFamily:'Famiglia con figli', rpCouple:'Coppia', rpSingle:'Professionista single',
     rpRetiree:'Pensionato/a', rpStudent:'Studente', rpExpat:'Expat',
@@ -2627,81 +2433,53 @@ function setMapMode(mode) {
 }
 
 // Patch getCantonScores to support people mode
+const _origGetCantonScores = getCantonScores;
 function getCantonScores(dim) {
   if(mapMode === 'people') {
     const reviews = getReviews();
-    const agg = {};
+    const scores = {};
+    Object.keys(CANTON_NAMES||{}).forEach(ab => { scores[ab] = []; });
     reviews.forEach(r => {
       const ab = CANTON_KEYS[r.canton];
       if(!ab) return;
-      if(!agg[ab]) agg[ab] = {total:0,count:0};
-      agg[ab].total += r.overall * 20;
-      agg[ab].count++;
+      scores[ab] = scores[ab] || [];
+      scores[ab].push(r.overall * 20); // convert 1-5 to 0-100
     });
     const result = {};
-    Object.keys(CANTON_NAMES||{}).forEach(ab => {
-      result[ab] = agg[ab] ? Math.round(agg[ab].total/agg[ab].count) : null;
+    Object.entries(scores).forEach(([ab, vals]) => {
+      result[ab] = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : null;
     });
     return result;
   }
-  // Data mode - original logic
-  const scores = {};
-  Object.keys(CANTON_NAMES).forEach(ab => { scores[ab] = []; });
-  COMMUNITIES.forEach(c => {
-    const ab = CANTON_KEYS[c.canton];
-    if (!ab) return;
-    const val = dim === 'overall' ? calcScore(c) : c.scores[dim];
-    if (val !== undefined) scores[ab].push(val);
-  });
-  const result = {};
-  Object.entries(scores).forEach(([ab, vals]) => {
-    result[ab] = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : null;
-  });
-  return result;
+  return _origGetCantonScores(dim);
 }
 
 // Patch renderMap to add toggle
-
+const _origRenderMap = renderMap;
+function renderMap() {
+  _origRenderMap();
+  renderMapModeToggle();
+  updateHeroStats();
+}
 
 // ─── "View Profile" button in rank cards ─────────────────────────────
 // Patch renderRanking to add profile button to action buttons
-
+const _origRenderRanking = renderRanking;
+function renderRanking() {
+  _origRenderRanking();
+  // Add profile button to all expanded cards via event delegation
+  document.getElementById('rank-grid').addEventListener('click', function(e) {
+    const profileBtn = e.target.closest('[data-action="profile"]');
+    if(profileBtn) {
+      const name = profileBtn.dataset.name;
+      if(name) openProfile(name);
+    }
+  }, {once: true});
+}
 
 seedSampleReviews();
 renderRevStarGrid();
-renderWeights();renderRanking();renderIndexPillars();
-async function loadReviewsFromSupabase() {
-  try {
-    if(!SUPABASE_KEY || SUPABASE_KEY.includes('REPLACE')) return;
-    const data = await sbSelect('reviews', 'status=eq.approved&order=created_at.desc&limit=200');
-    if(data && data.length > 0) {
-      const local = getReviews().filter(r => r.id && r.id.startsWith('r1') && r.id.length < 20);
-      const remote = data.map(r => ({
-        id: r.id, community: r.community, canton: r.canton,
-        overall: r.overall, name: r.name, text: r.text,
-        pros: r.pros||'', cons: r.cons||'', years: r.years||'',
-        profile: r.profile||'', tenure: r.tenure||'', proptype: r.proptype||'',
-        ratings: r.ratings||{}, helpful: r.helpful||0,
-        date: (r.created_at||'').split('T')[0], lang: r.lang||'en'
-      }));
-      const remoteIds = new Set(remote.map(r => r.id));
-      const merged = [...remote, ...local.filter(r => !remoteIds.has(r.id))];
-      saveReviews(merged);
-      updateHeroStats();
-    }
-  } catch(e) { console.warn('Supabase load failed:', e.message); }
-}
-
-applyTranslations();applyWaitlistTranslations();applyRevTranslations();updateHeroStats();loadReviewsFromSupabase();
-// Redraw map on window resize (debounced)
-let _mapResizeTimer;
-window.addEventListener('resize', function() {
-  clearTimeout(_mapResizeTimer);
-  _mapResizeTimer = setTimeout(function() {
-    const mp = document.getElementById('page-map');
-    if(mp && mp.classList.contains('active')) drawSVGMap();
-  }, 300);
-});
+renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();applyRevTranslations();updateHeroStats();loadReviewsFromSupabase();
 // Update community count from real data
 const countEl=document.getElementById('community-count');
 if(countEl)countEl.textContent=COMMUNITIES.length.toLocaleString();
