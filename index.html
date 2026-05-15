@@ -286,6 +286,7 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
       <div id="swiss-map-container" style="width:100%;min-height:380px;position:relative;">
         <div id="map-loading" style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:13px;color:var(--ink3);">Loading map...</div>
         <svg id="swiss-map" style="width:100%;display:block;"></svg>
+        <div id="map-debug" style="display:none;position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,0.7);color:#fff;font-size:10px;padding:6px 10px;border-radius:4px;max-width:90%;word-break:break-all;z-index:10;"></div>
       </div>
       <div id="map-tooltip" style="position:fixed;background:var(--ink);color:var(--paper);padding:10px 14px;border-radius:8px;font-size:13px;pointer-events:none;display:none;z-index:999;max-width:200px;"></div>
     </div>
@@ -1343,10 +1344,6 @@ function drawSVGMap() {
     const mesh = topojson.mesh(topo, topo.objects.cantons, (a, b) => a !== b);
 
     // D3 projection: Swiss coordinate system (LV95) or geographic
-    // Debug: log first feature properties to verify field names
-    if(cantons.features.length > 0) {
-      console.log('Canton properties:', JSON.stringify(cantons.features[0].properties));
-    }
     const projection = d3.geoMercator().fitSize([W, H], cantons);
     const path = d3.geoPath().projection(projection);
 
@@ -1354,23 +1351,18 @@ function drawSVGMap() {
     let html = '';
 
     // Canton fills
-    // Log first feature to see exact property names
-    if(cantons.features[0]) {
-      const p = cantons.features[0].properties;
-      console.log('First canton props:', JSON.stringify(p));
-    }
+
     cantons.features.forEach(f => {
-      // Try multiple property names used by different swiss-maps versions
-    const ktnr = f.properties.KTNR || f.properties.ktnr || f.properties.kan_nr 
-               || f.properties.id || f.properties.KT || f.properties.kt;
-      const ab = ktnrToAb[ktnr];
-      // Try to match canton to score using multiple strategies
-    let score = scores[ab];
-    // Fallback: try matching by canton abbreviation in properties
-    if(score === undefined) {
-      const propAb = f.properties.ABBR || f.properties.abbr || f.properties.name;
-      if(propAb) score = scores[propAb.toUpperCase()];
-    }
+      const p = f.properties || {};
+    // Try numeric KTNR first
+    const ktnr = p.KTNR || p.ktnr || p.kan_nr || p.KT_NR || p.id;
+    // Try direct abbreviation from properties
+    const propAbbr = (p.ABBR || p.abbr || p.KT || p.kt || p.kan_abbr || '').toUpperCase();
+      // Get canton abbreviation - try numeric lookup first, then direct abbr
+    let ab = ktnrToAb[ktnr] || propAbbr || null;
+    // Validate it's a real canton code
+    if(ab && !CANTON_NAMES[ab]) ab = null;
+      const score = ab ? scores[ab] : null;
       const fill = col(score);
       const name = (CANTON_NAMES || {})[ab] || ab || '';
       const cf = Object.entries(CANTON_KEYS || {}).find(([k,v]) => v === ab)?.[0] || '';
