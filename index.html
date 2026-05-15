@@ -1286,10 +1286,13 @@ function _drawWithTopo(topo) {
     .text(d => { const ab=getAb(d); return ab&&scores[ab]!=null ? scores[ab] : ''; });
 }
 
+let _mapDrawing = false;
 function drawSVGMap() {
+  if(_mapDrawing) return; // prevent concurrent draws
+  _mapDrawing = true;
   const cont = document.getElementById('swiss-map-container');
   const svgEl = document.getElementById('swiss-map');
-  if(!cont || !svgEl) return;
+  if(!cont || !svgEl) { _mapDrawing = false; return; }
 
   const W = Math.max(cont.getBoundingClientRect().width || cont.offsetWidth, 300);
   const H = Math.round(W * 0.62);
@@ -1340,6 +1343,10 @@ function drawSVGMap() {
     const mesh = topojson.mesh(topo, topo.objects.cantons, (a, b) => a !== b);
 
     // D3 projection: Swiss coordinate system (LV95) or geographic
+    // Debug: log first feature properties to verify field names
+    if(cantons.features.length > 0) {
+      console.log('Canton properties:', JSON.stringify(cantons.features[0].properties));
+    }
     const projection = d3.geoMercator().fitSize([W, H], cantons);
     const path = d3.geoPath().projection(projection);
 
@@ -1348,9 +1355,17 @@ function drawSVGMap() {
 
     // Canton fills
     cantons.features.forEach(f => {
-      const ktnr = f.properties.KTNR || f.properties.id;
+      // Try multiple property names used by different swiss-maps versions
+    const ktnr = f.properties.KTNR || f.properties.ktnr || f.properties.kan_nr 
+               || f.properties.id || f.properties.KT || f.properties.kt;
       const ab = ktnrToAb[ktnr];
-      const score = scores[ab];
+      // Try to match canton to score using multiple strategies
+    let score = scores[ab];
+    // Fallback: try matching by canton abbreviation in properties
+    if(score === undefined) {
+      const propAb = f.properties.ABBR || f.properties.abbr || f.properties.name;
+      if(propAb) score = scores[propAb.toUpperCase()];
+    }
       const fill = col(score);
       const name = (CANTON_NAMES || {})[ab] || ab || '';
       const cf = Object.entries(CANTON_KEYS || {}).find(([k,v]) => v === ab)?.[0] || '';
@@ -1410,6 +1425,7 @@ function drawSVGMap() {
 
     const loading = document.getElementById('map-loading');
     if(loading) loading.style.display = 'none';
+    _mapDrawing = false;
     console.log('Map drawn OK: W=' + W + ' scores=' + vals.length);
 
     // Cache topo for commune list
@@ -1419,6 +1435,7 @@ function drawSVGMap() {
 
   }).catch(err => {
     console.error('Map load failed:', err);
+    _mapDrawing = false;
     svgEl.innerHTML = '<text x="' + (W/2) + '" y="' + (H/2) + '" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" fill="#999">Map unavailable — check connection</text>';
   });
 }
