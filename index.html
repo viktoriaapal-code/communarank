@@ -1308,7 +1308,7 @@ function drawSVGMap() {
   const minVal = Math.min(...vals), maxVal = Math.max(...vals);
 
   function col(s) {
-    if(s === null) return '#e8e4da';
+    if(s === null || s === undefined || isNaN(s)) return '#ddd8cc';
     const t = Math.max(0, Math.min(1, (s - minVal) / (maxVal - minVal || 1)));
     return 'rgb(' + Math.round(200-t*160) + ',' + Math.round(232-t*80) + ',' + Math.round(194-t*155) + ')';
   }
@@ -1354,6 +1354,11 @@ function drawSVGMap() {
     let html = '';
 
     // Canton fills
+    // Log first feature to see exact property names
+    if(cantons.features[0]) {
+      const p = cantons.features[0].properties;
+      console.log('First canton props:', JSON.stringify(p));
+    }
     cantons.features.forEach(f => {
       // Try multiple property names used by different swiss-maps versions
     const ktnr = f.properties.KTNR || f.properties.ktnr || f.properties.kan_nr 
