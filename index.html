@@ -1289,135 +1289,138 @@ function _drawWithTopo(topo) {
 function drawSVGMap() {
   const cont = document.getElementById('swiss-map-container');
   const svgEl = document.getElementById('swiss-map');
-  if(!svgEl || !cont) { console.error('Map elements missing'); return; }
+  if(!cont || !svgEl) return;
+
+  const W = Math.max(cont.getBoundingClientRect().width || cont.offsetWidth, 300);
+  const H = Math.round(W * 0.62);
+
+  svgEl.setAttribute('width', W);
+  svgEl.setAttribute('height', H);
+  svgEl.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+  svgEl.style.cssText = 'display:block;';
 
   const scores = getCantonScores(mapDimension);
   const vals = Object.values(scores).filter(v => v !== null);
-  if(!vals.length) { console.warn('No scores'); return; }
-  
+  if(!vals.length) return;
   const minVal = Math.min(...vals), maxVal = Math.max(...vals);
 
   function col(s) {
-    if(s === null) return '#ddd8cc';
-    const t = Math.max(0, Math.min(1, (s-minVal)/(maxVal-minVal||1)));
-    return 'rgb('+Math.round(200-t*160)+','+Math.round(232-t*80)+','+Math.round(194-t*155)+')';
+    if(s === null) return '#e8e4da';
+    const t = Math.max(0, Math.min(1, (s - minVal) / (maxVal - minVal || 1)));
+    return 'rgb(' + Math.round(200-t*160) + ',' + Math.round(232-t*80) + ',' + Math.round(194-t*155) + ')';
   }
 
-  const CP = {
-    ZH:'M364.6,31.4L418.1,27.2L445.6,62.9L444.2,88.0L419.6,113.1L386.3,132.0L363.1,125.7L355.9,83.8L355.9,58.7Z',
-    BE:'M164.9,62.9L169.3,102.7L153.4,163.4L191.0,245.1L270.6,268.2L305.3,270.3L325.5,228.4L300.9,163.4L270.6,127.8L238.7,85.9L209.8,58.7Z',
-    LU:'M279.2,119.4L321.2,132.0L351.6,146.7L358.8,132.0L342.9,88.0L314.0,83.8L287.9,94.3Z',
-    UR:'M364.6,125.7L386.3,132.0L409.4,173.9L395.0,226.3L358.8,215.8L332.8,184.4L335.7,140.4Z',
-    SZ:'M386.3,132.0L419.6,113.1L431.1,138.3L423.9,167.6L400.8,184.4L364.6,161.3L358.8,132.0Z',
-    OW:'M300.9,163.4L332.8,184.4L358.8,215.8L342.9,236.8L311.1,224.2L292.3,201.1Z',
-    NW:'M332.8,184.4L358.8,161.3L364.6,161.3L358.8,215.8L332.8,184.4Z',
-    GL:'M444.2,142.5L460.1,180.2L458.6,211.6L426.8,211.6L409.4,173.9L423.9,167.6L431.1,138.3Z',
-    ZG:'M358.8,132.0L386.3,132.0L386.3,150.9L364.6,161.3L344.3,150.9Z',
-    FR:'M123.0,163.4L164.9,163.4L191.0,194.9L196.8,236.8L182.3,282.9L149.0,297.5L121.5,276.6L105.6,241.0L111.4,199.0Z',
-    SO:'M209.8,58.7L238.7,85.9L270.6,127.8L272.0,104.8L243.1,75.4L237.3,48.2L214.1,44.0Z',
-    BS:'M238.7,41.9L248.9,52.4L259.0,65.0L244.5,73.3L230.0,65.0Z',
-    BL:'M206.9,41.9L238.7,41.9L259.0,65.0L264.8,88.0L238.7,85.9L209.8,58.7Z',
-    SH:'M355.9,10.5L392.1,6.3L423.9,27.2L418.1,48.2L392.1,52.4L364.6,41.9L355.9,31.4Z',
-    AR:'M489.0,85.9L506.4,94.3L509.3,113.1L491.9,121.5L474.6,109.0L478.9,90.1Z',
-    AI:'M499.1,104.8L509.3,113.1L509.3,129.9L491.9,121.5L491.9,109.0Z',
-    SG:'M419.6,27.2L489.0,48.2L542.6,56.6L542.6,98.5L509.3,129.9L460.1,180.2L444.2,142.5L431.1,138.3L419.6,113.1L418.1,62.9Z',
-    GR:'M409.4,173.9L460.1,180.2L542.6,98.5L664.1,209.5L652.5,257.7L604.8,297.5L525.2,314.3L460.1,339.4L415.2,347.8L377.6,291.2L395.0,226.3Z',
-    AG:'M270.6,58.7L321.2,48.2L355.9,58.7L355.9,83.8L342.9,88.0L314.0,83.8L279.2,119.4L270.6,85.9L238.7,85.9L243.1,75.4L272.0,65.0Z',
-    TG:'M419.6,27.2L489.0,48.2L502.0,27.2L467.3,6.3L423.9,6.3L392.1,6.3Z',
-    TI:'M415.2,347.8L460.1,339.4L484.7,387.6L480.3,414.9L452.9,425.3L415.2,404.4L387.7,375.0L368.9,362.5L377.6,291.2Z',
-    VD:'M39.1,194.9L65.1,169.7L111.4,199.0L105.6,241.0L121.5,276.6L149.0,297.5L182.3,282.9L179.4,322.7L140.3,356.2L76.7,349.9L28.9,303.8L17.4,245.1Z',
-    VS:'M140.3,356.2L179.4,322.7L182.3,282.9L196.8,236.8L270.6,268.2L305.3,270.3L325.5,228.4L342.9,236.8L358.8,215.8L395.0,226.3L377.6,291.2L368.9,362.5L292.3,402.3L201.1,404.4L125.9,385.5Z',
-    NE:'M111.4,163.4L164.9,163.4L169.3,194.9L153.4,224.2L123.0,215.8L95.5,184.4L95.5,167.6Z',
-    GE:'M8.7,310.1L39.1,276.6L65.1,291.2L55.0,349.9L17.4,349.9L8.7,324.8Z',
-    JU:'M153.4,62.9L209.8,58.7L206.9,41.9L178.0,35.6L144.7,52.4L141.8,88.0L153.4,104.8Z',
-  };
+  // Show loading
+  svgEl.innerHTML = '<text x="' + (W/2) + '" y="' + (H/2) + '" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="14" fill="#999">Loading map...</text>';
 
-  function ctr(d) {
-    var m=d.match(/[\d.]+,[\d.]+/g)||[],pts=m.map(function(p){return p.split(',').map(Number)});
-    if(!pts.length)return[340,190];
-    return[pts.reduce(function(s,p){return s+p[0]},0)/pts.length,
-           pts.reduce(function(s,p){return s+p[1]},0)/pts.length];
+  // Canton abbreviation mapping from swiss-maps KTNR
+  const ktnrToAb = {1:'ZH',2:'BE',3:'LU',4:'UR',5:'SZ',6:'OW',7:'NW',8:'GL',9:'ZG',
+    10:'FR',11:'SO',12:'BS',13:'BL',14:'SH',15:'AR',16:'AI',17:'SG',18:'GR',19:'AG',
+    20:'TG',21:'TI',22:'VD',23:'VS',24:'NE',25:'GE',26:'JU'};
+
+  // Try to fetch from jsdelivr first, then unpkg
+  const sources = [
+    'https://cdn.jsdelivr.net/npm/swiss-maps@4/2021/ch-combined.json',
+    'https://unpkg.com/swiss-maps@4/2021/ch-combined.json'
+  ];
+
+  async function tryFetch(urls) {
+    for(const url of urls) {
+      try {
+        const r = await fetch(url, {cache: 'force-cache'});
+        if(r.ok) return r.json();
+      } catch(e) {}
+    }
+    throw new Error('All sources failed');
   }
 
-  function sp(d,sx,sy){
-    return d.replace(/([\d.]+),([\d.]+)/g,function(_,x,y){
-      return(+x*sx).toFixed(1)+','+(+y*sy).toFixed(1);
+  tryFetch(sources).then(topo => {
+    // Use D3 to project and render
+    const cantons = topojson.feature(topo, topo.objects.cantons);
+    const mesh = topojson.mesh(topo, topo.objects.cantons, (a, b) => a !== b);
+
+    // D3 projection: Swiss coordinate system (LV95) or geographic
+    const projection = d3.geoMercator().fitSize([W, H], cantons);
+    const path = d3.geoPath().projection(projection);
+
+    // Build SVG
+    let html = '';
+
+    // Canton fills
+    cantons.features.forEach(f => {
+      const ktnr = f.properties.KTNR || f.properties.id;
+      const ab = ktnrToAb[ktnr];
+      const score = scores[ab];
+      const fill = col(score);
+      const name = (CANTON_NAMES || {})[ab] || ab || '';
+      const cf = Object.entries(CANTON_KEYS || {}).find(([k,v]) => v === ab)?.[0] || '';
+      const n = (COMMUNITIES || []).filter(c => (CANTON_KEYS || {})[c.canton] === ab).length;
+      const pathD = path(f);
+      if(!pathD) return;
+
+      // Centroid for label
+      const cen = path.centroid(f);
+
+      html += '<path d="' + pathD + '" fill="' + fill + '" stroke="white" stroke-width="0.8" style="cursor:pointer"'
+        + ' data-ab="' + (ab||'') + '" data-name="' + name + '" data-score="' + (score??'') + '" data-cf="' + cf + '" data-n="' + n + '"/>';
+
+      if(ab) {
+        html += '<text x="' + cen[0].toFixed(1) + '" y="' + (cen[1]-5).toFixed(1) + '" text-anchor="middle" font-size="' + (W<600?8:10) + '" font-family="DM Sans,sans-serif" fill="' + (score&&(score-minVal)/(maxVal-minVal||1)>0.5?'#fff':'#2d5a27') + '" pointer-events="none">' + ab + '</text>';
+        if(score !== null) {
+          html += '<text x="' + cen[0].toFixed(1) + '" y="' + (cen[1]+9).toFixed(1) + '" text-anchor="middle" font-size="' + (W<600?8:10) + '" font-family="Fraunces,serif" font-weight="bold" fill="' + (score&&(score-minVal)/(maxVal-minVal||1)>0.5?'#fff':'#2d5a27') + '" pointer-events="none">' + score + '</text>';
+        }
+      }
     });
-  }
 
-  var W = cont.offsetWidth || cont.clientWidth || 680;
-  if(W < 100) W = 680;
-  var H = Math.round(W * 0.56);
-  var sx = W/680, sy = H/380;
+    svgEl.innerHTML = html;
 
-  var html = '<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" style="display:block">';
-  
-  Object.keys(CP).forEach(function(ab) {
-    var path = CP[ab];
-    var score = scores[ab];
-    var fill = col(score);
-    var c2 = ctr(path);
-    var cx = c2[0], cy = c2[1];
-    var t = score!==null?(score-minVal)/(maxVal-minVal||1):0;
-    var tc = t>0.5?'#ffffff':'#2d5a27';
-    var sp2 = sp(path,sx,sy);
-    var nm = (CANTON_NAMES&&CANTON_NAMES[ab])||ab;
-    var cf = '';
-    Object.keys(CANTON_KEYS||{}).forEach(function(k){if(CANTON_KEYS[k]===ab)cf=k;});
-    var fs = W<500?'7':'9';
-
-    html += '<path d="'+sp2+'" fill="'+fill+'" stroke="white" stroke-width="1" style="cursor:pointer" data-ab="'+ab+'" data-cf="'+cf+'" data-score="'+score+'" data-nm="'+nm+'"/>';
-    html += '<text x="'+(cx*sx).toFixed(1)+'" y="'+(cy*sy-4).toFixed(1)+'" text-anchor="middle" font-size="'+fs+'" font-family="sans-serif" fill="'+tc+'" pointer-events="none">'+ab+'</text>';
-    if(score!==null) html+='<text x="'+(cx*sx).toFixed(1)+'" y="'+(cy*sy+9).toFixed(1)+'" text-anchor="middle" font-size="'+fs+'" font-family="serif" font-weight="bold" fill="'+tc+'" pointer-events="none">'+score+'</text>';
-  });
-  
-  html += '</svg>';
-
-  // Use a wrapper div - most reliable injection method
-  var wrapper = document.createElement('div');
-  wrapper.innerHTML = html;
-  var newSvg = wrapper.firstChild;
-  svgEl.parentNode.replaceChild(newSvg, svgEl);
-  newSvg.id = 'swiss-map';
-  
-  var loading = document.getElementById('map-loading');
-  if(loading) loading.style.display='none';
-  
-  // Add event delegation
-  var drawnSvg = document.getElementById('swiss-map');
-  if(drawnSvg) {
-    drawnSvg.addEventListener('click', function(e) {
-      var path = e.target.closest('path');
-      if(!path) return;
-      var cf = path.getAttribute('data-cf');
+    // Event delegation
+    svgEl.onclick = function(e) {
+      const p = e.target.closest('path');
+      if(!p) return;
+      const cf = p.getAttribute('data-cf');
       if(cf) {
-        var sel = document.getElementById('canton-filter');
+        const sel = document.getElementById('canton-filter');
         if(sel) sel.value = cf;
         filterCommunities();
         showPage('ranking');
       }
-    });
-    drawnSvg.addEventListener('mousemove', function(e) {
-      var path = e.target.closest('path');
-      var tip = document.getElementById('map-tooltip');
+    };
+
+    svgEl.onmousemove = function(e) {
+      const p = e.target.closest('path[data-ab]');
+      const tip = document.getElementById('map-tooltip');
       if(!tip) return;
-      if(path && path.getAttribute('data-ab')) {
-        var nm = path.getAttribute('data-nm');
-        var sc = path.getAttribute('data-score');
+      if(p) {
         tip.style.display = 'block';
-        tip.style.left = (e.clientX+14)+'px';
-        tip.style.top = (e.clientY-14)+'px';
-        tip.innerHTML = '<div style="font-family:serif;font-size:14px;margin-bottom:3px;">'+nm+'</div><div style="font-size:12px;color:rgba(245,242,235,0.75);">Score: <strong style="color:#7dbf6e;">'+sc+'</strong></div>';
+        tip.style.left = (e.clientX + 14) + 'px';
+        tip.style.top = (e.clientY - 14) + 'px';
+        const dim = ((DIM_LABELS || {})[mapDimension] || {})[lang] || mapDimension;
+        tip.innerHTML = '<div style="font-family:Georgia,serif;font-size:14px;margin-bottom:3px;">' + p.getAttribute('data-name') + '</div>'
+          + '<div style="font-size:12px;color:rgba(245,242,235,0.75)">' + dim + ': <strong style="color:#7dbf6e">' + (p.getAttribute('data-score')||'n/a') + '</strong></div>'
+          + '<div style="font-size:11px;color:rgba(245,242,235,0.45);margin-top:2px">' + p.getAttribute('data-n') + ' communes in index</div>';
       } else {
         tip.style.display = 'none';
       }
-    });
-    drawnSvg.addEventListener('mouseleave', function() {
-      var tip = document.getElementById('map-tooltip');
+    };
+    svgEl.onmouseleave = function() {
+      const tip = document.getElementById('map-tooltip');
       if(tip) tip.style.display = 'none';
-    });
-  }
-  console.log('Map drawn OK: W='+W+' scores='+vals.length);
+    };
+
+    const loading = document.getElementById('map-loading');
+    if(loading) loading.style.display = 'none';
+    console.log('Map drawn OK: W=' + W + ' scores=' + vals.length);
+
+    // Cache topo for commune list
+    if(typeof buildCommuneListFromTopo === 'function' && ALL_SWISS_COMMUNES.length < 100) {
+      ALL_SWISS_COMMUNES = buildCommuneListFromTopo(topo);
+    }
+
+  }).catch(err => {
+    console.error('Map load failed:', err);
+    svgEl.innerHTML = '<text x="' + (W/2) + '" y="' + (H/2) + '" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" fill="#999">Map unavailable — check connection</text>';
+  });
 }
 
 
