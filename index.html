@@ -1315,32 +1315,32 @@ function drawSVGMap() {
   }
 
   const CP = {
-    ZH:'M430,82L468,75L490,88L495,110L480,130L460,138L440,125L425,108Z',
-    BE:'M290,120L330,108L360,115L370,145L355,185L320,210L285,205L260,180L255,150Z',
-    LU:'M375,148L405,140L420,155L415,175L395,182L372,172Z',
-    UR:'M400,175L420,168L435,185L428,210L408,215L395,200Z',
-    SZ:'M435,148L458,140L472,155L465,172L445,178L430,165Z',
-    OW:'M368,172L390,165L398,180L385,195L365,188Z',
-    NW:'M378,155L395,150L400,165L385,170L375,162Z',
-    GL:'M465,155L482,148L492,165L480,178L462,170Z',
-    ZG:'M430,148L448,142L452,158L438,162L428,155Z',
-    FR:'M252,148L285,140L295,160L280,185L255,180L240,162Z',
-    SO:'M318,92L348,85L358,100L345,118L318,115L308,102Z',
-    BS:'M310,68L325,62L330,72L320,78L308,74Z',
-    BL:'M295,72L318,65L325,80L312,92L295,88Z',
-    SH:'M398,45L428,38L435,52L420,62L398,58Z',
-    AR:'M510,108L528,102L535,115L522,122L508,118Z',
-    AI:'M518,115L530,110L535,120L525,126L515,122Z',
-    SG:'M468,98L510,90L525,105L518,130L495,138L468,125Z',
-    GR:'M448,168L510,158L545,178L540,225L505,248L462,238L438,210Z',
-    AG:'M348,88L388,80L398,98L385,115L352,118L338,102Z',
-    TG:'M435,72L478,62L488,78L472,95L438,98L428,82Z',
-    TI:'M375,228L420,220L448,240L440,285L408,295L375,278L358,255Z',
-    VD:'M178,148L245,138L255,165L238,200L195,215L160,195L152,168Z',
-    VS:'M248,185L320,215L355,225L355,258L298,278L250,255L225,225Z',
-    NE:'M228,115L258,108L265,128L250,142L225,138Z',
-    GE:'M148,195L172,188L178,205L162,212Z',
-    JU:'M248,88L282,80L290,98L270,112L245,105Z'
+    ZH:'M460,95L490,88L508,100L512,122L496,140L474,148L452,138L444,118Z',
+    BE:'M295,130L338,118L365,128L372,158L358,198L322,218L288,212L262,188L258,158Z',
+    LU:'M385,155L415,148L428,162L422,182L400,188L380,178Z',
+    UR:'M415,182L432,175L445,192L438,215L418,220L405,205Z',
+    SZ:'M448,148L472,140L485,155L478,172L458,178L442,165Z',
+    OW:'M372,178L395,170L402,185L390,200L368,192Z',
+    NW:'M382,162L400,156L405,170L390,175L378,168Z',
+    GL:'M478,162L496,154L505,170L492,183L475,175Z',
+    ZG:'M440,152L458,146L462,162L448,166L435,158Z',
+    FR:'M255,155L290,146L300,165L285,192L258,186L242,168Z',
+    SO:'M322,98L355,90L365,106L350,124L322,120L310,108Z',
+    BS:'M312,72L330,66L335,78L322,84L310,78Z',
+    BL:'M298,78L322,70L330,86L315,98L298,92Z',
+    SH:'M402,50L435,42L442,56L426,66L402,62Z',
+    AR:'M515,112L534,106L540,118L527,126L512,122Z',
+    AI:'M522,120L535,114L540,124L530,130L518,126Z',
+    SG:'M472,102L515,94L530,108L522,134L498,142L472,128Z',
+    GR:'M452,172L518,162L552,182L546,230L510,252L465,242L441,215Z',
+    AG:'M352,94L392,86L402,104L388,120L355,124L340,108Z',
+    TG:'M438,76L482,66L492,82L475,98L440,102L430,86Z',
+    TI:'M378,232L425,224L452,244L445,290L412,300L378,282L360,258Z',
+    VD:'M175,152L248,140L258,168L240,205L196,220L158,198L152,172Z',
+    VS:'M250,192L325,220L358,230L358,262L300,282L252,258L226,228Z',
+    NE:'M228,118L262,110L268,132L252,146L225,140Z',
+    GE:'M145,198L172,190L178,208L160,215Z',
+    JU:'M248,92L285,84L292,102L272,116L245,108Z'
   };
 
   function ctr(d) {
@@ -2664,7 +2664,30 @@ function getCantonScores(dim) {
 
 seedSampleReviews();
 renderRevStarGrid();
-renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();applyRevTranslations();updateHeroStats();loadReviewsFromSupabase();
+renderWeights();renderRanking();renderIndexPillars();
+async function loadReviewsFromSupabase() {
+  try {
+    if(!SUPABASE_KEY || SUPABASE_KEY.includes('REPLACE')) return;
+    const data = await sbSelect('reviews', 'status=eq.approved&order=created_at.desc&limit=200');
+    if(data && data.length > 0) {
+      const local = getReviews().filter(r => r.id && r.id.startsWith('r1') && r.id.length < 20);
+      const remote = data.map(r => ({
+        id: r.id, community: r.community, canton: r.canton,
+        overall: r.overall, name: r.name, text: r.text,
+        pros: r.pros||'', cons: r.cons||'', years: r.years||'',
+        profile: r.profile||'', tenure: r.tenure||'', proptype: r.proptype||'',
+        ratings: r.ratings||{}, helpful: r.helpful||0,
+        date: (r.created_at||'').split('T')[0], lang: r.lang||'en'
+      }));
+      const remoteIds = new Set(remote.map(r => r.id));
+      const merged = [...remote, ...local.filter(r => !remoteIds.has(r.id))];
+      saveReviews(merged);
+      updateHeroStats();
+    }
+  } catch(e) { console.warn('Supabase load failed:', e.message); }
+}
+
+applyTranslations();applyWaitlistTranslations();applyRevTranslations();updateHeroStats();loadReviewsFromSupabase();
 // Redraw map on window resize
 window.addEventListener('resize', function() {
   if(document.getElementById('page-map').classList.contains('active')) {
