@@ -248,7 +248,7 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
         </div>
       </div>
       <div id="swiss-map-container" style="width:100%;min-height:380px;position:relative;">
-        <div id="map-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--ink3);">Loading map...</div>
+        <div id="map-loading" style="position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:13px;color:var(--ink3);">Loading map...</div>
         <svg id="swiss-map" style="width:100%;display:block;"></svg>
       </div>
       <div id="map-tooltip" style="position:fixed;background:var(--ink);color:var(--paper);padding:10px 14px;border-radius:8px;font-size:13px;pointer-events:none;display:none;z-index:999;max-width:200px;"></div>
@@ -1022,13 +1022,31 @@ let mapTopoLoaded = false;
 let mapTopoData = null;
 
 function getCantonScores(dim) {
+  // People mode - use review ratings
+  if(typeof mapMode !== 'undefined' && mapMode === 'people') {
+    const reviews = getReviews();
+    const agg = {};
+    reviews.forEach(r => {
+      const ab = (CANTON_KEYS||{})[r.canton];
+      if(!ab) return;
+      if(!agg[ab]) agg[ab] = {total:0,count:0};
+      agg[ab].total += r.overall * 20;
+      agg[ab].count++;
+    });
+    const result = {};
+    Object.keys(CANTON_NAMES||{}).forEach(ab => {
+      result[ab] = agg[ab] ? Math.round(agg[ab].total/agg[ab].count) : null;
+    });
+    return result;
+  }
+  // Data mode - use index scores
   const scores = {};
   Object.keys(CANTON_NAMES).forEach(ab => { scores[ab] = []; });
   COMMUNITIES.forEach(c => {
-    const ab = CANTON_KEYS[c.canton];
-    if (!ab) return;
+    const ab = (CANTON_KEYS||{})[c.canton];
+    if(!ab) return;
     const val = dim === 'overall' ? calcScore(c) : c.scores[dim];
-    if (val !== undefined) scores[ab].push(val);
+    if(val !== undefined) scores[ab].push(val);
   });
   const result = {};
   Object.entries(scores).forEach(([ab, vals]) => {
@@ -2560,26 +2578,7 @@ function setMapMode(mode) {
 }
 
 // Patch getCantonScores to support people mode
-const _origGetCantonScores = getCantonScores;
-function getCantonScores(dim) {
-  if(mapMode === 'people') {
-    const reviews = getReviews();
-    const scores = {};
-    Object.keys(CANTON_NAMES||{}).forEach(ab => { scores[ab] = []; });
-    reviews.forEach(r => {
-      const ab = CANTON_KEYS[r.canton];
-      if(!ab) return;
-      scores[ab] = scores[ab] || [];
-      scores[ab].push(r.overall * 20); // convert 1-5 to 0-100
-    });
-    const result = {};
-    Object.entries(scores).forEach(([ab, vals]) => {
-      result[ab] = vals.length ? Math.round(vals.reduce((a,b)=>a+b,0)/vals.length) : null;
-    });
-    return result;
-  }
-  return _origGetCantonScores(dim);
-}
+
 
 // Patch renderMap to add toggle
 
