@@ -241,10 +241,8 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
     </div>
     <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:16px;">
       <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-        <div style="display:flex;gap:3px;background:var(--paper2);border-radius:8px;padding:3px;margin-right:8px;">
-          <button id="map-mode-data" onclick="window.setMapMode&&setMapMode('data')" style="padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:#2d5a27;color:white;font-weight:600;">📊 Data index</button>
-          <button id="map-mode-people" onclick="window.setMapMode&&setMapMode('people')" style="padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:transparent;color:#6b6b64;">⭐ People</button>
-        </div>
+        
+        <div id="map-mode-toggle" style="display:flex;gap:3px;background:var(--paper2);border-radius:8px;padding:3px;flex-wrap:wrap;"></div>
         <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;" id="map-dim-btns"></div>
         <div style="margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink3);">
           <span id="map-legend-low" style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:2px;background:#e8f3e6;display:inline-block;border:1px solid #ccc;"></span>Lower</span>
@@ -980,14 +978,9 @@ const MAP_T = {
 };
 
 const DIM_LABELS = {
-  overall:    {en:'Overall',fr:'Global',de:'Gesamt',it:'Globale'},
+  overall:    {en:'Overall Index',fr:'Indice global',de:'Gesamtindex',it:'Indice globale'},
   costOfLiving:{en:'Cost of Living',fr:'Coût de vie',de:'Lebenshaltung',it:'Costo vita'},
-  infrastructure:{en:'Infrastructure',fr:'Infrastructure',de:'Infrastruktur',it:'Infrastruttura'},
-  education:  {en:'Education',fr:'Éducation',de:'Bildung',it:'Istruzione'},
-  healthcare: {en:'Healthcare',fr:'Santé',de:'Gesundheit',it:'Sanità'},
-  energy:     {en:'Energy',fr:'Énergie',de:'Energie',it:'Energia'},
-  sustainability:{en:'Sustainability',fr:'Durabilité',de:'Nachhaltigkeit',it:'Sostenibilità'},
-  nature:     {en:'Nature',fr:'Nature',de:'Natur',it:'Natura'},
+  avgSalary:  {en:'Avg. Salary',fr:'Salaire moyen',de:'Ø Gehalt',it:'Salario medio'},
 };
 
 // Canton name → canton key mapping
@@ -1026,31 +1019,35 @@ let mapTopoLoaded = false;
 let mapTopoData = null;
 
 function getCantonScores(dim) {
-  // People mode - use review ratings
+  // People mode — use review ratings
   if(typeof mapMode !== 'undefined' && mapMode === 'people') {
     const reviews = getReviews();
     const agg = {};
     reviews.forEach(r => {
       const ab = (CANTON_KEYS||{})[r.canton];
       if(!ab) return;
-      if(!agg[ab]) agg[ab] = {total:0,count:0};
+      if(!agg[ab]) agg[ab] = {total:0, count:0};
       agg[ab].total += r.overall * 20;
       agg[ab].count++;
     });
     const result = {};
     Object.keys(CANTON_NAMES||{}).forEach(ab => {
-      result[ab] = agg[ab] ? Math.round(agg[ab].total/agg[ab].count) : null;
+      result[ab] = agg[ab] ? Math.round(agg[ab].total / agg[ab].count) : null;
     });
     return result;
   }
-  // Data mode - use index scores
+  // Real data modes
   const scores = {};
   Object.keys(CANTON_NAMES).forEach(ab => { scores[ab] = []; });
   COMMUNITIES.forEach(c => {
     const ab = (CANTON_KEYS||{})[c.canton];
     if(!ab) return;
-    const val = dim === 'overall' ? calcScore(c) : c.scores[dim];
-    if(val !== undefined) scores[ab].push(val);
+    let val;
+    if(dim === 'overall') val = calcScore(c);
+    else if(dim === 'costOfLiving') val = c.landPrice; // real CHF/m²
+    else if(dim === 'avgSalary') val = c.avgIncome;    // real CHF/year
+    else val = c.scores[dim];
+    if(val !== undefined && val !== null) scores[ab].push(val);
   });
   const result = {};
   Object.entries(scores).forEach(([ab, vals]) => {
@@ -1066,11 +1063,28 @@ function renderMap() {
   if(el('map-sub')) el('map-sub').textContent = mt.sub;
   if(el('map-communities-title')) el('map-communities-title').textContent = mt.commTitle;
 
-  // Render dimension buttons
+  // Render 4 mode buttons
   const btns = el('map-dim-btns');
   if(btns) {
-    btns.innerHTML = Object.entries(DIM_LABELS).map(([key,labels]) =>
-      `<button onclick="setMapDim('${key}')" id="mdim-${key}" style="padding:4px 10px;border-radius:6px;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;border:1px solid var(--border2);background:${mapDimension===key?'var(--green)':'white'};color:${mapDimension===key?'white':'var(--ink2)'};transition:all 0.15s;">${labels[lang]||labels.en}</button>`
+    btns.innerHTML = '';  // hide dim buttons - mode toggle handles everything
+  }
+  // Render mode toggle buttons
+  const modeBar = el('map-mode-toggle');
+  if(modeBar) {
+    const modes = [
+      {id:'overall', label:'📊 Data Index', mode:'data', dim:'overall'},
+      {id:'people',  label:'⭐ People',     mode:'people', dim:'overall'},
+      {id:'cost',    label:'🏠 Cost of Living', mode:'data', dim:'costOfLiving'},
+      {id:'salary',  label:'💰 Avg. Salary',    mode:'data', dim:'avgSalary'},
+    ];
+    modeBar.innerHTML = modes.map(m =>
+      `<button id="mbar-${m.id}" onclick="activateMapMode('${m.mode}','${m.dim}')"
+        style="padding:5px 12px;border-radius:6px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;transition:all 0.2s;
+        background:${(m.mode==='people'?mapMode==='people':(mapMode!=='people'&&mapDimension===m.dim))?'var(--green)':'transparent'};
+        color:${(m.mode==='people'?mapMode==='people':(mapMode!=='people'&&mapDimension===m.dim))?'white':'var(--ink2)'};
+        font-weight:${(m.mode==='people'?mapMode==='people':(mapMode!=='people'&&mapDimension===m.dim))?'600':'400'}">
+        ${m.label}
+      </button>`
     ).join('');
   }
 
@@ -1262,8 +1276,13 @@ function recolorMap(scores, col, W, H) {
     if(p&&p.getAttribute('data-ab')){
       const dim=((DIM_LABELS||{})[mapDimension]||{})[lang]||mapDimension;
       tip.style.display='block';tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-14)+'px';
+      const rawScore = p.getAttribute('data-score');
+      let displayScore = rawScore || 'n/a';
+      if(rawScore && mapDimension==='costOfLiving') displayScore = 'CHF '+Number(rawScore).toLocaleString()+'/m²';
+      else if(rawScore && mapDimension==='avgSalary') displayScore = 'CHF '+Number(rawScore).toLocaleString()+'/yr';
+      const dimLabel = mapMode==='people' ? 'People score' : ((DIM_LABELS[mapDimension]||{})[lang]||(DIM_LABELS[mapDimension]||{}).en||mapDimension);
       tip.innerHTML='<div style="font-family:Georgia,serif;font-size:14px;margin-bottom:3px;">'+p.getAttribute('data-name')+'</div>'
-        +'<div style="font-size:12px;color:rgba(245,242,235,0.75)">'+dim+': <strong style="color:#7dbf6e">'+(p.getAttribute('data-score')||'n/a')+'</strong></div>'
+        +'<div style="font-size:12px;color:rgba(245,242,235,0.75)">'+dimLabel+': <strong style="color:#7dbf6e">'+displayScore+'</strong></div>'
         +'<div style="font-size:11px;color:rgba(245,242,235,0.45);margin-top:2px">'+p.getAttribute('data-n')+' communes in index</div>';
     } else tip.style.display='none';
   };
@@ -2607,6 +2626,42 @@ function updateHeroStats() {
 var mapMode = 'data'; // 'data' or 'people'
 
 function renderMapModeToggle() {}
+function activateMapMode(mode, dim) {
+  mapMode = mode;
+  mapDimension = dim || 'overall';
+  // Update button styles
+  document.querySelectorAll('[id^="mbar-"]').forEach(btn => {
+    btn.style.background = 'transparent';
+    btn.style.color = 'var(--ink2)';
+    btn.style.fontWeight = '400';
+  });
+  const activeId = mode==='people' ? 'mbar-people' :
+                   dim==='costOfLiving' ? 'mbar-cost' :
+                   dim==='avgSalary' ? 'mbar-salary' : 'mbar-overall';
+  const activeBtn = document.getElementById(activeId);
+  if(activeBtn) {
+    activeBtn.style.background = mode==='people' ? '#c8960c' : 'var(--green)';
+    activeBtn.style.color = 'white';
+    activeBtn.style.fontWeight = '600';
+  }
+  // Reset drawing flag and redraw
+  _mapDrawing = false;
+  if(mode==='people') {
+    loadReviewsFromSupabase().then(function() {
+      _mapDrawing = false;
+      if(_mapFeaturesCache) recolorMap(getCantonScores(dim||'overall'), null, 680, 420);
+      else drawSVGMap();
+    }).catch(function() {
+      _mapDrawing = false;
+      if(_mapFeaturesCache) recolorMap(getCantonScores(dim||'overall'), null, 680, 420);
+      else drawSVGMap();
+    });
+  } else {
+    if(_mapFeaturesCache) recolorMap(getCantonScores(dim||'overall'), null, 680, 420);
+    else drawSVGMap();
+  }
+}
+
 function setMapMode(mode) {
   mapMode = mode;
   // Style buttons
