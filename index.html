@@ -186,12 +186,32 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
   }
 }
 </style>
+<script>
+function toggleMobileNav() {
+  var menu = document.getElementById('main-nav-links');
+  if(!menu) return;
+  var isOpen = menu.classList.toggle('open');
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+  var l1=document.getElementById('ham-line1');
+  var l2=document.getElementById('ham-line2');
+  var l3=document.getElementById('ham-line3');
+  if(l1) l1.style.transform = isOpen?'rotate(45deg) translate(5px,5px)':'';
+  if(l2) l2.style.opacity = isOpen?'0':'1';
+  if(l3) l3.style.transform = isOpen?'rotate(-45deg) translate(5px,-5px)':'';
+}
+function closeMobileNav() {
+  var menu = document.getElementById('main-nav-links');
+  if(menu) menu.classList.remove('open');
+  document.body.style.overflow = '';
+  var l1=document.getElementById('ham-line1'),l2=document.getElementById('ham-line2'),l3=document.getElementById('ham-line3');
+  if(l1)l1.style.transform=''; if(l2)l2.style.opacity='1'; if(l3)l3.style.transform='';
+}
+</script>
 </head>
 <body>
 <nav>
   <div class="nav-brand">Communa<span>Rank</span></div>
   <div class="nav-links" id="main-nav-links">
-    <button onclick="closeMobileNav()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#f5f2eb;font-size:28px;cursor:pointer;padding:8px;line-height:1;">✕</button>
     <button class="nav-btn active" onclick="showPage('ranking');closeMobileNav();" id="nb-ranking">📊 Ranking</button>
     <button class="nav-btn" onclick="showPage('compare');closeMobileNav();" id="nb-compare">⚖️ Compare</button>
     <button class="nav-btn" onclick="showPage('index');closeMobileNav();" id="nb-index">📋 Our Index</button>
@@ -746,23 +766,8 @@ const COMMUNITIES=[{name:'Zürich',canton:'Zurich (ZH)',type:'Urban',pop:45000,l
 const INDEX_PILLARS=[{key:'costOfLiving',icon:'💰',title:{en:'Cost of Living',fr:'Coût de vie',de:'Lebenshaltung',it:'Costo vita'},desc:{en:'Property prices, rental index, local tax rates, grocery costs, transport costs',fr:"Prix immobiliers, indice de loyer, taux d'imposition",de:'Immobilienpreise, Mietindex, Steuerbelastung',it:'Prezzi immobili, indice affitti, aliquote fiscali'},weight:'20%'},{key:'infrastructure',icon:'🏗',title:{en:'Infrastructure',fr:'Infrastructure',de:'Infrastruktur',it:'Infrastruttura'},desc:{en:'Road quality, public transport frequency, broadband coverage',fr:'Qualité des routes, fréquence des transports, couverture haut débit',de:'Straßenqualität, ÖPNV-Häufigkeit, Breitbandabdeckung',it:'Qualità strade, frequenza trasporti, copertura banda larga'},weight:'15%'},{key:'education',icon:'📚',title:{en:'Education',fr:'Éducation',de:'Bildung',it:'Istruzione'},desc:{en:'School ratings, international schools, universities, childcare',fr:'Notation des écoles, écoles internationales, garderies',de:'Schulbewertungen, internationale Schulen, Kinderbetreuung',it:'Valutazioni scuole, scuole internazionali, asili nido'},weight:'15%'},{key:'healthcare',icon:'🏥',title:{en:'Healthcare',fr:'Santé',de:'Gesundheit',it:'Sanità'},desc:{en:'Hospital proximity, GP availability, specialist density',fr:'Proximité hôpitaux, disponibilité médecins',de:'Krankenhauszugänglichkeit, Hausarztverfügbarkeit',it:'Prossimità ospedali, disponibilità medici'},weight:'12%'},{key:'energy',icon:'⚡',title:{en:'Energy & Utilities',fr:'Énergie & Services',de:'Energie & Versorgung',it:'Energia & Servizi'},desc:{en:'Electricity tariffs (ELCOM data), renewable energy share, heating costs',fr:'Tarifs électricité (données ELCOM), énergies renouvelables',de:'Stromtarife (ELCOM-Daten), Anteil erneuerbarer Energie',it:'Tariffe energia (dati ELCOM), energie rinnovabili'},weight:'10%'},{key:'sustainability',icon:'🌿',title:{en:'Sustainability',fr:'Durabilité',de:'Nachhaltigkeit',it:'Sostenibilità'},desc:{en:'Green spaces per capita, recycling rates, EV charging, solar installations',fr:'Espaces verts, taux de recyclage, recharge VE',de:'Grünflächen pro Kopf, Recyclingquoten, E-Ladeinfrastruktur',it:'Spazi verdi, tassi di riciclo, ricarica EV'},weight:'10%'},{key:'food',icon:'🛒',title:{en:'Food & Commerce',fr:'Alimentation & Commerce',de:'Lebensmittel & Handel',it:'Alimentari & Commercio'},desc:{en:'Supermarket density, farmers markets, restaurant variety',fr:'Densité supermarchés, marchés fermiers, restaurants',de:'Supermarktdichte, Wochenmärkte, Gastronomie',it:'Densità supermercati, mercati contadini, ristoranti'},weight:'8%'},{key:'entertainment',icon:'🎭',title:{en:'Entertainment',fr:'Loisirs',de:'Freizeit',it:'Svago'},desc:{en:'Cultural venues, sports facilities, nightlife, family activities',fr:'Lieux culturels, équipements sportifs, vie nocturne',de:'Kultureinrichtungen, Sportanlagen, Nachtleben',it:'Luoghi culturali, impianti sportivi, vita notturna'},weight:'5%'},{key:'nature',icon:'🏔',title:{en:'Nature Access',fr:'Accès à la nature',de:'Naturzugang',it:'Accesso natura'},desc:{en:'Hiking trails, lakes, air quality index, biodiversity, altitude',fr:"Sentiers de randonnée, lacs et rivières, qualité de l'air",de:'Wanderwege, Seen und Flüsse, Luftqualität',it:'Sentieri, laghi e fiumi, qualità aria'},weight:'5%'}];
 function getT(k){return T[lang][k]||T.en[k]||''}
 function setLang(l){lang=l;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));applyTranslations();
+
 function toggleMobileNav() {
-  var links = document.getElementById('main-nav-links');
-  if(!links) return;
-  var open = links.classList.toggle('open');
-  document.body.style.overflow = open ? 'hidden' : '';
-  var l1=document.getElementById('ham-line1'),l2=document.getElementById('ham-line2'),l3=document.getElementById('ham-line3');
-  if(l1) l1.style.transform = open?'rotate(45deg) translate(5px,5px)':'';
-  if(l2) l2.style.opacity = open?'0':'1';
-  if(l3) l3.style.transform = open?'rotate(-45deg) translate(5px,-5px)':'';
-}
-function closeMobileNav() {
-  var links = document.getElementById('main-nav-links');
-  if(links) links.classList.remove('open');
-  document.body.style.overflow = '';
-  var l1=document.getElementById('ham-line1'),l2=document.getElementById('ham-line2'),l3=document.getElementById('ham-line3');
-  if(l1)l1.style.transform=''; if(l2)l2.style.opacity='1'; if(l3)l3.style.transform='';
-}function toggleMobileNav() {
   const links = document.querySelector('.nav-links');
   const btn = document.getElementById('hamburger-btn');
   const isOpen = links.classList.toggle('open');
@@ -798,6 +803,30 @@ async function loadReviewsFromSupabase() {
     }
   } catch(e){console.warn('Supabase load:',e.message);}
 }
+// Hamburger menu - most reliable approach
+function toggleMobileNav() {
+  var menu = document.getElementById('main-nav-links');
+  if(!menu) return;
+  var isOpen = menu.classList.toggle('open');
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+  var l1=document.getElementById('ham-line1');
+  var l2=document.getElementById('ham-line2');
+  var l3=document.getElementById('ham-line3');
+  if(l1) l1.style.transform = isOpen?'rotate(45deg) translate(5px,5px)':'';
+  if(l2) l2.style.opacity = isOpen?'0':'1';
+  if(l3) l3.style.transform = isOpen?'rotate(-45deg) translate(5px,-5px)':'';
+}
+function closeMobileNav() {
+  var menu = document.getElementById('main-nav-links');
+  if(menu) menu.classList.remove('open');
+  document.body.style.overflow = '';
+  var l1=document.getElementById('ham-line1'),l2=document.getElementById('ham-line2'),l3=document.getElementById('ham-line3');
+  if(l1)l1.style.transform=''; if(l2)l2.style.opacity='1'; if(l3)l3.style.transform='';
+}
+document.addEventListener('DOMContentLoaded', function() {
+  var btn = document.getElementById('hamburger-btn');
+  if(btn) btn.addEventListener('click', toggleMobileNav);
+});
 renderWeights();renderRanking();renderIndexPillars();renderCompare();applyWaitlistTranslations();applyRevTranslations();const ce=document.getElementById('community-count');if(ce)ce.textContent=COMMUNITIES.length.toLocaleString();if(document.getElementById('page-map').classList.contains('active'))renderMap();}
 function applyTranslations(){const st=(id,val,attr)=>{const el=document.getElementById(id);if(!el)return;if(attr==='html')el.innerHTML=val;else if(attr==='ph')el.placeholder=val;else el.textContent=val;};st('h-tag',getT('heroTag'));st('h-title',getT('heroTitle'),'html');st('h-sub',getT('heroSub'));st('h-cta1',getT('heroCta1'));st('h-cta2',getT('heroCta2'));st('h-s1',getT('hS1'));st('h-s2',getT('hS2'));st('h-s3',getT('hS3'));st('h-s4',getT('hS4'));st('h-s5',getT('hS5')||'Resident reviews');st('rank-title',getT('rankTitle'));st('rank-sub',getT('rankSub'));st('w-title',getT('wTitle'));st('cmp-title',getT('cmpTitle'));st('cmp-sub',getT('cmpSub'));st('cmp-add-btn',getT('cmpAdd'));st('cmp-chart-title',getT('cmpChartTitle'));st('ai-title',getT('aiTitle'));st('ai-page-title',getT('aiPageTitle'));st('ai-page-sub',getT('aiPageSub'));st('search-input',getT('searchPlaceholder'),'ph');st('cmp-search',getT('cmpSearchPlaceholder'),'ph');st('chip-all',getT('chipAll'));st('chip-family',getT('chipFamily'));st('chip-affordable',getT('chipAffordable'));st('chip-sustainable',getT('chipSustainable'));st('chip-nature',getT('chipNature'));st('chip-urban',getT('chipUrban'));}
 function calcScore(c){let t=0,w=0;for(const[k,d]of Object.entries(WEIGHTS_DEF)){t+=c.scores[k]*d.val;w+=d.val}return Math.round(t/w)}
