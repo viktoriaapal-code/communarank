@@ -17,7 +17,7 @@ h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:500;line-height:1.2}
 nav{background:var(--ink);color:var(--paper);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
 .nav-brand{font-family:'Fraunces',serif;font-size:20px;color:var(--paper);letter-spacing:-0.3px}
 .nav-brand span{color:#7dbf6e}
-.nav-links{display:flex;gap:4px}
+
 .nav-btn{background:none;border:none;color:rgba(245,242,235,0.7);font-size:13px;padding:6px 12px;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s}
 .nav-btn:hover,.nav-btn.active{background:rgba(255,255,255,0.1);color:var(--paper)}
 .lang-sel{display:flex;gap:2px}
@@ -123,26 +123,33 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
 .ai-thinking span:nth-child(2){animation-delay:0.2s}
 .ai-thinking span:nth-child(3){animation-delay:0.4s}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-@media(max-width:600px){
-  .rank-card{grid-template-columns:36px 1fr}
-  .rank-right{display:none}
-  nav .nav-links{display:none!important}
-  nav .nav-links.open{display:flex!important;flex-direction:column;position:fixed;top:56px;left:0;right:0;bottom:0;background:var(--ink);z-index:9999;padding:20px;gap:6px;border-top:1px solid rgba(255,255,255,0.15);}
-  nav .nav-links.open .nav-btn{padding:14px 18px;font-size:16px;text-align:left;border-radius:10px;width:100%;display:block;color:var(--paper);background:rgba(255,255,255,0.07);}
-  .hamburger{display:flex!important;}
+
 }
-@media(min-width:601px){.hamburger{display:none!important;}}
+
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:8px;flex-direction:column;gap:5px;align-items:center;justify-content:center;margin-left:8px;}
+.ham-bar{display:block;width:22px;height:2px;background:var(--paper);border-radius:2px;transition:transform 0.25s,opacity 0.25s;}
+.nav-links{display:flex;gap:4px;}
+@media(max-width:768px){
+  .rank-card{grid-template-columns:36px 1fr;}
+  .rank-right{display:none;}
+  .hamburger{display:flex;}
+  .nav-links{display:none;}
+  .nav-links.open{display:flex!important;flex-direction:column;position:fixed;top:0;left:0;right:0;bottom:0;background:#1a1a18;z-index:99999;padding:80px 24px 24px;gap:8px;}
+  .nav-links.open .nav-btn{padding:16px 20px;font-size:18px;text-align:left;border-radius:12px;width:100%;color:#f5f2eb;background:rgba(255,255,255,0.08);border:none;font-family:'DM Sans',sans-serif;cursor:pointer;display:block;}
+  .lang-sel{display:none;}
+}
+@media(min-width:769px){.hamburger{display:none!important;}}
 </style>
 </head>
 <body>
 <nav>
   <div class="nav-brand">Communa<span>Rank</span></div>
   <div class="nav-links" id="main-nav-links">
-    <button class="nav-btn active" onclick="showPage('ranking')" id="nb-ranking">Ranking</button>
-    <button class="nav-btn" onclick="showPage('compare')" id="nb-compare">Compare</button>
-    <button class="nav-btn" onclick="showPage('index')" id="nb-index">Our Index</button>
-    <button class="nav-btn" onclick="showPage('map')" id="nb-map">Map</button>
-    <button class="nav-btn" onclick="showPage('reviews')" id="nb-reviews">Reviews</button>
+    <button class="nav-btn active" onclick="showPage('ranking');closeMobileNav();" id="nb-ranking">Ranking</button>
+    <button class="nav-btn" onclick="showPage('compare');closeMobileNav();" id="nb-compare">Compare</button>
+    <button class="nav-btn" onclick="showPage('index');closeMobileNav();" id="nb-index">Our Index</button>
+    <button class="nav-btn" onclick="showPage('map');closeMobileNav();" id="nb-map">Map</button>
+    <button class="nav-btn" onclick="showPage('reviews');closeMobileNav();" id="nb-reviews">Reviews</button>
   </div>
   <div class="lang-sel">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -150,11 +157,10 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
     <button class="lang-btn" onclick="setLang('de')">DE</button>
     <button class="lang-btn" onclick="setLang('it')">IT</button>
   </div>
-  <button class="hamburger" id="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu"
-    style="background:none;border:none;color:var(--paper);cursor:pointer;padding:8px;flex-direction:column;gap:5px;align-items:center;justify-content:center;margin-left:8px;">
-    <span id="ham-line1" style="display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:all 0.2s;"></span>
-    <span id="ham-line2" style="display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:all 0.2s;"></span>
-    <span id="ham-line3" style="display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:all 0.2s;"></span>
+  <button class="hamburger" id="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu">
+    <span class="ham-bar" id="ham-line1"></span>
+    <span class="ham-bar" id="ham-line2"></span>
+    <span class="ham-bar" id="ham-line3"></span>
   </button>
 </nav>
 <div class="hero">
@@ -694,16 +700,21 @@ const INDEX_PILLARS=[{key:'costOfLiving',icon:'💰',title:{en:'Cost of Living',
 function getT(k){return T[lang][k]||T.en[k]||''}
 function setLang(l){lang=l;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));applyTranslations();
 function toggleMobileNav() {
-  const links = document.getElementById('main-nav-links');
+  var links = document.getElementById('main-nav-links');
   if(!links) return;
-  const isOpen = links.classList.toggle('open');
-  document.body.style.overflow = isOpen ? 'hidden' : '';
-  const l1=document.getElementById('ham-line1');
-  const l2=document.getElementById('ham-line2');
-  const l3=document.getElementById('ham-line3');
-  if(l1) l1.style.transform = isOpen ? 'rotate(45deg) translate(5px,5px)' : '';
-  if(l2) l2.style.opacity = isOpen ? '0' : '1';
-  if(l3) l3.style.transform = isOpen ? 'rotate(-45deg) translate(5px,-5px)' : '';
+  var open = links.classList.toggle('open');
+  document.body.style.overflow = open ? 'hidden' : '';
+  var l1=document.getElementById('ham-line1'),l2=document.getElementById('ham-line2'),l3=document.getElementById('ham-line3');
+  if(l1) l1.style.transform = open?'rotate(45deg) translate(5px,5px)':'';
+  if(l2) l2.style.opacity = open?'0':'1';
+  if(l3) l3.style.transform = open?'rotate(-45deg) translate(5px,-5px)':'';
+}
+function closeMobileNav() {
+  var links = document.getElementById('main-nav-links');
+  if(links) links.classList.remove('open');
+  document.body.style.overflow = '';
+  var l1=document.getElementById('ham-line1'),l2=document.getElementById('ham-line2'),l3=document.getElementById('ham-line3');
+  if(l1)l1.style.transform=''; if(l2)l2.style.opacity='1'; if(l3)l3.style.transform='';
 }function toggleMobileNav() {
   const links = document.querySelector('.nav-links');
   const btn = document.getElementById('hamburger-btn');
