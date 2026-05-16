@@ -241,6 +241,10 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
     </div>
     <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:16px;">
       <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div style="display:flex;gap:3px;background:var(--paper2);border-radius:8px;padding:3px;margin-right:8px;">
+          <button id="map-mode-data" onclick="window.mapMode='data';document.getElementById('map-mode-data').style.cssText='padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:#2d5a27;color:white;font-weight:600;';document.getElementById('map-mode-people').style.cssText='padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:transparent;color:#6b6b64;';document.getElementById('map-dim-btns').style.opacity='1';_mapDrawing=false;drawSVGMap();" style="padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:#2d5a27;color:white;font-weight:600;">📊 Data index</button>
+          <button id="map-mode-people" onclick="window.mapMode='people';document.getElementById('map-mode-people').style.cssText='padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:#c8960c;color:white;font-weight:600;';document.getElementById('map-mode-data').style.cssText='padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:transparent;color:#6b6b64;';document.getElementById('map-dim-btns').style.opacity='0.4';_mapDrawing=false;loadReviewsFromSupabase().then(function(){drawSVGMap();}).catch(function(){drawSVGMap();});" style="padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:transparent;color:#6b6b64;">⭐ People</button>
+        </div>
         <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;" id="map-dim-btns"></div>
         <div style="margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink3);">
           <span id="map-legend-low" style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:12px;border-radius:2px;background:#e8f3e6;display:inline-block;border:1px solid #ccc;"></span>Lower</span>
@@ -1395,7 +1399,7 @@ function _drawWithTopo(topo) {
 const SUPABASE_URL = 'https://qeqxfjfvszjzapgtryyl.supabase.co';
 // Publishable key — safe in browser because RLS policies protect all tables
 // IMPORTANT: Replace with your actual publishable key from Supabase → Settings → API Keys
-const SUPABASE_KEY = 'sb_publishable_k8oN0zxXLLVkcMTiIRbEMQ_4YhovkJn';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFlcXhmamZ2c3pqemFwZ3RyeXlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3Nzg3NjgsImV4cCI6MjA5NDM1NDc2OH0.90tPK25zYMuNwUVd7UXv3vNlcl9BAvfxGIYS5smGim0';
 
 async function sbInsert(table, data) {
   if(!SUPABASE_KEY || SUPABASE_KEY.includes('REPLACE')) {
@@ -1798,17 +1802,15 @@ let dimStars = {};
 let selectedCommunity = '';
 
 function switchRevTab(tab) {
-  currentRevTab = tab;
-  ['write','browse','ranking'].forEach(t => {
-    const panel = document.getElementById('rev-tab-'+t);
-    const btn = document.getElementById('rtab-'+t);
-    if(panel) panel.style.display = t === tab ? 'block' : 'none';
-    if(btn) btn.classList.toggle('active', t === tab);
-  });
-  // Ensure commune list is loaded for autocomplete
-  if(tab === 'write' && ALL_SWISS_COMMUNES.length < 100) loadCommuneListAsync();
-  if(tab === 'browse') renderReviews();
-  if(tab === 'ranking') renderPeoplesRanking();
+  document.querySelectorAll('.rev-tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.rev-tab-pane').forEach(p => p.style.display='none');
+  const btn = document.getElementById('rtab-'+tab);
+  const pane = document.getElementById('rpane-'+tab);
+  if(btn) btn.classList.add('active');
+  if(pane) pane.style.display='block';
+  if(tab==='browse'||tab==='ranking') {
+    loadReviewsFromSupabase().then(()=>renderReviews()).catch(()=>renderReviews());
+  }
 }
 
 function loadCommuneListAsync() {
@@ -2040,7 +2042,7 @@ function renderReviews() {
   const q = (document.getElementById('rev-search')?.value || '').toLowerCase();
   const sort = document.getElementById('rev-sort')?.value || 'recent';
   let reviews = getReviews();
-
+  if(reviews.length===0){loadReviewsFromSupabase().then(()=>renderReviews()).catch(()=>{});return;}
   if(q) reviews = reviews.filter(r =>
     r.community.toLowerCase().includes(q) ||
     (r.text||'').toLowerCase().includes(q)
@@ -2544,7 +2546,14 @@ function updateHeroStats() {
 // ─── MAP: add "People's reviews" toggle ───────────────────────────────
 let mapMode = 'data'; // 'data' or 'people'
 
-function renderMapModeToggle() {
+function renderMapModeToggle() {}
+function setMapMode(mode) {
+  window.mapMode = mode;
+  _mapDrawing = false;
+  if(mode==='people') {
+    loadReviewsFromSupabase().then(()=>drawSVGMap()).catch(()=>drawSVGMap());
+  } else { drawSVGMap(); }
+}function renderMapModeToggle() {
   const btns = document.getElementById('map-dim-btns');
   if(!btns) return;
   // Check if toggle already exists
