@@ -126,8 +126,9 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
 @media(max-width:600px){
   .rank-card{grid-template-columns:36px 1fr}
   .rank-right{display:none}
-  nav .nav-links{display:none}
-  nav .nav-links.open{display:flex;flex-direction:column;position:fixed;top:56px;left:0;right:0;background:var(--ink);z-index:99;padding:8px 16px 16px;gap:4px;border-top:1px solid rgba(255,255,255,0.1);}
+  nav .nav-links{display:none!important}
+  nav .nav-links.open{display:flex!important;flex-direction:column;position:fixed;top:56px;left:0;right:0;bottom:0;background:var(--ink);z-index:9999;padding:20px;gap:6px;border-top:1px solid rgba(255,255,255,0.15);}
+  nav .nav-links.open .nav-btn{padding:14px 18px;font-size:16px;text-align:left;border-radius:10px;width:100%;display:block;color:var(--paper);background:rgba(255,255,255,0.07);}
   .hamburger{display:flex!important;}
 }
 @media(min-width:601px){.hamburger{display:none!important;}}
@@ -137,7 +138,7 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
 <nav>
   <div class="nav-brand">Communa<span>Rank</span></div>
   <button class="hamburger" id="hamburger-btn" onclick="toggleMobileNav()"
-    style="display:none;background:none;border:none;color:var(--paper);cursor:pointer;padding:8px;flex-direction:column;gap:5px;align-items:center;justify-content:center;">
+    style="background:none;border:none;color:var(--paper);cursor:pointer;padding:8px;flex-direction:column;gap:5px;align-items:center;justify-content:center;">
     <span id="ham-line1" style="display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:all 0.2s;"></span>
     <span id="ham-line2" style="display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:all 0.2s;"></span>
     <span id="ham-line3" style="display:block;width:22px;height:2px;background:var(--paper);border-radius:1px;transition:all 0.2s;"></span>
@@ -693,6 +694,18 @@ const INDEX_PILLARS=[{key:'costOfLiving',icon:'💰',title:{en:'Cost of Living',
 function getT(k){return T[lang][k]||T.en[k]||''}
 function setLang(l){lang=l;document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));applyTranslations();
 function toggleMobileNav() {
+  const nav = document.getElementById('nav-links-main');
+  const links = nav || document.querySelector('.nav-links');
+  if(!links) return;
+  const isOpen = links.classList.toggle('open');
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+  const l1=document.getElementById('ham-line1');
+  const l2=document.getElementById('ham-line2');
+  const l3=document.getElementById('ham-line3');
+  if(l1) l1.style.transform = isOpen ? 'rotate(45deg) translate(5px,5px)' : '';
+  if(l2) l2.style.opacity = isOpen ? '0' : '1';
+  if(l3) l3.style.transform = isOpen ? 'rotate(-45deg) translate(5px,-5px)' : '';
+}function toggleMobileNav() {
   const links = document.querySelector('.nav-links');
   const btn = document.getElementById('hamburger-btn');
   const isOpen = links.classList.toggle('open');
@@ -2629,36 +2642,27 @@ function renderMapModeToggle() {}
 function activateMapMode(mode, dim) {
   mapMode = mode;
   mapDimension = dim || 'overall';
-  // Update button styles
-  document.querySelectorAll('[id^="mbar-"]').forEach(btn => {
-    btn.style.background = 'transparent';
-    btn.style.color = 'var(--ink2)';
-    btn.style.fontWeight = '400';
+  // Style buttons
+  document.querySelectorAll('[id^="mbar-"]').forEach(function(btn) {
+    btn.style.background='transparent'; btn.style.color='var(--ink2)'; btn.style.fontWeight='400';
   });
-  const activeId = mode==='people' ? 'mbar-people' :
-                   dim==='costOfLiving' ? 'mbar-cost' :
-                   dim==='avgSalary' ? 'mbar-salary' : 'mbar-overall';
-  const activeBtn = document.getElementById(activeId);
-  if(activeBtn) {
-    activeBtn.style.background = mode==='people' ? '#c8960c' : 'var(--green)';
-    activeBtn.style.color = 'white';
-    activeBtn.style.fontWeight = '600';
-  }
-  // Reset drawing flag and redraw
+  var aid = mode==='people'?'mbar-people':dim==='costOfLiving'?'mbar-cost':dim==='avgSalary'?'mbar-salary':'mbar-overall';
+  var ab = document.getElementById(aid);
+  if(ab){ ab.style.background=mode==='people'?'#c8960c':'var(--green)'; ab.style.color='white'; ab.style.fontWeight='600'; }
+  // Draw map with new mode
   _mapDrawing = false;
+  if(_mapFeaturesCache) {
+    var sc = getCantonScores(mapDimension);
+    recolorMap(sc, null, parseFloat(document.getElementById('swiss-map')?.getAttribute('width')||680), parseFloat(document.getElementById('swiss-map')?.getAttribute('height')||420));
+  } else {
+    drawSVGMap();
+  }
+  // If people mode, also fetch from Supabase and refresh
   if(mode==='people') {
     loadReviewsFromSupabase().then(function() {
-      _mapDrawing = false;
-      if(_mapFeaturesCache) recolorMap(getCantonScores(dim||'overall'), null, 680, 420);
-      else drawSVGMap();
-    }).catch(function() {
-      _mapDrawing = false;
-      if(_mapFeaturesCache) recolorMap(getCantonScores(dim||'overall'), null, 680, 420);
-      else drawSVGMap();
-    });
-  } else {
-    if(_mapFeaturesCache) recolorMap(getCantonScores(dim||'overall'), null, 680, 420);
-    else drawSVGMap();
+      var sc2 = getCantonScores('overall');
+      recolorMap(sc2, null, parseFloat(document.getElementById('swiss-map')?.getAttribute('width')||680), parseFloat(document.getElementById('swiss-map')?.getAttribute('height')||420));
+    }).catch(function(){});
   }
 }
 
