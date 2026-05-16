@@ -242,8 +242,8 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
     <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:16px;">
       <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
         <div style="display:flex;gap:3px;background:var(--paper2);border-radius:8px;padding:3px;margin-right:8px;">
-          <button id="map-mode-data" onclick="setMapMode('data')" style="padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:#2d5a27;color:white;font-weight:600;">📊 Data index</button>
-          <button id="map-mode-people" onclick="setMapMode('people')" style="padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:transparent;color:#6b6b64;">⭐ People</button>
+          <button id="map-mode-data" onclick="window.setMapMode&&setMapMode('data')" style="padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:#2d5a27;color:white;font-weight:600;">📊 Data index</button>
+          <button id="map-mode-people" onclick="window.setMapMode&&setMapMode('people')" style="padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:transparent;color:#6b6b64;">⭐ People</button>
         </div>
         <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;" id="map-dim-btns"></div>
         <div style="margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink3);">
@@ -1213,7 +1213,13 @@ function drawSVGMap() {
 
 function recolorMap(scores, col, W, H) {
   const svgEl = document.getElementById('swiss-map');
-  if(!svgEl || !_mapFeaturesCache) return;
+  if(!svgEl) return;
+  if(!_mapFeaturesCache) {
+    // Cache not ready - do full draw
+    _mapDrawing = false;
+    drawSVGMap();
+    return;
+  }
   if(!col) {
     const vals=Object.values(scores).filter(v=>v!==null&&v!==undefined);
     const minVal=vals.length?Math.min(...vals):0, maxVal=vals.length?Math.max(...vals):100;
@@ -2603,6 +2609,29 @@ var mapMode = 'data'; // 'data' or 'people'
 function renderMapModeToggle() {}
 function setMapMode(mode) {
   mapMode = mode;
+  // Style buttons
+  const db = document.getElementById('map-mode-data');
+  const pb = document.getElementById('map-mode-people');
+  if(db) db.style.cssText = mode==='data'
+    ? 'padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:#2d5a27;color:white;font-weight:600;'
+    : 'padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:transparent;color:#6b6b64;';
+  if(pb) pb.style.cssText = mode==='people'
+    ? 'padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:#c8960c;color:white;font-weight:600;'
+    : 'padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:transparent;color:#6b6b64;';
+  const dimBtns = document.getElementById('map-dim-btns');
+  if(dimBtns) dimBtns.style.opacity = mode==='people' ? '0.35' : '1';
+  // Recolor map
+  if(mode==='people') {
+    loadReviewsFromSupabase().then(function() {
+      recolorMap(getCantonScores(mapDimension), null, 680, 420);
+    }).catch(function() {
+      recolorMap(getCantonScores(mapDimension), null, 680, 420);
+    });
+  } else {
+    recolorMap(getCantonScores(mapDimension), null, 680, 420);
+  }
+}function setMapMode(mode) {
+  mapMode = mode;
   // Update button styles
   const db=document.getElementById('map-mode-data');
   const pb=document.getElementById('map-mode-people');
@@ -2631,38 +2660,8 @@ function setMapMode(mode) {
       document.getElementById('swiss-map')?.getAttribute('width')||680,
       document.getElementById('swiss-map')?.getAttribute('height')||420);
   }
-}function renderMapModeToggle() {
-  const btns = document.getElementById('map-dim-btns');
-  if(!btns) return;
-  // Check if toggle already exists
-  if(document.getElementById('map-mode-toggle')) return;
-
-  const toggleDiv = document.createElement('div');
-  toggleDiv.id = 'map-mode-toggle';
-  toggleDiv.style.cssText = 'display:flex;gap:4px;background:var(--paper2);border-radius:8px;padding:3px;margin-right:12px;';
-  toggleDiv.innerHTML = `
-    <button id="mmode-data" onclick="setMapMode('data')"
-      style="padding:4px 10px;border-radius:6px;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:white;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,0.08);transition:all 0.15s;">
-      📊 Data index
-    </button>
-    <button id="mmode-people" onclick="setMapMode('people')"
-      style="padding:4px 10px;border-radius:6px;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;background:none;color:var(--ink2);transition:all 0.15s;">
-      ⭐ People
-    </button>`;
-  btns.parentElement.insertBefore(toggleDiv, btns);
 }
 
-function setMapMode(mode) {
-  mapMode = mode;
-  document.getElementById('mmode-data').style.cssText = `padding:4px 10px;border-radius:6px;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;transition:all 0.15s;background:${mode==='data'?'white':'none'};color:${mode==='data'?'var(--ink)':'var(--ink2)'};box-shadow:${mode==='data'?'0 1px 3px rgba(0,0,0,0.08)':'none'};`;
-  document.getElementById('mmode-people').style.cssText = `padding:4px 10px;border-radius:6px;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;transition:all 0.15s;background:${mode==='people'?'white':'none'};color:${mode==='people'?'var(--ink)':'var(--ink2)'};box-shadow:${mode==='people'?'0 1px 3px rgba(0,0,0,0.08)':'none'};`;
-
-  // Dim/show dimension selector
-  const dimBtns = document.getElementById('map-dim-btns');
-  if(dimBtns) dimBtns.style.opacity = mode==='people'?'0.35':'1';
-
-  drawChoropleth();
-}
 
 // Patch getCantonScores to support people mode
 
