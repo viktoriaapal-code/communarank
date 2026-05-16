@@ -2599,7 +2599,11 @@ function setMapMode(mode) {
 if(typeof buildCommuneListFromTopo === "function") ALL_SWISS_COMMUNES = buildCommuneListFromTopo(null);
 seedSampleReviews();
 renderRevStarGrid();
-renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();applyRevTranslations();updateHeroStats();loadReviewsFromSupabase();
+renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();applyRevTranslations();updateHeroStats();if (typeof loadReviewsFromSupabase === 'function') {
+  loadReviewsFromSupabase();
+} else {
+  console.warn('loadReviewsFromSupabase is not available yet — skipping Supabase review load');
+}
 // Update community count from real data
 const countEl=document.getElementById('community-count');
 if(countEl)countEl.textContent=COMMUNITIES.length.toLocaleString();
