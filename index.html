@@ -126,30 +126,77 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
 
 }
 
-.hamburger{display:none;background:none;border:none;cursor:pointer;padding:8px;flex-direction:column;gap:5px;align-items:center;justify-content:center;margin-left:8px;}
-.ham-bar{display:block;width:22px;height:2px;background:var(--paper);border-radius:2px;transition:transform 0.25s,opacity 0.25s;}
-.nav-links{display:flex;gap:4px;}
-@media(max-width:768px){
-  .rank-card{grid-template-columns:36px 1fr;}
-  .rank-right{display:none;}
-  .hamburger{display:flex;}
-  .nav-links{display:none;}
-  .nav-links.open{display:flex!important;flex-direction:column;position:fixed;top:0;left:0;right:0;bottom:0;background:#1a1a18;z-index:99999;padding:80px 24px 24px;gap:8px;}
-  .nav-links.open .nav-btn{padding:16px 20px;font-size:18px;text-align:left;border-radius:12px;width:100%;color:#f5f2eb;background:rgba(255,255,255,0.08);border:none;font-family:'DM Sans',sans-serif;cursor:pointer;display:block;}
-  .lang-sel{display:none;}
+
+
+
+
+@media(min-width:769px){}
+
+/* ── NAV LINKS (desktop) ── */
+.nav-links { display:flex; gap:4px; }
+
+/* ── HAMBURGER ── */
+.hamburger { display:none; }
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .rank-card { grid-template-columns: 36px 1fr; }
+  .rank-right { display: none; }
+  .lang-sel { display: none; }
+  .nav-links { display: none; }
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    margin-left: 8px;
+  }
+  .nav-links.open {
+    display: flex !important;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: #1a1a18;
+    z-index: 99999;
+    padding: 80px 24px 24px;
+    gap: 8px;
+    overflow-y: auto;
+  }
+  .nav-links.open .nav-btn {
+    padding: 16px 20px;
+    font-size: 18px;
+    text-align: left;
+    border-radius: 12px;
+    width: 100%;
+    color: #f5f2eb;
+    background: rgba(255,255,255,0.08);
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: block;
+  }
+  .nav-links.open .nav-btn:hover,
+  .nav-links.open .nav-btn.active {
+    background: rgba(255,255,255,0.15);
+  }
 }
-@media(min-width:769px){.hamburger{display:none!important;}}
 </style>
 </head>
 <body>
 <nav>
   <div class="nav-brand">Communa<span>Rank</span></div>
   <div class="nav-links" id="main-nav-links">
-    <button class="nav-btn active" onclick="showPage('ranking');closeMobileNav();" id="nb-ranking">Ranking</button>
-    <button class="nav-btn" onclick="showPage('compare');closeMobileNav();" id="nb-compare">Compare</button>
-    <button class="nav-btn" onclick="showPage('index');closeMobileNav();" id="nb-index">Our Index</button>
-    <button class="nav-btn" onclick="showPage('map');closeMobileNav();" id="nb-map">Map</button>
-    <button class="nav-btn" onclick="showPage('reviews');closeMobileNav();" id="nb-reviews">Reviews</button>
+    <button onclick="closeMobileNav()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#f5f2eb;font-size:28px;cursor:pointer;padding:8px;line-height:1;">✕</button>
+    <button class="nav-btn active" onclick="showPage('ranking');closeMobileNav();" id="nb-ranking">📊 Ranking</button>
+    <button class="nav-btn" onclick="showPage('compare');closeMobileNav();" id="nb-compare">⚖️ Compare</button>
+    <button class="nav-btn" onclick="showPage('index');closeMobileNav();" id="nb-index">📋 Our Index</button>
+    <button class="nav-btn" onclick="showPage('map');closeMobileNav();" id="nb-map">🗺️ Map</button>
+    <button class="nav-btn" onclick="showPage('reviews');closeMobileNav();" id="nb-reviews">⭐ Reviews</button>
   </div>
   <div class="lang-sel">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -157,11 +204,10 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
     <button class="lang-btn" onclick="setLang('de')">DE</button>
     <button class="lang-btn" onclick="setLang('it')">IT</button>
   </div>
-  <button id="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu"
-    style="display:none;background:transparent;border:none;cursor:pointer;padding:10px;flex-direction:column;gap:6px;align-items:center;justify-content:center;margin-left:8px;">
-    <span id="ham-line1" style="display:block;width:24px;height:2px;background:#ffffff;border-radius:2px;transition:transform 0.25s,opacity 0.25s;"></span>
-    <span id="ham-line2" style="display:block;width:24px;height:2px;background:#ffffff;border-radius:2px;transition:transform 0.25s,opacity 0.25s;"></span>
-    <span id="ham-line3" style="display:block;width:24px;height:2px;background:#ffffff;border-radius:2px;transition:transform 0.25s,opacity 0.25s;"></span>
+  <button id="hamburger-btn" onclick="toggleMobileNav()" aria-label="Menu" class="hamburger">
+    <span style="display:block;width:22px;height:2px;background:#ffffff;border-radius:2px;transition:all 0.25s;" id="ham-line1"></span>
+    <span style="display:block;width:22px;height:2px;background:#ffffff;border-radius:2px;transition:all 0.25s;" id="ham-line2"></span>
+    <span style="display:block;width:22px;height:2px;background:#ffffff;border-radius:2px;transition:all 0.25s;" id="ham-line3"></span>
   </button>
 </nav>
 <div class="hero">
@@ -752,18 +798,6 @@ async function loadReviewsFromSupabase() {
     }
   } catch(e){console.warn('Supabase load:',e.message);}
 }
-// Show hamburger on mobile
-(function(){
-  var ham = document.getElementById('hamburger-btn');
-  if(ham) {
-    if(window.innerWidth <= 768) {
-      ham.style.display = 'flex';
-    }
-    window.addEventListener('resize', function(){
-      if(ham) ham.style.display = window.innerWidth<=768 ? 'flex' : 'none';
-    });
-  }
-})();
 renderWeights();renderRanking();renderIndexPillars();renderCompare();applyWaitlistTranslations();applyRevTranslations();const ce=document.getElementById('community-count');if(ce)ce.textContent=COMMUNITIES.length.toLocaleString();if(document.getElementById('page-map').classList.contains('active'))renderMap();}
 function applyTranslations(){const st=(id,val,attr)=>{const el=document.getElementById(id);if(!el)return;if(attr==='html')el.innerHTML=val;else if(attr==='ph')el.placeholder=val;else el.textContent=val;};st('h-tag',getT('heroTag'));st('h-title',getT('heroTitle'),'html');st('h-sub',getT('heroSub'));st('h-cta1',getT('heroCta1'));st('h-cta2',getT('heroCta2'));st('h-s1',getT('hS1'));st('h-s2',getT('hS2'));st('h-s3',getT('hS3'));st('h-s4',getT('hS4'));st('h-s5',getT('hS5')||'Resident reviews');st('rank-title',getT('rankTitle'));st('rank-sub',getT('rankSub'));st('w-title',getT('wTitle'));st('cmp-title',getT('cmpTitle'));st('cmp-sub',getT('cmpSub'));st('cmp-add-btn',getT('cmpAdd'));st('cmp-chart-title',getT('cmpChartTitle'));st('ai-title',getT('aiTitle'));st('ai-page-title',getT('aiPageTitle'));st('ai-page-sub',getT('aiPageSub'));st('search-input',getT('searchPlaceholder'),'ph');st('cmp-search',getT('cmpSearchPlaceholder'),'ph');st('chip-all',getT('chipAll'));st('chip-family',getT('chipFamily'));st('chip-affordable',getT('chipAffordable'));st('chip-sustainable',getT('chipSustainable'));st('chip-nature',getT('chipNature'));st('chip-urban',getT('chipUrban'));}
 function calcScore(c){let t=0,w=0;for(const[k,d]of Object.entries(WEIGHTS_DEF)){t+=c.scores[k]*d.val;w+=d.val}return Math.round(t/w)}
