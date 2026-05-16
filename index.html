@@ -242,8 +242,8 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
     <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:16px;">
       <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
         <div style="display:flex;gap:3px;background:var(--paper2);border-radius:8px;padding:3px;margin-right:8px;">
-          <button id="map-mode-data" onclick="window.mapMode='data';document.getElementById('map-mode-data').style.cssText='padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:#2d5a27;color:white;font-weight:600;';document.getElementById('map-mode-people').style.cssText='padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:transparent;color:#6b6b64;';document.getElementById('map-dim-btns').style.opacity='1';_mapDrawing=false;drawSVGMap();" style="padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:#2d5a27;color:white;font-weight:600;">📊 Data index</button>
-          <button id="map-mode-people" onclick="window.mapMode='people';document.getElementById('map-mode-people').style.cssText='padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:#c8960c;color:white;font-weight:600;';document.getElementById('map-mode-data').style.cssText='padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:transparent;color:#6b6b64;';document.getElementById('map-dim-btns').style.opacity='0.4';_mapDrawing=false;loadReviewsFromSupabase().then(function(){drawSVGMap();}).catch(function(){drawSVGMap();});" style="padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:transparent;color:#6b6b64;">⭐ People</button>
+          <button id="map-mode-data" onclick="setMapMode('data')" style="padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:#2d5a27;color:white;font-weight:600;">📊 Data index</button>
+          <button id="map-mode-people" onclick="setMapMode('people')" style="padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:transparent;color:#6b6b64;">⭐ People</button>
         </div>
         <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;" id="map-dim-btns"></div>
         <div style="margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink3);">
@@ -1105,21 +1105,20 @@ function drawChoropleth() {
   setTimeout(drawSVGMap, 80);
 }
 
-let _mapDrawing = false;
+var _mapDrawing = false;
+var _mapTopoCache = null;
+var _mapFeaturesCache = null;
+var _mapProjectionCache = null;
+
 function drawSVGMap() {
-  if(_mapDrawing) return;
-  _mapDrawing = true;
   const cont = document.getElementById('swiss-map-container');
   const svgEl = document.getElementById('swiss-map');
-  if(!cont || !svgEl) { _mapDrawing = false; return; }
+  if(!cont || !svgEl) return;
 
   const W = Math.max(cont.getBoundingClientRect().width || cont.offsetWidth, 300);
   const H = Math.round(W * 0.62);
-  svgEl.setAttribute('width', W);
-  svgEl.setAttribute('height', H);
-  svgEl.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-  svgEl.style.cssText = 'display:block;';
 
+  // Build score colorizer
   const scores = getCantonScores(mapDimension);
   const vals = Object.values(scores).filter(v => v !== null && v !== undefined);
   const minVal = vals.length ? Math.min(...vals) : 0;
@@ -1130,6 +1129,21 @@ function drawSVGMap() {
     const t = Math.max(0, Math.min(1, (s-minVal)/(maxVal-minVal||1)));
     return 'rgb('+Math.round(200-t*160)+','+Math.round(232-t*80)+','+Math.round(194-t*155)+')';
   }
+
+  // If we already have cached features, just recolor - instant!
+  if(_mapFeaturesCache && _mapProjectionCache) {
+    recolorMap(scores, col, W, H);
+    return;
+  }
+
+  // First load - fetch TopoJSON
+  if(_mapDrawing) return;
+  _mapDrawing = true;
+
+  svgEl.setAttribute('width', W);
+  svgEl.setAttribute('height', H);
+  svgEl.setAttribute('viewBox', '0 0 '+W+' '+H);
+  svgEl.style.display = 'block';
 
   const CC = {
     ZH:[8.65,47.41],BE:[7.45,46.93],LU:[8.11,47.07],UR:[8.63,46.88],
@@ -1148,74 +1162,106 @@ function drawSVGMap() {
 
   async function tryFetch(urls) {
     for(const url of urls) {
-      try { const r = await fetch(url,{cache:'force-cache'}); if(r.ok) return r.json(); } catch(e) {}
+      try { const r=await fetch(url,{cache:'force-cache'}); if(r.ok) return r.json(); } catch(e){}
     }
     throw new Error('Failed');
   }
 
   tryFetch(sources).then(topo => {
+    _mapTopoCache = topo;
     const cantons = topojson.feature(topo, topo.objects.cantons);
     const projection = d3.geoMercator().fitSize([W,H], cantons);
     const pathGen = d3.geoPath().projection(projection);
+
+    // Build canton SVG position cache
     const cantonSVGPos = {};
     Object.entries(CC).forEach(([ab,[lon,lat]]) => { cantonSVGPos[ab] = projection([lon,lat]); });
 
-    let html = '';
+    // Store features with their matched canton
+    _mapFeaturesCache = [];
     cantons.features.forEach(f => {
       const pathD = pathGen(f);
       if(!pathD) return;
       const svgCen = pathGen.centroid(f);
       if(!svgCen || isNaN(svgCen[0])) return;
-      let ab = null, minDist = Infinity;
+      let ab=null, minDist=Infinity;
       Object.entries(cantonSVGPos).forEach(([code,pos]) => {
-        const d = (svgCen[0]-pos[0])**2 + (svgCen[1]-pos[1])**2;
-        if(d < minDist) { minDist = d; ab = code; }
+        const d=(svgCen[0]-pos[0])**2+(svgCen[1]-pos[1])**2;
+        if(d<minDist){minDist=d;ab=code;}
       });
-      const score = ab ? scores[ab] : null;
-      const fill = col(score);
-      const name = ab ? ((CANTON_NAMES||{})[ab]||ab) : '';
-      const cf = ab ? (Object.entries(CANTON_KEYS||{}).find(([k,v])=>v===ab)||[])[0]||'' : '';
-      const n = ab ? (COMMUNITIES||[]).filter(c=>(CANTON_KEYS||{})[c.canton]===ab).length : 0;
-      const t = (score!==null&&score!==undefined) ? (score-minVal)/(maxVal-minVal||1) : 0;
-      const tc = t>0.5?'#fff':'#2d5a27';
-      const fs = W<600?8:10;
-      html += '<path d="'+pathD+'" fill="'+fill+'" stroke="white" stroke-width="0.8" style="cursor:pointer"'
-        +' data-ab="'+(ab||'')+'" data-name="'+name+'" data-score="'+(score??'')+'" data-cf="'+cf+'" data-n="'+n+'"/>';
-      if(ab) {
-        html += '<text x="'+svgCen[0].toFixed(1)+'" y="'+(svgCen[1]-5).toFixed(1)+'" text-anchor="middle" font-size="'+fs+'" font-family="DM Sans,sans-serif" fill="'+tc+'" pointer-events="none">'+ab+'</text>';
-        if(score!==null&&score!==undefined) html += '<text x="'+svgCen[0].toFixed(1)+'" y="'+(svgCen[1]+9).toFixed(1)+'" text-anchor="middle" font-size="'+fs+'" font-family="Georgia,serif" font-weight="bold" fill="'+tc+'" pointer-events="none">'+score+'</text>';
-      }
+      const name=ab?((CANTON_NAMES||{})[ab]||ab):'';
+      const cf=ab?(Object.entries(CANTON_KEYS||{}).find(([k,v])=>v===ab)||[])[0]||'':'';
+      const n=ab?(COMMUNITIES||[]).filter(c=>(CANTON_KEYS||{})[c.canton]===ab).length:0;
+      _mapFeaturesCache.push({pathD, svgCen, ab, name, cf, n});
     });
+    _mapProjectionCache = projection;
 
-    svgEl.innerHTML = html;
-    svgEl.onclick = function(e) {
-      const p = e.target.closest('path[data-cf]');
-      if(!p) return;
-      const cf = p.getAttribute('data-cf');
-      if(cf){const s=document.getElementById('canton-filter');if(s)s.value=cf;filterCommunities();showPage('ranking');}
-    };
-    svgEl.onmousemove = function(e) {
-      const p = e.target.closest('path[data-ab]');
-      const tip = document.getElementById('map-tooltip');
-      if(!tip) return;
-      if(p&&p.getAttribute('data-ab')){
-        const dim=((DIM_LABELS||{})[mapDimension]||{})[lang]||mapDimension;
-        tip.style.display='block';tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-14)+'px';
-        tip.innerHTML='<div style="font-family:Georgia,serif;font-size:14px;margin-bottom:3px;">'+p.getAttribute('data-name')+'</div>'
-          +'<div style="font-size:12px;color:rgba(245,242,235,0.75)">'+dim+': <strong style="color:#7dbf6e">'+(p.getAttribute('data-score')||'n/a')+'</strong></div>'
-          +'<div style="font-size:11px;color:rgba(245,242,235,0.45);margin-top:2px">'+p.getAttribute('data-n')+' communes in index</div>';
-      } else tip.style.display='none';
-    };
-    svgEl.onmouseleave = function(){const t=document.getElementById('map-tooltip');if(t)t.style.display='none';};
+    recolorMap(scores, col, W, H);
+    _mapDrawing = false;
+
     const loading=document.getElementById('map-loading');
-    if(loading)loading.style.display='none';
-    _mapDrawing=false;
-    if(typeof buildCommuneListFromTopo==='function'&&ALL_SWISS_COMMUNES.length<100)
+    if(loading) loading.style.display='none';
+
+    if(typeof buildCommuneListFromTopo==='function' && ALL_SWISS_COMMUNES.length<100)
       ALL_SWISS_COMMUNES=buildCommuneListFromTopo(topo);
-  }).catch(err=>{
-    _mapDrawing=false;
+
+  }).catch(err => {
+    _mapDrawing = false;
     svgEl.innerHTML='<text x="'+(W/2)+'" y="'+(H/2)+'" text-anchor="middle" font-size="13" fill="#999">Map unavailable</text>';
   });
+}
+
+function recolorMap(scores, col, W, H) {
+  const svgEl = document.getElementById('swiss-map');
+  if(!svgEl || !_mapFeaturesCache) return;
+  if(!col) {
+    const vals=Object.values(scores).filter(v=>v!==null&&v!==undefined);
+    const minVal=vals.length?Math.min(...vals):0, maxVal=vals.length?Math.max(...vals):100;
+    col = s => {
+      if(s===null||s===undefined||isNaN(s)) return '#ddd8cc';
+      const t=Math.max(0,Math.min(1,(s-minVal)/(maxVal-minVal||1)));
+      return 'rgb('+Math.round(200-t*160)+','+Math.round(232-t*80)+','+Math.round(194-t*155)+')';
+    };
+  }
+  const fs = W<600?8:10;
+  const vals=Object.values(scores).filter(v=>v!==null&&v!==undefined);
+  const minVal=vals.length?Math.min(...vals):0, maxVal=vals.length?Math.max(...vals):100;
+
+  let html='';
+  _mapFeaturesCache.forEach(({pathD,svgCen,ab,name,cf,n}) => {
+    const score=ab?scores[ab]:null;
+    const fill=col(score);
+    const t=(score!==null&&score!==undefined)?(score-minVal)/(maxVal-minVal||1):0;
+    const tc=t>0.5?'#fff':'#2d5a27';
+    html+='<path d="'+pathD+'" fill="'+fill+'" stroke="white" stroke-width="0.8" style="cursor:pointer"'
+      +' data-ab="'+(ab||'')+'" data-name="'+name+'" data-score="'+(score??'')+'" data-cf="'+cf+'" data-n="'+n+'"/>';
+    if(ab){
+      html+='<text x="'+svgCen[0].toFixed(1)+'" y="'+(svgCen[1]-5).toFixed(1)+'" text-anchor="middle" font-size="'+fs+'" font-family="DM Sans,sans-serif" fill="'+tc+'" pointer-events="none">'+ab+'</text>';
+      if(score!==null&&score!==undefined) html+='<text x="'+svgCen[0].toFixed(1)+'" y="'+(svgCen[1]+9).toFixed(1)+'" text-anchor="middle" font-size="'+fs+'" font-family="Georgia,serif" font-weight="bold" fill="'+tc+'" pointer-events="none">'+score+'</text>';
+    }
+  });
+  svgEl.innerHTML=html;
+
+  // Add events
+  svgEl.onclick=function(e){
+    const p=e.target.closest('path[data-cf]');
+    if(!p)return;
+    const cf=p.getAttribute('data-cf');
+    if(cf){const s=document.getElementById('canton-filter');if(s)s.value=cf;filterCommunities();showPage('ranking');}
+  };
+  svgEl.onmousemove=function(e){
+    const p=e.target.closest('path[data-ab]');
+    const tip=document.getElementById('map-tooltip');
+    if(!tip)return;
+    if(p&&p.getAttribute('data-ab')){
+      const dim=((DIM_LABELS||{})[mapDimension]||{})[lang]||mapDimension;
+      tip.style.display='block';tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-14)+'px';
+      tip.innerHTML='<div style="font-family:Georgia,serif;font-size:14px;margin-bottom:3px;">'+p.getAttribute('data-name')+'</div>'
+        +'<div style="font-size:12px;color:rgba(245,242,235,0.75)">'+dim+': <strong style="color:#7dbf6e">'+(p.getAttribute('data-score')||'n/a')+'</strong></div>'
+        +'<div style="font-size:11px;color:rgba(245,242,235,0.45);margin-top:2px">'+p.getAttribute('data-n')+' communes in index</div>';
+    } else tip.style.display='none';
+  };
+  svgEl.onmouseleave=function(){const t=document.getElementById('map-tooltip');if(t)t.style.display='none';};
 }
 
 function loadMapTopo() {
@@ -1802,14 +1848,22 @@ let dimStars = {};
 let selectedCommunity = '';
 
 function switchRevTab(tab) {
-  document.querySelectorAll('.rev-tab-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.rev-tab-pane').forEach(p => p.style.display='none');
-  const btn = document.getElementById('rtab-'+tab);
-  const pane = document.getElementById('rpane-'+tab);
-  if(btn) btn.classList.add('active');
-  if(pane) pane.style.display='block';
-  if(tab==='browse'||tab==='ranking') {
-    loadReviewsFromSupabase().then(()=>renderReviews()).catch(()=>renderReviews());
+  currentRevTab = tab;
+  ['write','browse','ranking'].forEach(t => {
+    const panel = document.getElementById('rev-tab-'+t);
+    const btn = document.getElementById('rtab-'+t);
+    if(panel) panel.style.display = t===tab ? 'block' : 'none';
+    if(btn) btn.classList.toggle('active', t===tab);
+  });
+  if(tab==='write' && ALL_SWISS_COMMUNES.length<100) loadCommuneListAsync();
+  if(tab==='browse') {
+    // Show existing reviews immediately, then refresh from Supabase
+    renderReviews();
+    loadReviewsFromSupabase().then(()=>renderReviews()).catch(()=>{});
+  }
+  if(tab==='ranking') {
+    renderPeoplesRanking();
+    loadReviewsFromSupabase().then(()=>renderPeoplesRanking()).catch(()=>{});
   }
 }
 
@@ -2041,8 +2095,8 @@ function renderReviews() {
 
   const q = (document.getElementById('rev-search')?.value || '').toLowerCase();
   const sort = document.getElementById('rev-sort')?.value || 'recent';
+  // Always merge localStorage + Supabase cache
   let reviews = getReviews();
-  if(reviews.length===0){loadReviewsFromSupabase().then(()=>renderReviews()).catch(()=>{});return;}
   if(q) reviews = reviews.filter(r =>
     r.community.toLowerCase().includes(q) ||
     (r.text||'').toLowerCase().includes(q)
@@ -2544,15 +2598,39 @@ function updateHeroStats() {
 }
 
 // ─── MAP: add "People's reviews" toggle ───────────────────────────────
-let mapMode = 'data'; // 'data' or 'people'
+var mapMode = 'data'; // 'data' or 'people'
 
 function renderMapModeToggle() {}
 function setMapMode(mode) {
-  window.mapMode = mode;
-  _mapDrawing = false;
+  mapMode = mode;
+  // Update button styles
+  const db=document.getElementById('map-mode-data');
+  const pb=document.getElementById('map-mode-people');
+  if(db&&pb){
+    if(mode==='data'){
+      db.style.cssText='padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:#2d5a27;color:white;font-weight:600;';
+      pb.style.cssText='padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:transparent;color:#6b6b64;';
+    } else {
+      pb.style.cssText='padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:#c8960c;color:white;font-weight:600;';
+      db.style.cssText='padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:none;background:transparent;color:#6b6b64;';
+    }
+  }
   if(mode==='people') {
-    loadReviewsFromSupabase().then(()=>drawSVGMap()).catch(()=>drawSVGMap());
-  } else { drawSVGMap(); }
+    // Load reviews then recolor
+    loadReviewsFromSupabase().then(() => {
+      const scores = getCantonScores(mapDimension);
+      recolorMap(scores, null, 
+        document.getElementById('swiss-map')?.getAttribute('width')||680,
+        document.getElementById('swiss-map')?.getAttribute('height')||420);
+    }).catch(() => {
+      recolorMap(getCantonScores(mapDimension), null, 680, 420);
+    });
+  } else {
+    // Just recolor with data scores
+    recolorMap(getCantonScores(mapDimension), null,
+      document.getElementById('swiss-map')?.getAttribute('width')||680,
+      document.getElementById('swiss-map')?.getAttribute('height')||420);
+  }
 }function renderMapModeToggle() {
   const btns = document.getElementById('map-dim-btns');
   if(!btns) return;
@@ -2597,7 +2675,7 @@ function setMapMode(mode) {
 
 seedSampleReviews();
 renderRevStarGrid();
-renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();applyRevTranslations();updateHeroStats();loadReviewsFromSupabase();
+renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();loadReviewsFromSupabase().catch(()=>{});applyRevTranslations();updateHeroStats();loadReviewsFromSupabase();
 // Update community count from real data
 const countEl=document.getElementById('community-count');
 if(countEl)countEl.textContent=COMMUNITIES.length.toLocaleString();
