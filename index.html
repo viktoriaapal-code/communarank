@@ -850,7 +850,10 @@ function applyTranslations(){
     const icons=['📊 ','⚖️ ','📋 ','🗺️ ','<span style="color:#f5c518">★</span> '];
     const val=t(keys[i]);
     if(val) el.textContent=icons[i]+val;
-  });const st=(id,val,attr)=>{const el=document.getElementById(id);if(!el)return;if(attr==='html')el.innerHTML=val;else if(attr==='ph')el.placeholder=val;else el.textContent=val;};st('h-tag',getT('heroTag'));st('h-title',getT('heroTitle'),'html');st('h-sub',getT('heroSub'));st('h-cta1',getT('heroCta1'));st('h-cta2',getT('heroCta2'));st('h-s1',getT('hS1'));st('h-s2',getT('hS2'));st('h-s3',getT('hS3'));st('h-s4',getT('hS4'));st('h-s5',getT('hS5')||'Resident reviews');st('rank-title',getT('rankTitle'));st('rank-sub',getT('rankSub'));st('w-title',getT('wTitle'));st('cmp-title',getT('cmpTitle'));st('cmp-sub',getT('cmpSub'));st('cmp-add-btn',getT('cmpAdd'));st('cmp-chart-title',getT('cmpChartTitle'));st('ai-title',getT('aiTitle'));st('ai-page-title',getT('aiPageTitle'));st('ai-page-sub',getT('aiPageSub'));st('search-input',getT('searchPlaceholder'),'ph');st('cmp-search',getT('cmpSearchPlaceholder'),'ph');st('chip-all',getT('chipAll'));st('chip-family',getT('chipFamily'));st('chip-affordable',getT('chipAffordable'));st('chip-sustainable',getT('chipSustainable'));st('chip-nature',getT('chipNature'));st('chip-urban',getT('chipUrban'));}
+  });const st=(id,val,attr)=>{const el=document.getElementById(id);if(!el)return;if(attr==='html')el.innerHTML=val;else if(attr==='ph')el.placeholder=val;else el.textContent=val;};st('h-tag',getT('heroTag'));st('h-title',getT('heroTitle'),'html');st('h-sub',getT('heroSub'));st('h-cta1',getT('heroCta1'));st('h-cta2',getT('heroCta2'));st('h-s1',getT('hS1'));st('h-s2',getT('hS2'));st('h-s3',getT('hS3'));st('h-s4',getT('hS4'));st('h-s5',getT('hS5')||'Resident reviews');st('rank-title',getT('rankTitle'));st('rank-sub',getT('rankSub'));st('w-title',getT('wTitle'));st('cmp-title',getT('cmpTitle'));st('cmp-sub',getT('cmpSub'));st('cmp-add-btn',getT('cmpAdd'));st('cmp-chart-title',getT('cmpChartTitle'));st('ai-title',getT('aiTitle'));st('ai-page-title',getT('aiPageTitle'));st('ai-page-sub',getT('aiPageSub'));st('search-input',getT('searchPlaceholder'),'ph');st('cmp-search',getT('cmpSearchPlaceholder'),'ph');st('chip-all',getT('chipAll'));st('chip-family',getT('chipFamily'));st('chip-affordable',getT('chipAffordable'));st('chip-sustainable',getT('chipSustainable'));st('chip-nature',getT('chipNature'));st('chip-urban',getT('chipUrban'));
+  // Re-render privacy page if currently shown
+  var pp=document.getElementById('page-privacy');if(pp&&pp.style.display!=='none')renderPrivacy();
+}
 function calcScore(c){let t=0,w=0;for(const[k,d]of Object.entries(WEIGHTS_DEF)){t+=c.scores[k]*d.val;w+=d.val}return Math.round(t/w)}
 function renderWeights(){const g=document.getElementById('weights-grid');g.innerHTML='';for(const[k,w]of Object.entries(WEIGHTS_DEF)){const d=document.createElement('div');d.className='weight-item';d.innerHTML=`<label><span>${w.icon} ${w.label[lang]||w.label.en}</span><span class="weight-badge" id="wb-${k}">${w.val}%</span></label><input type="range" min="0" max="30" step="1" value="${w.val}" oninput="updateWeight('${k}',this.value)">`;g.appendChild(d)}}
 function updateWeight(k,v){WEIGHTS_DEF[k].val=parseInt(v);document.getElementById('wb-'+k).textContent=v+'%';renderRanking()}
@@ -1088,7 +1091,7 @@ function addToCompare(n){if(!n)return;const c=COMMUNITIES.find(c=>c.name===n);if
 function removeFromCompare(n){cmpSelected=cmpSelected.filter(x=>x!==n);renderCompare()}
 function renderCompare(){const sel=document.getElementById('cmp-selected');sel.innerHTML=cmpSelected.map(n=>`<span style="background:var(--green3);color:var(--green);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;" onclick="removeFromCompare('${n}')">${n} ×</span>`).join('');const g=document.getElementById('compare-grid');if(!cmpSelected.length){g.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--ink3);font-size:14px;">Add communities above to compare</div>`;return}const cs=cmpSelected.map(n=>COMMUNITIES.find(c=>c.name===n)).filter(Boolean);g.innerHTML=cs.map(c=>{const sc=calcScore(c);const _salLbl=lang==='fr'?'Revenu médian':lang==='de'?'Medianeinkommen':lang==='it'?'Reddito mediano':'Median Income';const _ratLbl=lang==='fr'?'Pouvoir d achat':lang==='de'?'Kaufkraft':lang==='it'?'Acquisto':'Purchasing Power';const salRows=c.medianIncome?`<div class="compare-row" style="background:var(--gold2);padding:4px 0;border-radius:4px;margin-bottom:4px;"><span class="compare-row-label">💵 ${_salLbl}</span><span style="font-weight:600;font-size:12px;color:#7a5a00;">CHF ${(c.medianIncome/1000).toFixed(0)}k</span></div><div class="compare-row" style="background:${c.salaryRatio>=60?'var(--green3)':c.salaryRatio>=40?'var(--gold2)':'#fde8e8'};padding:4px 0;border-radius:4px;margin-bottom:8px;"><span class="compare-row-label">⚖️ ${_ratLbl}</span><span class="badge ${c.salaryRatio>=60?'badge-green':c.salaryRatio>=40?'badge-gold':'badge-red'}">${c.salaryRatio}/100</span></div>`:'';const rows=INDEX_PILLARS.map(p=>{const v=c.scores[p.key];const cl=v>=80?'badge-green':v>=60?'badge-gold':'badge-red';return`<div class="compare-row"><span class="compare-row-label">${p.icon} ${p.title[lang]||p.title.en}</span><span class="badge ${cl}">${v}</span></div>`}).join('');return`<div class="compare-card"><h4>${c.name} <span style="color:var(--green);font-family:'Fraunces',serif;">${sc}</span></h4><div style="font-size:11px;color:var(--ink3);margin-bottom:10px;">${c.canton} · ${c.type} · ${c.landPrice} ${getT('cost')}</div>${salRows}${rows}</div>`}).join('');const wrap=document.getElementById('cmp-chart-wrap');wrap.style.display=cs.length>=2?'block':'none';if(cs.length>=2)renderRadar(cs)}
 function renderRadar(cs){if(cmpChart){cmpChart.destroy();cmpChart=null}const labels=INDEX_PILLARS.map(p=>p.title[lang]||p.title.en);const colors=['#2d5a27','#c8960c','#1a3a5c','#8b2020'];const datasets=cs.map((c,i)=>({label:c.name,data:INDEX_PILLARS.map(p=>c.scores[p.key]),borderColor:colors[i],backgroundColor:colors[i]+'22',borderWidth:2,pointRadius:3}));cmpChart=new Chart(document.getElementById('cmpChart'),{type:'radar',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,ticks:{stepSize:20,font:{size:9,navRanking:'Ranking',navCompare:'Compare',navIndex:'Our Index',navMap:'Map',navReviews:'Reviews',navRanking:'Classement',navCompare:'Comparer',navIndex:'Notre Index',navMap:'Carte',navReviews:'Avis',navRanking:'Rangliste',navCompare:'Vergleich',navIndex:'Unser Index',navMap:'Karte',navReviews:'Bewertungen',navRanking:'Classifica',navCompare:'Confronta',navIndex:'Il nostro Index',navMap:'Mappa',navReviews:'Recensioni'}},pointLabels:{font:{size:10}}}},plugins:{legend:{display:true,labels:{font:{size:11}}}}}})}
-function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+n).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.id==='nb-'+n));if(n==='compare')renderCompare();if(n==='index')renderIndexPillars();if(n==='map')renderMap();if(n==='ai')applyWaitlistTranslations();if(n==='reviews'){applyRevTranslations();renderRevStarGrid();if(ALL_SWISS_COMMUNES.length<100)loadCommuneListAsync();};const navLinks=document.querySelector('.nav-links');if(navLinks&&navLinks.classList.contains('open')){navLinks.classList.remove('open');const h1=document.getElementById('ham-line1');const h2=document.getElementById('ham-line2');const h3=document.getElementById('ham-line3');if(h1)h1.style.transform='';if(h2)h2.style.opacity='1';if(h3)h3.style.transform='';}}
+function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+n).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.id==='nb-'+n));if(n==='compare')renderCompare();if(n==='index')renderIndexPillars();if(n==='map')renderMap();if(n==='ai')applyWaitlistTranslations();if(n==='privacy')renderPrivacy();if(n==='reviews'){applyRevTranslations();renderRevStarGrid();if(ALL_SWISS_COMMUNES.length<100)loadCommuneListAsync();};const navLinks=document.querySelector('.nav-links');if(navLinks&&navLinks.classList.contains('open')){navLinks.classList.remove('open');const h1=document.getElementById('ham-line1');const h2=document.getElementById('ham-line2');const h3=document.getElementById('ham-line3');if(h1)h1.style.transform='';if(h2)h2.style.opacity='1';if(h3)h3.style.transform='';}}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
 
 // ─── MAP ───────────────────────────────────────────────
@@ -2856,75 +2859,38 @@ renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWa
 // Update community count from real data
 const countEl=document.getElementById('community-count');
 if(countEl)countEl.textContent=COMMUNITIES.length.toLocaleString();
+
+function renderPrivacy() {
+  var lang2 = typeof lang !== "undefined" ? lang : "en";
+  var titles = {en:"Privacy Policy",fr:"Politique de confidentialit\u00e9",de:"Datenschutzerkl\u00e4rung",it:"Informativa sulla privacy"};
+  var subs = {en:"Last updated: May 2026 \u00b7 Swiss nDSG & EU GDPR compliant",fr:"Mai 2026 \u00b7 Conforme nDSG & RGPD UE",de:"Mai 2026 \u00b7 DSG & DSGVO konform",it:"Maggio 2026 \u00b7 LPD svizzera & GDPR UE"};
+  var secs_en = [{"h": "1. Who we are", "p": "CommunaRank is a Swiss community intelligence platform. Contact: <a href=\"mailto:info@communarank.ch\" style=\"color:var(--green)\">info@communarank.ch</a>"}, {"h": "2. Data we collect", "p": "<ul style=\"padding-left:18px;line-height:2.2\"><li><b>Reviews:</b> Nickname, rating, text \u2014 Supabase (Frankfurt, EU)</li><li><b>Waitlist:</b> Email only</li><li><b>Analytics:</b> Vercel Analytics (no cookies)</li><li><b>Local storage:</b> Language preference only</li></ul>"}, {"h": "3. How we use your data", "p": "Reviews published after moderation. Waitlist emails for new features only. Analytics are anonymous."}, {"h": "4. Storage & security", "p": "All data stored in EU (Frankfurt) via Supabase (SOC 2 Type II certified). Encrypted at rest and in transit."}, {"h": "5. Your rights (nDSG / GDPR)", "p": "Right to access, correct, delete, and port your data. Email <a href=\"mailto:info@communarank.ch\" style=\"color:var(--green)\">info@communarank.ch</a>. We respond within 30 days."}, {"h": "6. Cookies", "p": "No advertising cookies. Vercel Analytics is privacy-first and cookie-free."}, {"h": "7. Review moderation", "p": "All reviews stored as pending and manually reviewed before publication. Offensive reviews deleted within 7 days."}, {"h": "8. Contact", "p": "Questions: <a href=\"mailto:info@communarank.ch\" style=\"color:var(--green)\">info@communarank.ch</a><br>Swiss authority: <a href=\"https://www.edoeb.admin.ch\" target=\"_blank\" style=\"color:var(--green)\">edoeb.admin.ch</a>"}];
+  var secs_fr = [{"h": "1. Qui sommes-nous", "p": "CommunaRank est une plateforme suisse. Contact\u00a0: <a href=\"mailto:info@communarank.ch\" style=\"color:var(--green)\">info@communarank.ch</a>"}, {"h": "2. Donn\u00e9es collect\u00e9es", "p": "<ul style=\"padding-left:18px;line-height:2.2\"><li><b>Avis\u00a0:</b> Pseudonyme, note, texte \u2014 Supabase (Francfort, UE)</li><li><b>Liste d\u2019attente\u00a0:</b> E-mail uniquement</li><li><b>Analytiques\u00a0:</b> Vercel Analytics (sans cookies)</li><li><b>Stockage local\u00a0:</b> Pr\u00e9f\u00e9rence de langue</li></ul>"}, {"h": "3. Utilisation des donn\u00e9es", "p": "Les avis sont publi\u00e9s apr\u00e8s mod\u00e9ration. Les e-mails servent aux actualit\u00e9s. Les analytiques sont anonymes."}, {"h": "4. Stockage & s\u00e9curit\u00e9", "p": "Donn\u00e9es stock\u00e9es dans l\u2019UE (Francfort) via Supabase (SOC 2 Type II). Chiffr\u00e9es."}, {"h": "5. Vos droits (nLPD / RGPD)", "p": "Acc\u00e8s, correction, suppression. \u00c9crivez \u00e0 <a href=\"mailto:info@communarank.ch\" style=\"color:var(--green)\">info@communarank.ch</a>. R\u00e9ponse sous 30 jours."}, {"h": "6. Cookies", "p": "Aucun cookie publicitaire. Vercel Analytics respecte la vie priv\u00e9e."}, {"h": "7. Mod\u00e9ration", "p": "Tous les avis sont mod\u00e9r\u00e9s avant publication. Les avis offensants supprim\u00e9s sous 7 jours."}, {"h": "8. Contact", "p": "<a href=\"mailto:info@communarank.ch\" style=\"color:var(--green)\">info@communarank.ch</a><br>Autorit\u00e9\u00a0: <a href=\"https://www.edoeb.admin.ch\" target=\"_blank\" style=\"color:var(--green)\">edoeb.admin.ch</a>"}];
+  var secs_de = [{"h": "1. Wer wir sind", "p": "CommunaRank ist eine Schweizer Plattform. Kontakt: <a href=\"mailto:info@communarank.ch\" style=\"color:var(--green)\">info@communarank.ch</a>"}, {"h": "2. Erhobene Daten", "p": "<ul style=\"padding-left:18px;line-height:2.2\"><li><b>Bewertungen:</b> Spitzname, Note, Text \u2014 Supabase (Frankfurt, EU)</li><li><b>Warteliste:</b> Nur E-Mail</li><li><b>Analytik:</b> Vercel Analytics (keine Cookies)</li><li><b>Lokaler Speicher:</b> Sprachpr\u00e4ferenz</li></ul>"}, {"h": "3. Datennutzung", "p": "Bewertungen nach Pr\u00fcfung ver\u00f6ffentlicht. E-Mails nur f\u00fcr Neuigkeiten. Analysen sind anonym."}, {"h": "4. Speicherung & Sicherheit", "p": "Daten in der EU (Frankfurt) via Supabase (SOC 2 Typ II). Verschl\u00fcsselt."}, {"h": "5. Ihre Rechte (DSG / DSGVO)", "p": "Zugang, Berichtigung, L\u00f6schung. Schreiben Sie an <a href=\"mailto:info@communarank.ch\" style=\"color:var(--green)\">info@communarank.ch</a>. Antwort in 30 Tagen."}, {"h": "6. Cookies", "p": "Keine Werbe-Cookies. Vercel Analytics ist datenschutzfreundlich."}, {"h": "7. Bewertungsmoderation", "p": "Alle Bewertungen werden vor Ver\u00f6ffentlichung gepr\u00fcft. Beleidigende Inhalte in 7 Tagen gel\u00f6scht."}, {"h": "8. Kontakt", "p": "<a href=\"mailto:info@communarank.ch\" style=\"color:var(--green)\">info@communarank.ch</a><br>Beh\u00f6rde: <a href=\"https://www.edoeb.admin.ch\" target=\"_blank\" style=\"color:var(--green)\">edoeb.admin.ch</a>"}];
+  var secs_it = [{"h": "1. Chi siamo", "p": "CommunaRank \u00e8 una piattaforma svizzera. Contatto: <a href=\"mailto:info@communarank.ch\" style=\"color:var(--green)\">info@communarank.ch</a>"}, {"h": "2. Dati raccolti", "p": "<ul style=\"padding-left:18px;line-height:2.2\"><li><b>Recensioni:</b> Nickname, voto, testo \u2014 Supabase (Francoforte, UE)</li><li><b>Lista attesa:</b> Solo e-mail</li><li><b>Analitiche:</b> Vercel Analytics (senza cookie)</li><li><b>Memoria locale:</b> Solo lingua</li></ul>"}, {"h": "3. Utilizzo dei dati", "p": "Le recensioni sono pubblicate dopo moderazione. Le email per novit\u00e0 solo. Analitiche anonime."}, {"h": "4. Archiviazione & sicurezza", "p": "Dati nell\u2019UE (Francoforte) tramite Supabase (SOC 2 Tipo II). Crittografati."}, {"h": "5. I tuoi diritti (LPD / GDPR)", "p": "Accesso, correzione, cancellazione. Scrivi a <a href=\"mailto:info@communarank.ch\" style=\"color:var(--green)\">info@communarank.ch</a>. Risposta entro 30 giorni."}, {"h": "6. Cookie", "p": "Nessun cookie pubblicitario. Vercel Analytics rispetta la privacy."}, {"h": "7. Moderazione", "p": "Tutte le recensioni moderate prima della pubblicazione. Offensive eliminate entro 7 giorni."}, {"h": "8. Contatto", "p": "<a href=\"mailto:info@communarank.ch\" style=\"color:var(--green)\">info@communarank.ch</a><br>Autorit\u00e0: <a href=\"https://www.edoeb.admin.ch\" target=\"_blank\" style=\"color:var(--green)\">edoeb.admin.ch</a>"}];
+  var secsByLang = {en:secs_en, fr:secs_fr, de:secs_de, it:secs_it};
+  var p = secsByLang[lang2] || secs_en;
+  var t = document.getElementById("priv-title"); if(t) t.textContent = titles[lang2]||titles.en;
+  var s = document.getElementById("priv-sub"); if(s) s.textContent = subs[lang2]||subs.en;
+  var content = document.getElementById("priv-content");
+  if(!content) return;
+  content.innerHTML = p.map(function(sec) {
+    return "<div class=\"card\" style=\"padding:16px 24px;margin-bottom:4px;\">" +
+      "<h3 style=\"font-family:Fraunces,serif;font-size:15px;margin-bottom:8px;\">" + sec.h + "</h3>" +
+      "<div style=\"line-height:1.8;color:var(--ink2);font-size:14px;\">" + sec.p + "</div></div>";
+  }).join("");
+}
+
 </script>
-<div id="page-privacy" style="display:none">
+<div id="page-privacy" class="page">
   <div class="section">
     <div class="section-header">
-      <h2 class="section-title">Privacy Policy</h2>
-      <p class="section-sub">Last updated: May 2026 · Compliant with Swiss nDSG and EU GDPR</p>
+      <h2 class="section-title" id="priv-title">Privacy Policy</h2>
+      <p class="section-sub" id="priv-sub">Last updated: May 2026 · Swiss nDSG &amp; EU GDPR compliant</p>
     </div>
-    <div style="max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:20px;">
-
-      <div class="card" style="padding:28px 32px;">
-        <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:12px;">1. Who we are</h3>
-        <p style="line-height:1.8;color:var(--ink2);">CommunaRank is a Swiss community intelligence platform operated by an individual data controller based in Switzerland. Contact: <a href="mailto:info@communarank.ch" style="color:var(--green)">info@communarank.ch</a></p>
-      </div>
-
-      <div class="card" style="padding:28px 32px;">
-        <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:12px;">2. Data we collect</h3>
-        <ul style="line-height:2;color:var(--ink2);padding-left:20px;">
-          <li><strong>Community reviews:</strong> Nickname, rating (1–5 stars), written text, community name — stored in Supabase (Frankfurt, Germany, EU)</li>
-          <li><strong>Waitlist signups:</strong> Email address only — stored in Supabase</li>
-          <li><strong>Analytics:</strong> Page views, device type, country — via Vercel Analytics (no cookies, no personal data)</li>
-          <li><strong>Local storage:</strong> Your language preference and saved reviews — stored only in your browser</li>
-        </ul>
-      </div>
-
-      <div class="card" style="padding:28px 32px;">
-        <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:12px;">3. How we use your data</h3>
-        <ul style="line-height:2;color:var(--ink2);padding-left:20px;">
-          <li>Community reviews are published after manual moderation to help other users find the right community</li>
-          <li>Waitlist emails are used only to notify you when new features launch — no marketing</li>
-          <li>Analytics data is aggregated and anonymous — we cannot identify individual users</li>
-        </ul>
-      </div>
-
-      <div class="card" style="padding:28px 32px;">
-        <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:12px;">4. Data storage & security</h3>
-        <p style="line-height:1.8;color:var(--ink2);">All data is stored in the EU (Frankfurt, Germany) via Supabase, which is SOC 2 Type II certified. Data is encrypted at rest and in transit. We apply Row Level Security (RLS) policies to limit data access.</p>
-      </div>
-
-      <div class="card" style="padding:28px 32px;">
-        <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:12px;">5. Your rights (nDSG / GDPR)</h3>
-        <p style="line-height:1.8;color:var(--ink2);margin-bottom:12px;">You have the right to:</p>
-        <ul style="line-height:2;color:var(--ink2);padding-left:20px;">
-          <li><strong>Access</strong> — request a copy of your personal data</li>
-          <li><strong>Correction</strong> — request correction of inaccurate data</li>
-          <li><strong>Deletion</strong> — request deletion of your data ("right to be forgotten")</li>
-          <li><strong>Portability</strong> — receive your data in machine-readable format</li>
-          <li><strong>Objection</strong> — object to processing of your data</li>
-        </ul>
-        <p style="margin-top:12px;color:var(--ink2);">To exercise any right, email <a href="mailto:info@communarank.ch" style="color:var(--green)">info@communarank.ch</a>. We respond within 30 days.</p>
-      </div>
-
-      <div class="card" style="padding:28px 32px;">
-        <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:12px;">6. Cookies & tracking</h3>
-        <p style="line-height:1.8;color:var(--ink2);">We use <strong>no advertising cookies</strong> and no third-party tracking. Vercel Analytics is privacy-first and cookie-free. Your browser's localStorage is used only for user preferences (language, saved data) and never shared.</p>
-      </div>
-
-      <div class="card" style="padding:28px 32px;">
-        <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:12px;">7. Review moderation</h3>
-        <p style="line-height:1.8;color:var(--ink2);">All submitted reviews are stored as "pending" and manually reviewed before publication. We reject reviews containing offensive language, personal names, discriminatory content, or false information. Rejected reviews are deleted within 7 days.</p>
-      </div>
-
-      <div class="card" style="padding:28px 32px;">
-        <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:12px;">8. Contact & complaints</h3>
-        <p style="line-height:1.8;color:var(--ink2);">For privacy questions: <a href="mailto:info@communarank.ch" style="color:var(--green)">info@communarank.ch</a><br>
-        If unsatisfied with our response, you may contact the Swiss Federal Data Protection Commissioner (FDPIC) at <a href="https://www.edoeb.admin.ch" target="_blank" style="color:var(--green)">edoeb.admin.ch</a></p>
-      </div>
-
-    </div>
+    <div style="max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:12px;" id="priv-content"></div>
   </div>
+</div>
 </div>
 </body>
 </html>
