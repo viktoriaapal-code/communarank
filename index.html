@@ -841,7 +841,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 renderWeights();renderRanking();renderIndexPillars();renderCompare();applyWaitlistTranslations();applyRevTranslations();const ce=document.getElementById('community-count');if(ce)ce.textContent=COMMUNITIES.length.toLocaleString();if(document.getElementById('page-map').classList.contains('active'))renderMap();}
 // Hash routing - read URL on load and handle back/forward
-(function(){
+document.addEventListener('DOMContentLoaded', function(){
   var pages = ['ranking','compare','index','map','reviews','privacy'];
   var hash = window.location.hash.replace('#','');
   if(hash && pages.indexOf(hash)!==-1){ showPage(hash); }
@@ -849,7 +849,7 @@ renderWeights();renderRanking();renderIndexPillars();renderCompare();applyWaitli
     var h = window.location.hash.replace('#','');
     if(h && pages.indexOf(h)!==-1) showPage(h);
   };
-})();
+});
 function applyTranslations(){
   // Update nav buttons
   const t=getT;
