@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇨🇭</text></svg>">
 <title>CommunaRank — Smart Community Index Switzerland</title>
 <meta name="description" content="Switzerland's most comprehensive community ranking platform. Find the best Swiss community to buy land, purchase a home, or rent — ranked by cost of living, infrastructure, education, sustainability and more.">
 <meta property="og:title" content="CommunaRank — Smart Community Index Switzerland">
@@ -142,7 +143,6 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
 @media (max-width: 768px) {
   .rank-card { grid-template-columns: 36px 1fr; }
   .rank-right { display: none; }
-  .lang-sel { display: none; }
   .nav-links { display: none; }
   .hamburger {
     display: flex;
@@ -207,6 +207,7 @@ function closeMobileNav() {
   if(l1)l1.style.transform=''; if(l2)l2.style.opacity='1'; if(l3)l3.style.transform='';
 }
 </script>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <nav>
@@ -216,7 +217,7 @@ function closeMobileNav() {
     <button class="nav-btn" onclick="showPage('compare');closeMobileNav();" id="nb-compare">⚖️ Compare</button>
     <button class="nav-btn" onclick="showPage('index');closeMobileNav();" id="nb-index">📋 Our Index</button>
     <button class="nav-btn" onclick="showPage('map');closeMobileNav();" id="nb-map">🗺️ Map</button>
-    <button class="nav-btn" onclick="showPage('reviews');closeMobileNav();" id="nb-reviews">⭐ Reviews</button>
+    <button class="nav-btn" onclick="showPage('reviews');closeMobileNav();" id="nb-reviews"><span style="color:#f5c518">★</span> Reviews</button>
   </div>
   <div class="lang-sel">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -267,14 +268,7 @@ function closeMobileNav() {
         <option>Urban</option><option>Suburban</option><option>Rural</option><option>Alpine</option>
       </select>
     </div>
-    <div class="filter-chips" id="filter-chips">
-      <span class="chip active" onclick="setChip(this,'all')" id="chip-all">All</span>
-      <span class="chip" onclick="setChip(this,'family')" id="chip-family">Family-friendly</span>
-      <span class="chip" onclick="setChip(this,'affordable')" id="chip-affordable">Affordable</span>
-      <span class="chip" onclick="setChip(this,'sustainable')" id="chip-sustainable">Sustainable</span>
-      <span class="chip" onclick="setChip(this,'nature')" id="chip-nature">Near nature</span>
-      <span class="chip" onclick="setChip(this,'urban')" id="chip-urban">Urban lifestyle</span>
-    </div>
+    
     <div class="weights-panel">
       <div class="weights-title">
         <span id="w-title">Personalize index weights</span>
@@ -360,6 +354,10 @@ function closeMobileNav() {
 
     <!-- WRITE REVIEW TAB -->
     <div id="rev-tab-write">
+<div style="background:#fef9e7;border:1px solid #f5c518;border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.6;color:#7a6200;">
+  <strong>⚠️ Community Guidelines</strong><br>
+  Please share your genuine personal experience. Reviews must not contain offensive language, discriminatory content, or name specific individuals. All reviews go through a moderation process before being published. By submitting you agree to our <a href="#" onclick="showPage('privacy')" style="color:#2d5a27;">Privacy Policy</a>.
+</div>
       <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:28px;max-width:680px;">
         <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:20px;" id="rev-form-title">Share your experience</h3>
 
@@ -518,7 +516,8 @@ function closeMobileNav() {
           <span style="font-size:12px;color:var(--ink2);line-height:1.6;" id="consent-text">I agree that my review will be publicly visible on CommunaRank. I confirm this review reflects my genuine personal experience. I understand I can request deletion at any time by contacting info@communarank.ch.</span>
         </label>
 
-        <button onclick="submitReview()" id="rev-submit-btn"
+        <div id="rev-submit-error" style="display:none;color:#8b2020;background:#fdf2f2;border:1px solid #f5c6c6;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;"></div>
+<button onclick="submitReview()" id="rev-submit-btn"
           style="background:var(--green);color:white;border:none;padding:14px 28px;border-radius:var(--r);font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;transition:all 0.2s;width:100%;">
           <span id="rev-submit-lbl">Submit my review →</span>
         </button>
@@ -611,7 +610,20 @@ function closeMobileNav() {
 
     <!-- Data sources footer -->
     <div style="padding:16px 28px;background:var(--paper2);border-top:1px solid var(--border);font-size:11px;color:var(--ink3);" id="prof-source">
-      Sources: BFS/OFS · ELCOM · Swiss Tax Conference · OpenStreetMap · Resident reviews
+      Sources: BFS/OFS · ELCOM · Swiss Tax Conference (SSK) · ESTV (salary data) · OpenStreetMap · Resident reviews
+    </div>
+    <div style="background:var(--paper2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-top:20px;">
+      <h3 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:10px;">💰 Salary & Income Data</h3>
+      <p style="font-size:13px;color:var(--ink2);line-height:1.7;">
+        Average and median income figures are from the <strong>Swiss Federal Tax Administration (ESTV)</strong> — 2022 cantonal income statistics based on tax declarations. Covers gross income per taxpayer unit.
+        <br><a href="https://www.estv.admin.ch/estv/en/home/allgemein/steuerstatistiken/fachinformationen/steuerstatistiken/direkte-bundessteuer.html" target="_blank" style="color:var(--green);font-size:12px;">→ estv.admin.ch</a>
+      </p>
+      <h3 style="font-family:'Fraunces',serif;font-size:15px;margin:16px 0 10px;">🏗️ Expanding to All 2,131 Communes</h3>
+      <p style="font-size:13px;color:var(--ink2);line-height:1.7;">
+        Currently we rank <strong>50 major communes</strong>. We are actively expanding using official BFS (Swiss Federal Statistical Office) data to cover all Swiss communes. 
+        Data sources include: BFS Regionalportal, ESTV income statistics, ELCOM electricity tariffs, and cantonal tax data from the Swiss Tax Conference.
+        <br><a href="https://www.bfs.admin.ch" target="_blank" style="color:var(--green);font-size:12px;">→ bfs.admin.ch</a>
+      </p>
     </div>
   </div>
 </div>
@@ -828,7 +840,17 @@ document.addEventListener('DOMContentLoaded', function() {
   if(btn) btn.addEventListener('click', toggleMobileNav);
 });
 renderWeights();renderRanking();renderIndexPillars();renderCompare();applyWaitlistTranslations();applyRevTranslations();const ce=document.getElementById('community-count');if(ce)ce.textContent=COMMUNITIES.length.toLocaleString();if(document.getElementById('page-map').classList.contains('active'))renderMap();}
-function applyTranslations(){const st=(id,val,attr)=>{const el=document.getElementById(id);if(!el)return;if(attr==='html')el.innerHTML=val;else if(attr==='ph')el.placeholder=val;else el.textContent=val;};st('h-tag',getT('heroTag'));st('h-title',getT('heroTitle'),'html');st('h-sub',getT('heroSub'));st('h-cta1',getT('heroCta1'));st('h-cta2',getT('heroCta2'));st('h-s1',getT('hS1'));st('h-s2',getT('hS2'));st('h-s3',getT('hS3'));st('h-s4',getT('hS4'));st('h-s5',getT('hS5')||'Resident reviews');st('rank-title',getT('rankTitle'));st('rank-sub',getT('rankSub'));st('w-title',getT('wTitle'));st('cmp-title',getT('cmpTitle'));st('cmp-sub',getT('cmpSub'));st('cmp-add-btn',getT('cmpAdd'));st('cmp-chart-title',getT('cmpChartTitle'));st('ai-title',getT('aiTitle'));st('ai-page-title',getT('aiPageTitle'));st('ai-page-sub',getT('aiPageSub'));st('search-input',getT('searchPlaceholder'),'ph');st('cmp-search',getT('cmpSearchPlaceholder'),'ph');st('chip-all',getT('chipAll'));st('chip-family',getT('chipFamily'));st('chip-affordable',getT('chipAffordable'));st('chip-sustainable',getT('chipSustainable'));st('chip-nature',getT('chipNature'));st('chip-urban',getT('chipUrban'));}
+function applyTranslations(){
+  // Update nav buttons
+  const t=getT;
+  ['nb-ranking','nb-compare','nb-index','nb-map','nb-reviews'].forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    const keys=['navRanking','navCompare','navIndex','navMap','navReviews'];
+    const icons=['📊 ','⚖️ ','📋 ','🗺️ ','<span style="color:#f5c518">★</span> '];
+    const val=t(keys[i]);
+    if(val) el.textContent=icons[i]+val;
+  });const st=(id,val,attr)=>{const el=document.getElementById(id);if(!el)return;if(attr==='html')el.innerHTML=val;else if(attr==='ph')el.placeholder=val;else el.textContent=val;};st('h-tag',getT('heroTag'));st('h-title',getT('heroTitle'),'html');st('h-sub',getT('heroSub'));st('h-cta1',getT('heroCta1'));st('h-cta2',getT('heroCta2'));st('h-s1',getT('hS1'));st('h-s2',getT('hS2'));st('h-s3',getT('hS3'));st('h-s4',getT('hS4'));st('h-s5',getT('hS5')||'Resident reviews');st('rank-title',getT('rankTitle'));st('rank-sub',getT('rankSub'));st('w-title',getT('wTitle'));st('cmp-title',getT('cmpTitle'));st('cmp-sub',getT('cmpSub'));st('cmp-add-btn',getT('cmpAdd'));st('cmp-chart-title',getT('cmpChartTitle'));st('ai-title',getT('aiTitle'));st('ai-page-title',getT('aiPageTitle'));st('ai-page-sub',getT('aiPageSub'));st('search-input',getT('searchPlaceholder'),'ph');st('cmp-search',getT('cmpSearchPlaceholder'),'ph');st('chip-all',getT('chipAll'));st('chip-family',getT('chipFamily'));st('chip-affordable',getT('chipAffordable'));st('chip-sustainable',getT('chipSustainable'));st('chip-nature',getT('chipNature'));st('chip-urban',getT('chipUrban'));}
 function calcScore(c){let t=0,w=0;for(const[k,d]of Object.entries(WEIGHTS_DEF)){t+=c.scores[k]*d.val;w+=d.val}return Math.round(t/w)}
 function renderWeights(){const g=document.getElementById('weights-grid');g.innerHTML='';for(const[k,w]of Object.entries(WEIGHTS_DEF)){const d=document.createElement('div');d.className='weight-item';d.innerHTML=`<label><span>${w.icon} ${w.label[lang]||w.label.en}</span><span class="weight-badge" id="wb-${k}">${w.val}%</span></label><input type="range" min="0" max="30" step="1" value="${w.val}" oninput="updateWeight('${k}',this.value)">`;g.appendChild(d)}}
 function updateWeight(k,v){WEIGHTS_DEF[k].val=parseInt(v);document.getElementById('wb-'+k).textContent=v+'%';renderRanking()}
@@ -871,6 +893,7 @@ en:{
   ],
   updateRows:[["Land prices","Annual (Q1)"],["Electricity tariffs","Annual (Oct)"],["Tax burden index","Annual"],["OSM infrastructure","Quarterly"],["Current dataset","2024-Q4"]],
   sourceCards:[
+    {abbr:"ESTV",color:"#fff3e0",textColor:"#b45309",name:"Swiss Federal Tax Administration",desc:"Provides annual cantonal income and salary statistics based on tax declarations. Used for our average and median salary data (2022 figures). Updated annually.",url:"https://www.estv.admin.ch",urlLabel:"estv.admin.ch →"},
     {abbr:"BFS/OFS",color:"var(--green3)",textColor:"var(--green)",name:"Federal Statistical Office",desc:"Switzerland's national statistics authority. Provides population data, housing statistics, income levels, and commune registers. Data updated annually.",url:"https://www.bfs.admin.ch",urlLabel:"bfs.admin.ch →"},
     {abbr:"ELCOM",color:"#e8f0ff",textColor:"#1a3a5c",name:"Electricity Commission",desc:"Swiss Federal Electricity Commission. Publishes official electricity tariffs for every grid operator in Switzerland. Updated annually each October.",url:"https://www.elcom.admin.ch",urlLabel:"elcom.admin.ch →"},
     {abbr:"OSM",color:"var(--gold2)",textColor:"#7a5a00",name:"OpenStreetMap",desc:"The world's largest open geographic database. Used to count infrastructure density: hospitals, schools, shops, transport stops, parks, and EV chargers.",url:"https://www.openstreetmap.org",urlLabel:"openstreetmap.org →"},
@@ -1064,7 +1087,7 @@ function addSelectedToCompare(){const n=document.getElementById('cmp-search').va
 function addToCompare(n){if(!n)return;const c=COMMUNITIES.find(c=>c.name===n);if(!c){showToast('Community not found');return}if(cmpSelected.includes(n)){showToast('Already in comparison');return}if(cmpSelected.length>=4){showToast('Max 4 communities');return}cmpSelected.push(n);renderCompare();showToast(n+' added')}
 function removeFromCompare(n){cmpSelected=cmpSelected.filter(x=>x!==n);renderCompare()}
 function renderCompare(){const sel=document.getElementById('cmp-selected');sel.innerHTML=cmpSelected.map(n=>`<span style="background:var(--green3);color:var(--green);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;" onclick="removeFromCompare('${n}')">${n} ×</span>`).join('');const g=document.getElementById('compare-grid');if(!cmpSelected.length){g.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--ink3);font-size:14px;">Add communities above to compare</div>`;return}const cs=cmpSelected.map(n=>COMMUNITIES.find(c=>c.name===n)).filter(Boolean);g.innerHTML=cs.map(c=>{const sc=calcScore(c);const _salLbl=lang==='fr'?'Revenu médian':lang==='de'?'Medianeinkommen':lang==='it'?'Reddito mediano':'Median Income';const _ratLbl=lang==='fr'?'Pouvoir d achat':lang==='de'?'Kaufkraft':lang==='it'?'Acquisto':'Purchasing Power';const salRows=c.medianIncome?`<div class="compare-row" style="background:var(--gold2);padding:4px 0;border-radius:4px;margin-bottom:4px;"><span class="compare-row-label">💵 ${_salLbl}</span><span style="font-weight:600;font-size:12px;color:#7a5a00;">CHF ${(c.medianIncome/1000).toFixed(0)}k</span></div><div class="compare-row" style="background:${c.salaryRatio>=60?'var(--green3)':c.salaryRatio>=40?'var(--gold2)':'#fde8e8'};padding:4px 0;border-radius:4px;margin-bottom:8px;"><span class="compare-row-label">⚖️ ${_ratLbl}</span><span class="badge ${c.salaryRatio>=60?'badge-green':c.salaryRatio>=40?'badge-gold':'badge-red'}">${c.salaryRatio}/100</span></div>`:'';const rows=INDEX_PILLARS.map(p=>{const v=c.scores[p.key];const cl=v>=80?'badge-green':v>=60?'badge-gold':'badge-red';return`<div class="compare-row"><span class="compare-row-label">${p.icon} ${p.title[lang]||p.title.en}</span><span class="badge ${cl}">${v}</span></div>`}).join('');return`<div class="compare-card"><h4>${c.name} <span style="color:var(--green);font-family:'Fraunces',serif;">${sc}</span></h4><div style="font-size:11px;color:var(--ink3);margin-bottom:10px;">${c.canton} · ${c.type} · ${c.landPrice} ${getT('cost')}</div>${salRows}${rows}</div>`}).join('');const wrap=document.getElementById('cmp-chart-wrap');wrap.style.display=cs.length>=2?'block':'none';if(cs.length>=2)renderRadar(cs)}
-function renderRadar(cs){if(cmpChart){cmpChart.destroy();cmpChart=null}const labels=INDEX_PILLARS.map(p=>p.title[lang]||p.title.en);const colors=['#2d5a27','#c8960c','#1a3a5c','#8b2020'];const datasets=cs.map((c,i)=>({label:c.name,data:INDEX_PILLARS.map(p=>c.scores[p.key]),borderColor:colors[i],backgroundColor:colors[i]+'22',borderWidth:2,pointRadius:3}));cmpChart=new Chart(document.getElementById('cmpChart'),{type:'radar',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,ticks:{stepSize:20,font:{size:9}},pointLabels:{font:{size:10}}}},plugins:{legend:{display:true,labels:{font:{size:11}}}}}})}
+function renderRadar(cs){if(cmpChart){cmpChart.destroy();cmpChart=null}const labels=INDEX_PILLARS.map(p=>p.title[lang]||p.title.en);const colors=['#2d5a27','#c8960c','#1a3a5c','#8b2020'];const datasets=cs.map((c,i)=>({label:c.name,data:INDEX_PILLARS.map(p=>c.scores[p.key]),borderColor:colors[i],backgroundColor:colors[i]+'22',borderWidth:2,pointRadius:3}));cmpChart=new Chart(document.getElementById('cmpChart'),{type:'radar',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,ticks:{stepSize:20,font:{size:9,navRanking:'Ranking',navCompare:'Compare',navIndex:'Our Index',navMap:'Map',navReviews:'Reviews',navRanking:'Classement',navCompare:'Comparer',navIndex:'Notre Index',navMap:'Carte',navReviews:'Avis',navRanking:'Rangliste',navCompare:'Vergleich',navIndex:'Unser Index',navMap:'Karte',navReviews:'Bewertungen',navRanking:'Classifica',navCompare:'Confronta',navIndex:'Il nostro Index',navMap:'Mappa',navReviews:'Recensioni'}},pointLabels:{font:{size:10}}}},plugins:{legend:{display:true,labels:{font:{size:11}}}}}})}
 function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+n).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.id==='nb-'+n));if(n==='compare')renderCompare();if(n==='index')renderIndexPillars();if(n==='map')renderMap();if(n==='ai')applyWaitlistTranslations();if(n==='reviews'){applyRevTranslations();renderRevStarGrid();if(ALL_SWISS_COMMUNES.length<100)loadCommuneListAsync();};const navLinks=document.querySelector('.nav-links');if(navLinks&&navLinks.classList.contains('open')){navLinks.classList.remove('open');const h1=document.getElementById('ham-line1');const h2=document.getElementById('ham-line2');const h3=document.getElementById('ham-line3');if(h1)h1.style.transform='';if(h2)h2.style.opacity='1';if(h3)h3.style.transform='';}}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
 
@@ -2127,6 +2150,16 @@ function submitReview() {
     lang
   };
 
+  // Moderate before saving
+  const modResult = moderateReview(text, name);
+  if(!modResult.ok) {
+    const errEl = document.getElementById('rev-submit-error');
+    if(errEl) { errEl.textContent = modResult.reason; errEl.style.display='block'; }
+    else alert(modResult.reason);
+    return;
+  }
+  // Set status to pending - will show after moderation
+  review.status = 'pending';
   // Save locally first (instant feedback)
   const reviews = getReviews();
   reviews.unshift(review);
@@ -2147,7 +2180,7 @@ function submitReview() {
     proptype: review.proptype || null,
     ratings: review.ratings,
     lang: review.lang,
-    status: 'approved'
+    status: 'pending'
   }).then(() => {
     console.log('Review saved to Supabase ✓');
     updateHeroStats();
@@ -2542,7 +2575,7 @@ const PROF_T = {
   en:{scoreLbl:'Data index score',reviewLbl:'Resident rating',reviewsLbl:'Reviews',
       dimTitle:'Index scores (0–100)',revTitle:'Resident reviews',writeBtnLbl:'Write a review →',
       noReviews:'No reviews yet for this community. Be the first!',
-      sourceLbl:'Sources: BFS/OFS · ELCOM · Swiss Tax Conference · OpenStreetMap · Resident reviews',
+      sourceLbl:'Sources: BFS/OFS · ELCOM · Swiss Tax Conference (SSK) · ESTV (salary data) · OpenStreetMap · Resident reviews',
       facts:{pop:'Population',density:'Density',landPrice:'Land price',rent:'Est. rent',
              electricity:'Electricity',taxRate:'Tax burden',type:'Type',canton:'Canton'}},
   fr:{scoreLbl:'Score indice',reviewLbl:'Note résidents',reviewsLbl:'Avis',
@@ -2824,5 +2857,74 @@ renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWa
 const countEl=document.getElementById('community-count');
 if(countEl)countEl.textContent=COMMUNITIES.length.toLocaleString();
 </script>
+<div id="page-privacy" style="display:none">
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">Privacy Policy</h2>
+      <p class="section-sub">Last updated: May 2026 · Compliant with Swiss nDSG and EU GDPR</p>
+    </div>
+    <div style="max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:20px;">
+
+      <div class="card" style="padding:28px 32px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:12px;">1. Who we are</h3>
+        <p style="line-height:1.8;color:var(--ink2);">CommunaRank is a Swiss community intelligence platform operated by an individual data controller based in Switzerland. Contact: <a href="mailto:info@communarank.ch" style="color:var(--green)">info@communarank.ch</a></p>
+      </div>
+
+      <div class="card" style="padding:28px 32px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:12px;">2. Data we collect</h3>
+        <ul style="line-height:2;color:var(--ink2);padding-left:20px;">
+          <li><strong>Community reviews:</strong> Nickname, rating (1–5 stars), written text, community name — stored in Supabase (Frankfurt, Germany, EU)</li>
+          <li><strong>Waitlist signups:</strong> Email address only — stored in Supabase</li>
+          <li><strong>Analytics:</strong> Page views, device type, country — via Vercel Analytics (no cookies, no personal data)</li>
+          <li><strong>Local storage:</strong> Your language preference and saved reviews — stored only in your browser</li>
+        </ul>
+      </div>
+
+      <div class="card" style="padding:28px 32px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:12px;">3. How we use your data</h3>
+        <ul style="line-height:2;color:var(--ink2);padding-left:20px;">
+          <li>Community reviews are published after manual moderation to help other users find the right community</li>
+          <li>Waitlist emails are used only to notify you when new features launch — no marketing</li>
+          <li>Analytics data is aggregated and anonymous — we cannot identify individual users</li>
+        </ul>
+      </div>
+
+      <div class="card" style="padding:28px 32px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:12px;">4. Data storage & security</h3>
+        <p style="line-height:1.8;color:var(--ink2);">All data is stored in the EU (Frankfurt, Germany) via Supabase, which is SOC 2 Type II certified. Data is encrypted at rest and in transit. We apply Row Level Security (RLS) policies to limit data access.</p>
+      </div>
+
+      <div class="card" style="padding:28px 32px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:12px;">5. Your rights (nDSG / GDPR)</h3>
+        <p style="line-height:1.8;color:var(--ink2);margin-bottom:12px;">You have the right to:</p>
+        <ul style="line-height:2;color:var(--ink2);padding-left:20px;">
+          <li><strong>Access</strong> — request a copy of your personal data</li>
+          <li><strong>Correction</strong> — request correction of inaccurate data</li>
+          <li><strong>Deletion</strong> — request deletion of your data ("right to be forgotten")</li>
+          <li><strong>Portability</strong> — receive your data in machine-readable format</li>
+          <li><strong>Objection</strong> — object to processing of your data</li>
+        </ul>
+        <p style="margin-top:12px;color:var(--ink2);">To exercise any right, email <a href="mailto:info@communarank.ch" style="color:var(--green)">info@communarank.ch</a>. We respond within 30 days.</p>
+      </div>
+
+      <div class="card" style="padding:28px 32px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:12px;">6. Cookies & tracking</h3>
+        <p style="line-height:1.8;color:var(--ink2);">We use <strong>no advertising cookies</strong> and no third-party tracking. Vercel Analytics is privacy-first and cookie-free. Your browser's localStorage is used only for user preferences (language, saved data) and never shared.</p>
+      </div>
+
+      <div class="card" style="padding:28px 32px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:12px;">7. Review moderation</h3>
+        <p style="line-height:1.8;color:var(--ink2);">All submitted reviews are stored as "pending" and manually reviewed before publication. We reject reviews containing offensive language, personal names, discriminatory content, or false information. Rejected reviews are deleted within 7 days.</p>
+      </div>
+
+      <div class="card" style="padding:28px 32px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:12px;">8. Contact & complaints</h3>
+        <p style="line-height:1.8;color:var(--ink2);">For privacy questions: <a href="mailto:info@communarank.ch" style="color:var(--green)">info@communarank.ch</a><br>
+        If unsatisfied with our response, you may contact the Swiss Federal Data Protection Commissioner (FDPIC) at <a href="https://www.edoeb.admin.ch" target="_blank" style="color:var(--green)">edoeb.admin.ch</a></p>
+      </div>
+
+    </div>
+  </div>
+</div>
 </body>
 </html>
