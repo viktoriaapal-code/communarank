@@ -1989,17 +1989,7 @@ function saveReviews(reviews) {
 }
 
 // Seed some sample reviews so page isn't empty on first visit
-function seedSampleReviews() {
-  if(getReviews().length > 0) return;
-  const samples = [
-    {id:'r1',community:'Zürich',canton:'Zurich (ZH)',overall:4,ratings:{costOfLiving:2,infrastructure:5,education:5,healthcare:5,safety:5,nature:3,community:4,transport:5},pros:'World-class public transport, amazing cultural scene, incredibly safe',cons:'Very expensive rent and food, competitive housing market',text:'Zürich is one of the most liveable cities in the world for good reason. The infrastructure is exceptional — trams always on time, spotless streets, excellent healthcare. The main downside is cost: you need a solid income to live comfortably.',name:'Thomas B.',years:'5-10',profile:'Single professional',helpful:12,date:'2024-11-15',lang:'en'},
-    {id:'r2',community:'Zug',canton:'Zug (ZG)',overall:5,ratings:{costOfLiving:4,infrastructure:5,education:5,healthcare:5,safety:5,nature:4,community:4,transport:4},pros:'Lowest taxes in Switzerland, beautiful lake, excellent schools',cons:'Small city feel, limited nightlife',text:'Moving to Zug was the best financial decision I made. The tax savings are real and significant. Beautiful lake views, great schools for kids, and very safe. It does feel a bit quiet if you\'re used to a big city.',name:'Sarah K.',years:'3-5',profile:'Family with children',helpful:18,date:'2024-12-01',lang:'en'},
-    {id:'r3',community:'Nyon',canton:'Vaud (VD)',overall:5,ratings:{costOfLiving:3,infrastructure:4,education:5,healthcare:4,safety:5,nature:5,community:5,transport:4},pros:'Lake Geneva views, international community, great schools',cons:'A bit expensive, can feel like a Geneva suburb',text:'Nyon is a hidden gem. The lakeside location is stunning, there\'s a strong international community (great for expats), excellent French-speaking schools. The train to Geneva takes 20 minutes. Highly recommend for families.',name:'Marie L.',years:'3-5',profile:'Expat',helpful:24,date:'2025-01-10',lang:'en'},
-    {id:'r4',community:'Thun',canton:'Bern (BE)',overall:4,ratings:{costOfLiving:5,infrastructure:4,education:4,healthcare:4,safety:5,nature:5,community:5,transport:3},pros:'Stunning Alps views, affordable, strong community spirit',cons:'Less international, limited job market compared to Zurich',text:'Thun is genuinely underrated. The mountains are right there, the Thunersee is beautiful, and it\'s far more affordable than Zurich or Geneva. People are friendly and there\'s a real community feel. Perfect if you work remotely.',name:'Andreas M.',years:'1-3',profile:'Single professional',helpful:9,date:'2025-02-20',lang:'en'},
-    {id:'r5',community:'Lugano',canton:'Ticino (TI)',overall:4,ratings:{costOfLiving:3,infrastructure:4,education:4,healthcare:5,safety:5,nature:5,community:4,transport:3},pros:'Mediterranean climate, beautiful lake, Italian culture',cons:'Isolated from rest of Switzerland, limited public transport',text:'Lugano feels like Italy but with Swiss efficiency. The climate is genuinely different — palm trees, warm summers, mild winters. The lake is gorgeous. Healthcare is excellent. The downside is distance: it\'s a 3-hour train to Zurich.',name:'Claudia R.',years:'5-10',profile:'Retiree',helpful:15,date:'2025-03-05',lang:'en'},
-  ];
-  saveReviews(samples);
-}
+function seedSampleReviews() { /* disabled - using real Supabase data only */ }
 
 // State
 let currentRevTab = 'write';
@@ -2865,7 +2855,7 @@ function setMapMode(mode) {
 
 seedSampleReviews();
 renderRevStarGrid();
-renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();loadReviewsFromSupabase().catch(()=>{});applyRevTranslations();updateHeroStats();loadReviewsFromSupabase();
+renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();loadReviewsFromSupabase().catch(()=>{});applyRevTranslations();updateHeroStats();localStorage.removeItem('communarank_reviews');loadReviewsFromSupabase();
 // Update community count from real data
 const countEl=document.getElementById('community-count');
 if(countEl)countEl.textContent=COMMUNITIES.length.toLocaleString();
