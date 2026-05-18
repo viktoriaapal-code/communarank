@@ -2122,6 +2122,70 @@ function selectRevCommunity(name, canton) {
   if(div) div.style.display = 'none';
 }
 
+// Basic client-side moderation. Returns {ok:true} or {ok:false, reason:'...'}
+// Server-side moderation/RLS should still be the source of truth — this just
+// catches the obvious junk before we round-trip to Supabase.
+function moderateReview(text, name) {
+  const t = (typeof REV_T !== 'undefined' && REV_T[lang]) ? REV_T[lang] : {};
+  text = (text || '').trim();
+  name = (name || '').trim();
+
+  if(text.length < 10) {
+    return { ok:false, reason: t.errText || 'Please write a slightly longer review (at least 10 characters).' };
+  }
+  if(text.length > 2000) {
+    return { ok:false, reason: 'Review is too long (max 2000 characters).' };
+  }
+  if(name.length > 60) {
+    return { ok:false, reason: 'Nickname is too long (max 60 characters).' };
+  }
+
+  // Shouting check — block reviews that are mostly uppercase
+  const letters = text.replace(/[^A-Za-zÀ-ÿ]/g, '');
+  if(letters.length > 20) {
+    const upper = letters.replace(/[^A-ZÀ-Þ]/g, '').length;
+    if(upper / letters.length > 0.7) {
+      return { ok:false, reason: 'Please avoid writing in ALL CAPS.' };
+    }
+  }
+
+  // Block URLs / emails / phone numbers (anti-spam + privacy)
+  if(/https?:\/\/|www\.[a-z0-9-]+\.[a-z]{2,}/i.test(text)) {
+    return { ok:false, reason: 'Please remove links from your review.' };
+  }
+  if(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/.test(text)) {
+    return { ok:false, reason: 'Please remove email addresses from your review.' };
+  }
+  if(/(?:\+?\d[\s\-().]?){7,}/.test(text)) {
+    return { ok:false, reason: 'Please remove phone numbers from your review.' };
+  }
+
+  // Light profanity / hate filter (EN/FR/DE/IT). Not exhaustive — server-side
+  // moderation should be the real gatekeeper. We just stop the most obvious cases.
+  const banned = [
+    'fuck','shit','bitch','asshole','bastard','cunt','dick','pussy','nigger','faggot','retard','whore','slut',
+    'merde','putain','salope','connard','enculé','pute','nègre','pédé',
+    'scheiße','arschloch','fotze','schlampe','hurensohn','nutte',
+    'cazzo','stronzo','puttana','vaffanculo','negro','frocio'
+  ];
+  const low = text.toLowerCase();
+  for(const w of banned) {
+    // \b on the left so "scunthorpe" doesn't trip "cunt"; allow any suffix on the right
+    // (catches fucking/fucked/asshole/etc.)
+    const re = new RegExp('\\b' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '[a-zà-ÿ]*', 'i');
+    if(re.test(low)) {
+      return { ok:false, reason: 'Your review contains language that is not allowed. Please rephrase.' };
+    }
+  }
+
+  // Repeated-character spam (e.g. "aaaaaaaaaa")
+  if(/(.)\1{9,}/.test(text)) {
+    return { ok:false, reason: 'Please write a genuine review.' };
+  }
+
+  return { ok:true };
+}
+
 function submitReview() {
   const t = REV_T[lang] || REV_T.en;
   const name = document.getElementById('rev-name')?.value.trim() || '';
@@ -2161,35 +2225,19 @@ function submitReview() {
     else alert(modResult.reason);
     return;
   }
-  // Set status to pending - will show after moderation
-  review.status = 'pending';
+  // Hide any previous error
+  const errEl = document.getElementById('rev-submit-error');
+  if(errEl) errEl.style.display='none';
+
+  // Mark approved client-side (already passed moderation) so it shows up on reload
+  review.status = 'approved';
+
   // Save locally first (instant feedback)
   const reviews = getReviews();
   reviews.unshift(review);
   saveReviews(reviews);
 
-  // Also persist to Supabase
-  sbInsert('reviews', {
-    community: review.community,
-    canton: review.canton,
-    overall: review.overall,
-    name: review.name,
-    text: review.text,
-    pros: review.pros || null,
-    cons: review.cons || null,
-    years: review.years || null,
-    profile: review.profile || null,
-    tenure: review.tenure || null,
-    proptype: review.proptype || null,
-    ratings: review.ratings,
-    lang: review.lang,
-    status: 'pending'
-  }).then(() => {
-    console.log('Review saved to Supabase ✓');
-    updateHeroStats();
-  }).catch(e => console.warn('Supabase save failed (stored locally):', e.message));
-
-  // Also save to Supabase database
+  // Persist to Supabase (single insert — was duplicated before, creating two rows)
   sbInsert('reviews', {
     community: review.community,
     canton: review.canton,
