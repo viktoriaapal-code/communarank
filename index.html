@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇨🇭</text></svg>">
 <title>CommunaRank — Smart Community Index Switzerland</title>
 <meta name="description" content="Switzerland's most comprehensive community ranking platform. Find the best Swiss community to buy land, purchase a home, or rent — ranked by cost of living, infrastructure, education, sustainability and more.">
 <meta property="og:title" content="CommunaRank — Smart Community Index Switzerland">
@@ -143,6 +142,7 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
 @media (max-width: 768px) {
   .rank-card { grid-template-columns: 36px 1fr; }
   .rank-right { display: none; }
+  .lang-sel { display: none; }
   .nav-links { display: none; }
   .hamburger {
     display: flex;
@@ -186,38 +186,17 @@ footer{background:var(--ink);color:rgba(245,242,235,0.5);padding:32px 24px;text-
   }
 }
 </style>
-<script>
-function toggleMobileNav() {
-  var menu = document.getElementById('main-nav-links');
-  if(!menu) return;
-  var isOpen = menu.classList.toggle('open');
-  document.body.style.overflow = isOpen ? 'hidden' : '';
-  var l1=document.getElementById('ham-line1');
-  var l2=document.getElementById('ham-line2');
-  var l3=document.getElementById('ham-line3');
-  if(l1) l1.style.transform = isOpen?'rotate(45deg) translate(5px,5px)':'';
-  if(l2) l2.style.opacity = isOpen?'0':'1';
-  if(l3) l3.style.transform = isOpen?'rotate(-45deg) translate(5px,-5px)':'';
-}
-function closeMobileNav() {
-  var menu = document.getElementById('main-nav-links');
-  if(menu) menu.classList.remove('open');
-  document.body.style.overflow = '';
-  var l1=document.getElementById('ham-line1'),l2=document.getElementById('ham-line2'),l3=document.getElementById('ham-line3');
-  if(l1)l1.style.transform=''; if(l2)l2.style.opacity='1'; if(l3)l3.style.transform='';
-}
-</script>
-<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <nav>
   <div class="nav-brand">Communa<span>Rank</span></div>
   <div class="nav-links" id="main-nav-links">
+    <button onclick="closeMobileNav()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#f5f2eb;font-size:28px;cursor:pointer;padding:8px;line-height:1;">✕</button>
     <button class="nav-btn active" onclick="showPage('ranking');closeMobileNav();" id="nb-ranking">📊 Ranking</button>
     <button class="nav-btn" onclick="showPage('compare');closeMobileNav();" id="nb-compare">⚖️ Compare</button>
     <button class="nav-btn" onclick="showPage('index');closeMobileNav();" id="nb-index">📋 Our Index</button>
     <button class="nav-btn" onclick="showPage('map');closeMobileNav();" id="nb-map">🗺️ Map</button>
-    <button class="nav-btn" onclick="showPage('reviews');closeMobileNav();" id="nb-reviews"><span style="color:#f5c518">★</span> Reviews</button>
+    <button class="nav-btn" onclick="showPage('reviews');closeMobileNav();" id="nb-reviews">⭐ Reviews</button>
   </div>
   <div class="lang-sel">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -268,7 +247,14 @@ function closeMobileNav() {
         <option>Urban</option><option>Suburban</option><option>Rural</option><option>Alpine</option>
       </select>
     </div>
-    
+    <div class="filter-chips" id="filter-chips">
+      <span class="chip active" onclick="setChip(this,'all')" id="chip-all">All</span>
+      <span class="chip" onclick="setChip(this,'family')" id="chip-family">Family-friendly</span>
+      <span class="chip" onclick="setChip(this,'affordable')" id="chip-affordable">Affordable</span>
+      <span class="chip" onclick="setChip(this,'sustainable')" id="chip-sustainable">Sustainable</span>
+      <span class="chip" onclick="setChip(this,'nature')" id="chip-nature">Near nature</span>
+      <span class="chip" onclick="setChip(this,'urban')" id="chip-urban">Urban lifestyle</span>
+    </div>
     <div class="weights-panel">
       <div class="weights-title">
         <span id="w-title">Personalize index weights</span>
@@ -354,7 +340,6 @@ function closeMobileNav() {
 
     <!-- WRITE REVIEW TAB -->
     <div id="rev-tab-write">
-<div id="rev-guidelines" style="background:#fef9e7;border:1px solid #f5c518;border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.6;color:#7a6200;"></div>
       <div style="background:white;border:1px solid var(--border);border-radius:var(--r2);padding:28px;max-width:680px;">
         <h3 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:20px;" id="rev-form-title">Share your experience</h3>
 
@@ -513,8 +498,7 @@ function closeMobileNav() {
           <span style="font-size:12px;color:var(--ink2);line-height:1.6;" id="consent-text">I agree that my review will be publicly visible on CommunaRank. I confirm this review reflects my genuine personal experience. I understand I can request deletion at any time by contacting info@communarank.ch.</span>
         </label>
 
-        <div id="rev-submit-error" style="display:none;color:#8b2020;background:#fdf2f2;border:1px solid #f5c6c6;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;"></div>
-<button onclick="submitReview()" id="rev-submit-btn"
+        <button onclick="submitReview()" id="rev-submit-btn"
           style="background:var(--green);color:white;border:none;padding:14px 28px;border-radius:var(--r);font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;transition:all 0.2s;width:100%;">
           <span id="rev-submit-lbl">Submit my review →</span>
         </button>
@@ -607,20 +591,7 @@ function closeMobileNav() {
 
     <!-- Data sources footer -->
     <div style="padding:16px 28px;background:var(--paper2);border-top:1px solid var(--border);font-size:11px;color:var(--ink3);" id="prof-source">
-      Sources: BFS/OFS · ELCOM · Swiss Tax Conference (SSK) · ESTV (salary data) · OpenStreetMap · Resident reviews
-    </div>
-    <div style="background:var(--paper2);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-top:20px;">
-      <h3 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:10px;">💰 Salary & Income Data</h3>
-      <p style="font-size:13px;color:var(--ink2);line-height:1.7;">
-        Average and median income figures are from the <strong>Swiss Federal Tax Administration (ESTV)</strong> — 2022 cantonal income statistics based on tax declarations. Covers gross income per taxpayer unit.
-        <br><a href="https://www.estv.admin.ch/estv/en/home/allgemein/steuerstatistiken/fachinformationen/steuerstatistiken/direkte-bundessteuer.html" target="_blank" style="color:var(--green);font-size:12px;">→ estv.admin.ch</a>
-      </p>
-      <h3 style="font-family:'Fraunces',serif;font-size:15px;margin:16px 0 10px;">🏗️ Expanding to All 2,131 Communes</h3>
-      <p style="font-size:13px;color:var(--ink2);line-height:1.7;">
-        Currently we rank <strong>50 major communes</strong>. We are actively expanding using official BFS (Swiss Federal Statistical Office) data to cover all Swiss communes. 
-        Data sources include: BFS Regionalportal, ESTV income statistics, ELCOM electricity tariffs, and cantonal tax data from the Swiss Tax Conference.
-        <br><a href="https://www.bfs.admin.ch" target="_blank" style="color:var(--green);font-size:12px;">→ bfs.admin.ch</a>
-      </p>
+      Sources: BFS/OFS · ELCOM · Swiss Tax Conference · OpenStreetMap · Resident reviews
     </div>
   </div>
 </div>
@@ -768,7 +739,7 @@ function closeMobileNav() {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
 <script>
-const T={en:{heroTag:"Switzerland's Community Intelligence Platform",heroTitle:"Find where you truly <em>belong</em> in Switzerland",heroSub:"Our proprietary Smart Community Index evaluates Swiss communities across 9 dimensions — from cost of living to sustainability — with more communes added quarterly.",heroCta1:"Explore Rankings",heroCta2:"Ask AI Advisor",hS1:"Communities ranked",hS2:"Index dimensions",hS3:"Cantons covered",hS4:"Languages",rankTitle:"Community Rankings",rankSub:"Ranked by the CommunaRank Smart Community Index. Adjust weights to personalize.",wTitle:"Personalize index weights",cmpTitle:"Side-by-side comparison",cmpSub:"Select up to 4 communities to compare",cmpAdd:"Add to compare",cmpChartTitle:"Radar comparison",idxTitle:"The CommunaRank Smart Community Index",idxSub:"Our proprietary methodology for evaluating Swiss communities across 9 pillars",idxMethodTitle:"Methodology",idxMethodBody:"The CommunaRank Smart Community Index aggregates publicly available Swiss federal data (OFS/FSO), cantonal statistics, OpenStreetMap infrastructure data, energy provider tariffs, and user-submitted data points.",ds1:"Federal Statistics Office",ds2:"OpenStreetMap data",ds3:"Electricity regulator",ds4:"Cantonal authorities",aiTitle:"CommunaRank AI — powered by Claude",aiPageTitle:"AI Community Advisor",aiPageSub:"Ask anything about Swiss communities, land purchase, costs, or lifestyle",chipAll:"All",chipFamily:"Family-friendly",chipAffordable:"Affordable",chipSustainable:"Sustainable",chipNature:"Near nature",chipUrban:"Urban lifestyle",quickPrompts:["Best communities under 800k CHF?","Where to live near Zurich with good schools?","Compare land prices Vaud vs Bern","Most sustainable alpine communities"],searchPlaceholder:"Search community, canton...",cmpSearchPlaceholder:"Add community to compare...",detailBuy:"Buy land here",detailRent:"Rental market",detailSave:"Save to wishlist",detailMore:"Full profile",cost:"CHF/m²",score:"Score",guidelines:"<strong>⚠️ Community Guidelines</strong><br>Please share your genuine personal experience. Reviews must not contain offensive language, discriminatory content, or name specific individuals. All reviews go through moderation before publishing. By submitting you agree to our <a href=\'#\' onclick=\'showPage(\"privacy\")\' style=\'color:#2d5a27\'>Privacy Policy</a>.",},fr:{heroTag:"Plateforme d'intelligence communautaire suisse",heroTitle:"Trouvez où vous <em>appartenir</em> vraiment en Suisse",heroSub:"Notre indice Smart Community évalue les communes suisses sur 9 dimensions — du coût de la vie à la durabilité.",heroCta1:"Explorer le classement",heroCta2:"Conseiller IA",hS1:"Communes classées",hS2:"Dimensions d'index",hS3:"Cantons couverts",hS4:"Langues",rankTitle:"Classement des communes",rankSub:"Classé selon l'indice CommunaRank. Ajustez les pondérations pour personnaliser.",wTitle:"Personnaliser les pondérations",cmpTitle:"Comparaison côte-à-côte",cmpSub:"Sélectionnez jusqu'à 4 communes à comparer",cmpAdd:"Ajouter à la comparaison",cmpChartTitle:"Comparaison radar",idxTitle:"L'indice CommunaRank Smart Community",idxSub:"Notre méthodologie propriétaire pour évaluer les communes suisses",idxMethodTitle:"Méthodologie",idxMethodBody:"L'indice agrège les données fédérales suisses disponibles (OFS), les statistiques cantonales, les données OpenStreetMap et les tarifs des fournisseurs d'énergie.",ds1:"Office fédéral des statistiques",ds2:"Données OpenStreetMap",ds3:"Régulateur de l'électricité",ds4:"Autorités cantonales",aiTitle:"CommunaRank IA — propulsé par Claude",aiPageTitle:"Conseiller IA communautaire",aiPageSub:"Posez des questions sur les communes, l'achat de terrain ou le mode de vie",chipAll:"Tous",chipFamily:"Familial",chipAffordable:"Abordable",chipSustainable:"Durable",chipNature:"Proche nature",chipUrban:"Vie urbaine",quickPrompts:["Meilleures communes < 800k CHF?","Vivre près de Genève avec bonnes écoles?","Comparer foncier Vaud vs Berne","Communes alpines durables"],searchPlaceholder:"Rechercher une commune...",cmpSearchPlaceholder:"Ajouter une commune...",detailBuy:"Acheter ici",detailRent:"Marché locatif",detailSave:"Sauvegarder",detailMore:"Profil complet",cost:"CHF/m²",score:"Score",guidelines:"<strong>⚠️ Règles de la communauté</strong><br>Partagez votre expérience personnelle sincère. Les avis ne doivent pas contenir de langage offensant, de contenu discriminatoire ni nommer des personnes. Tous les avis sont modérés avant publication. En soumettant, vous acceptez notre <a href=\'#\' onclick=\'showPage(\"privacy\")\' style=\'color:#2d5a27\'>Politique de confidentialité</a>.",},de:{heroTag:"Schweizer Gemeinschaft-Intelligenzplattform",heroTitle:"Finden Sie Ihr wahres <em>Zuhause</em> in der Schweiz",heroSub:"Unser Smart Community Index bewertet Schweizer Gemeinden in 9 Dimensionen — von Lebenshaltungskosten bis Nachhaltigkeit.",heroCta1:"Rangliste erkunden",heroCta2:"KI-Berater",hS1:"Bewertete Gemeinden",hS2:"Index-Dimensionen",hS3:"Abgedeckte Kantone",hS4:"Sprachen",rankTitle:"Gemeinderankings",rankSub:"Rangiert nach dem CommunaRank Smart Community Index. Gewichtungen anpassen.",wTitle:"Indexgewichtungen anpassen",cmpTitle:"Vergleich nebeneinander",cmpSub:"Bis zu 4 Gemeinden vergleichen",cmpAdd:"Zum Vergleich hinzufügen",cmpChartTitle:"Radar-Vergleich",idxTitle:"Der CommunaRank Smart Community Index",idxSub:"Unsere proprietäre Methodik zur Bewertung Schweizer Gemeinden",idxMethodTitle:"Methodik",idxMethodBody:"Der CommunaRank Smart Community Index aggregiert öffentlich zugängliche Schweizer Bundesdaten (BFS), kantonale Statistiken, OpenStreetMap-Infrastrukturdaten und Energietarife.",ds1:"Bundesamt für Statistik",ds2:"OpenStreetMap-Daten",ds3:"Stromregulator",ds4:"Kantonsbehörden",aiTitle:"CommunaRank KI — betrieben von Claude",aiPageTitle:"KI-Gemeinschaftsberater",aiPageSub:"Fragen zu Schweizer Gemeinden, Landkauf oder Lebensstil",chipAll:"Alle",chipFamily:"Familienfreundlich",chipAffordable:"Erschwinglich",chipSustainable:"Nachhaltig",chipNature:"Naturnahe",chipUrban:"Stadtleben",quickPrompts:["Beste Gemeinden unter 800k CHF?","Leben nahe Zürich mit guten Schulen?","Landpreise Waadt vs. Bern","Nachhaltige alpine Gemeinden"],searchPlaceholder:"Gemeinde, Kanton suchen...",cmpSearchPlaceholder:"Gemeinde hinzufügen...",detailBuy:"Land kaufen",detailRent:"Mietmarkt",detailSave:"Merkliste",detailMore:"Vollprofil",cost:"CHF/m²",score:"Punkte",guidelines:"<strong>⚠️ Community-Richtlinien</strong><br>Teilen Sie Ihre persönliche Erfahrung. Bewertungen dürfen keine beleidigenden Inhalte, diskriminierende Aussagen oder Personennamen enthalten. Alle Bewertungen werden moderiert. Mit der Einreichung stimmen Sie unserer <a href=\'#\' onclick=\'showPage(\"privacy\")\' style=\'color:#2d5a27\'>Datenschutzerklärung</a> zu.",},it:{heroTag:"Piattaforma di intelligenza comunitaria svizzera",heroTitle:"Trova dove <em>appartenere</em> davvero in Svizzera",heroSub:"Il nostro indice Smart Community valuta i comuni svizzeri su 9 dimensioni — dal costo della vita alla sostenibilità.",heroCta1:"Esplora le classifiche",heroCta2:"Consulente IA",hS1:"Comuni classificati",hS2:"Dimensioni indice",hS3:"Cantoni coperti",hS4:"Lingue",rankTitle:"Classifica dei comuni",rankSub:"Classificato secondo l'indice CommunaRank. Regola i pesi per personalizzare.",wTitle:"Personalizza i pesi dell'indice",cmpTitle:"Confronto affiancato",cmpSub:"Seleziona fino a 4 comuni da confrontare",cmpAdd:"Aggiungi al confronto",cmpChartTitle:"Confronto radar",idxTitle:"L'indice CommunaRank Smart Community",idxSub:"La nostra metodologia proprietaria per valutare i comuni svizzeri",idxMethodTitle:"Metodologia",idxMethodBody:"L'indice CommunaRank aggrega i dati federali svizzeri disponibili (UST), statistiche cantonali, dati infrastrutturali OpenStreetMap e tariffe energetiche.",ds1:"Ufficio federale di statistica",ds2:"Dati OpenStreetMap",ds3:"Regolatore energia",ds4:"Autorità cantonali",aiTitle:"CommunaRank IA — alimentato da Claude",aiPageTitle:"Consulente IA comunitario",aiPageSub:"Fai domande su comuni svizzeri, acquisto di terreni o stile di vita",chipAll:"Tutti",chipFamily:"Familiare",chipAffordable:"Conveniente",chipSustainable:"Sostenibile",chipNature:"Vicino natura",chipUrban:"Vita urbana",quickPrompts:["Migliori comuni < 800k CHF?","Vivere vicino Zurigo con buone scuole?","Prezzi terreni Vaud vs Berna","Comuni alpini sostenibili"],searchPlaceholder:"Cerca comune, cantone...",cmpSearchPlaceholder:"Aggiungi comune...",detailBuy:"Acquista terreno",detailRent:"Mercato affitti",detailSave:"Salva",detailMore:"Profilo completo",cost:"CHF/m²",score:"Punteggio"}};
+const T={en:{heroTag:"Switzerland's Community Intelligence Platform",heroTitle:"Find where you truly <em>belong</em> in Switzerland",heroSub:"Our proprietary Smart Community Index evaluates Swiss communities across 9 dimensions — from cost of living to sustainability — with more communes added quarterly.",heroCta1:"Explore Rankings",heroCta2:"Ask AI Advisor",hS1:"Communities ranked",hS2:"Index dimensions",hS3:"Cantons covered",hS4:"Languages",rankTitle:"Community Rankings",rankSub:"Ranked by the CommunaRank Smart Community Index. Adjust weights to personalize.",wTitle:"Personalize index weights",cmpTitle:"Side-by-side comparison",cmpSub:"Select up to 4 communities to compare",cmpAdd:"Add to compare",cmpChartTitle:"Radar comparison",idxTitle:"The CommunaRank Smart Community Index",idxSub:"Our proprietary methodology for evaluating Swiss communities across 9 pillars",idxMethodTitle:"Methodology",idxMethodBody:"The CommunaRank Smart Community Index aggregates publicly available Swiss federal data (OFS/FSO), cantonal statistics, OpenStreetMap infrastructure data, energy provider tariffs, and user-submitted data points.",ds1:"Federal Statistics Office",ds2:"OpenStreetMap data",ds3:"Electricity regulator",ds4:"Cantonal authorities",aiTitle:"CommunaRank AI — powered by Claude",aiPageTitle:"AI Community Advisor",aiPageSub:"Ask anything about Swiss communities, land purchase, costs, or lifestyle",chipAll:"All",chipFamily:"Family-friendly",chipAffordable:"Affordable",chipSustainable:"Sustainable",chipNature:"Near nature",chipUrban:"Urban lifestyle",quickPrompts:["Best communities under 800k CHF?","Where to live near Zurich with good schools?","Compare land prices Vaud vs Bern","Most sustainable alpine communities"],searchPlaceholder:"Search community, canton...",cmpSearchPlaceholder:"Add community to compare...",detailBuy:"Buy land here",detailRent:"Rental market",detailSave:"Save to wishlist",detailMore:"Full profile",cost:"CHF/m²",score:"Score"},fr:{heroTag:"Plateforme d'intelligence communautaire suisse",heroTitle:"Trouvez où vous <em>appartenir</em> vraiment en Suisse",heroSub:"Notre indice Smart Community évalue les communes suisses sur 9 dimensions — du coût de la vie à la durabilité.",heroCta1:"Explorer le classement",heroCta2:"Conseiller IA",hS1:"Communes classées",hS2:"Dimensions d'index",hS3:"Cantons couverts",hS4:"Langues",rankTitle:"Classement des communes",rankSub:"Classé selon l'indice CommunaRank. Ajustez les pondérations pour personnaliser.",wTitle:"Personnaliser les pondérations",cmpTitle:"Comparaison côte-à-côte",cmpSub:"Sélectionnez jusqu'à 4 communes à comparer",cmpAdd:"Ajouter à la comparaison",cmpChartTitle:"Comparaison radar",idxTitle:"L'indice CommunaRank Smart Community",idxSub:"Notre méthodologie propriétaire pour évaluer les communes suisses",idxMethodTitle:"Méthodologie",idxMethodBody:"L'indice agrège les données fédérales suisses disponibles (OFS), les statistiques cantonales, les données OpenStreetMap et les tarifs des fournisseurs d'énergie.",ds1:"Office fédéral des statistiques",ds2:"Données OpenStreetMap",ds3:"Régulateur de l'électricité",ds4:"Autorités cantonales",aiTitle:"CommunaRank IA — propulsé par Claude",aiPageTitle:"Conseiller IA communautaire",aiPageSub:"Posez des questions sur les communes, l'achat de terrain ou le mode de vie",chipAll:"Tous",chipFamily:"Familial",chipAffordable:"Abordable",chipSustainable:"Durable",chipNature:"Proche nature",chipUrban:"Vie urbaine",quickPrompts:["Meilleures communes < 800k CHF?","Vivre près de Genève avec bonnes écoles?","Comparer foncier Vaud vs Berne","Communes alpines durables"],searchPlaceholder:"Rechercher une commune...",cmpSearchPlaceholder:"Ajouter une commune...",detailBuy:"Acheter ici",detailRent:"Marché locatif",detailSave:"Sauvegarder",detailMore:"Profil complet",cost:"CHF/m²",score:"Score"},de:{heroTag:"Schweizer Gemeinschaft-Intelligenzplattform",heroTitle:"Finden Sie Ihr wahres <em>Zuhause</em> in der Schweiz",heroSub:"Unser Smart Community Index bewertet Schweizer Gemeinden in 9 Dimensionen — von Lebenshaltungskosten bis Nachhaltigkeit.",heroCta1:"Rangliste erkunden",heroCta2:"KI-Berater",hS1:"Bewertete Gemeinden",hS2:"Index-Dimensionen",hS3:"Abgedeckte Kantone",hS4:"Sprachen",rankTitle:"Gemeinderankings",rankSub:"Rangiert nach dem CommunaRank Smart Community Index. Gewichtungen anpassen.",wTitle:"Indexgewichtungen anpassen",cmpTitle:"Vergleich nebeneinander",cmpSub:"Bis zu 4 Gemeinden vergleichen",cmpAdd:"Zum Vergleich hinzufügen",cmpChartTitle:"Radar-Vergleich",idxTitle:"Der CommunaRank Smart Community Index",idxSub:"Unsere proprietäre Methodik zur Bewertung Schweizer Gemeinden",idxMethodTitle:"Methodik",idxMethodBody:"Der CommunaRank Smart Community Index aggregiert öffentlich zugängliche Schweizer Bundesdaten (BFS), kantonale Statistiken, OpenStreetMap-Infrastrukturdaten und Energietarife.",ds1:"Bundesamt für Statistik",ds2:"OpenStreetMap-Daten",ds3:"Stromregulator",ds4:"Kantonsbehörden",aiTitle:"CommunaRank KI — betrieben von Claude",aiPageTitle:"KI-Gemeinschaftsberater",aiPageSub:"Fragen zu Schweizer Gemeinden, Landkauf oder Lebensstil",chipAll:"Alle",chipFamily:"Familienfreundlich",chipAffordable:"Erschwinglich",chipSustainable:"Nachhaltig",chipNature:"Naturnahe",chipUrban:"Stadtleben",quickPrompts:["Beste Gemeinden unter 800k CHF?","Leben nahe Zürich mit guten Schulen?","Landpreise Waadt vs. Bern","Nachhaltige alpine Gemeinden"],searchPlaceholder:"Gemeinde, Kanton suchen...",cmpSearchPlaceholder:"Gemeinde hinzufügen...",detailBuy:"Land kaufen",detailRent:"Mietmarkt",detailSave:"Merkliste",detailMore:"Vollprofil",cost:"CHF/m²",score:"Punkte"},it:{heroTag:"Piattaforma di intelligenza comunitaria svizzera",heroTitle:"Trova dove <em>appartenere</em> davvero in Svizzera",heroSub:"Il nostro indice Smart Community valuta i comuni svizzeri su 9 dimensioni — dal costo della vita alla sostenibilità.",heroCta1:"Esplora le classifiche",heroCta2:"Consulente IA",hS1:"Comuni classificati",hS2:"Dimensioni indice",hS3:"Cantoni coperti",hS4:"Lingue",rankTitle:"Classifica dei comuni",rankSub:"Classificato secondo l'indice CommunaRank. Regola i pesi per personalizzare.",wTitle:"Personalizza i pesi dell'indice",cmpTitle:"Confronto affiancato",cmpSub:"Seleziona fino a 4 comuni da confrontare",cmpAdd:"Aggiungi al confronto",cmpChartTitle:"Confronto radar",idxTitle:"L'indice CommunaRank Smart Community",idxSub:"La nostra metodologia proprietaria per valutare i comuni svizzeri",idxMethodTitle:"Metodologia",idxMethodBody:"L'indice CommunaRank aggrega i dati federali svizzeri disponibili (UST), statistiche cantonali, dati infrastrutturali OpenStreetMap e tariffe energetiche.",ds1:"Ufficio federale di statistica",ds2:"Dati OpenStreetMap",ds3:"Regolatore energia",ds4:"Autorità cantonali",aiTitle:"CommunaRank IA — alimentato da Claude",aiPageTitle:"Consulente IA comunitario",aiPageSub:"Fai domande su comuni svizzeri, acquisto di terreni o stile di vita",chipAll:"Tutti",chipFamily:"Familiare",chipAffordable:"Conveniente",chipSustainable:"Sostenibile",chipNature:"Vicino natura",chipUrban:"Vita urbana",quickPrompts:["Migliori comuni < 800k CHF?","Vivere vicino Zurigo con buone scuole?","Prezzi terreni Vaud vs Berna","Comuni alpini sostenibili"],searchPlaceholder:"Cerca comune, cantone...",cmpSearchPlaceholder:"Aggiungi comune...",detailBuy:"Acquista terreno",detailRent:"Mercato affitti",detailSave:"Salva",detailMore:"Profilo completo",cost:"CHF/m²",score:"Punteggio"}};
 let lang='en',currentFilter='all',cmpSelected=[],cmpChart=null;
 const WEIGHTS_DEF={costOfLiving:{label:{en:'Cost of Living',fr:'Coût de vie',de:'Lebenshaltung',it:'Costo vita'},val:20,icon:'💰'},infrastructure:{label:{en:'Infrastructure',fr:'Infrastructure',de:'Infrastruktur',it:'Infrastruttura'},val:15,icon:'🏗'},education:{label:{en:'Education',fr:'Éducation',de:'Bildung',it:'Istruzione'},val:15,icon:'📚'},healthcare:{label:{en:'Healthcare',fr:'Santé',de:'Gesundheit',it:'Sanità'},val:12,icon:'🏥'},energy:{label:{en:'Energy & Utilities',fr:'Énergie',de:'Energie',it:'Energia'},val:10,icon:'⚡'},sustainability:{label:{en:'Sustainability',fr:'Durabilité',de:'Nachhaltigkeit',it:'Sostenibilità'},val:10,icon:'🌿'},food:{label:{en:'Food & Shops',fr:'Commerce',de:'Einkauf',it:'Negozi'},val:8,icon:'🛒'},entertainment:{label:{en:'Entertainment',fr:'Loisirs',de:'Freizeit',it:'Svago'},val:5,icon:'🎭'},nature:{label:{en:'Nature Access',fr:'Nature',de:'Natur',it:'Natura'},val:5,icon:'🏔'}};
 const COMMUNITIES=[{name:'Zürich',canton:'Zurich (ZH)',type:'Urban',pop:45000,landPrice:3800,lat:47.3769,lon:8.5417,scores:{costOfLiving:32,infrastructure:95,education:95,healthcare:95,energy:86,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:58200,avgIncome:81400,salaryRatio:22},{name:'Genève',canton:'Geneva (GE)',type:'Urban',pop:45000,landPrice:4200,lat:46.2044,lon:6.1432,scores:{costOfLiving:21,infrastructure:95,education:95,healthcare:95,energy:75,sustainability:85,food:95,entertainment:80,nature:55},tags:['family','sustainable','urban'],medianIncome:62100,avgIncome:94200,salaryRatio:21},{name:'Basel',canton:'Basel (BS)',type:'Urban',pop:45000,landPrice:2800,lat:47.5596,lon:7.5886,scores:{costOfLiving:42,infrastructure:95,education:95,healthcare:95,energy:80,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:52800,avgIncome:74600,salaryRatio:30},{name:'Bern',canton:'Bern (BE)',type:'Urban',pop:45000,landPrice:2200,lat:46.9481,lon:7.4474,scores:{costOfLiving:51,infrastructure:95,education:95,healthcare:95,energy:82,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:54100,avgIncome:76300,salaryRatio:43},{name:'Lausanne',canton:'Vaud (VD)',type:'Urban',pop:45000,landPrice:3100,lat:46.5197,lon:6.6323,scores:{costOfLiving:38,infrastructure:95,education:95,healthcare:95,energy:81,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:55400,avgIncome:79800,salaryRatio:28},{name:'Winterthur',canton:'Zurich (ZH)',type:'Urban',pop:45000,landPrice:1800,lat:47.5001,lon:8.7238,scores:{costOfLiving:58,infrastructure:95,education:95,healthcare:95,energy:86,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:54600,avgIncome:72400,salaryRatio:56},{name:'Luzern',canton:'Lucerne (LU)',type:'Urban',pop:45000,landPrice:2600,lat:47.0502,lon:8.3093,scores:{costOfLiving:50,infrastructure:95,education:95,healthcare:95,energy:90,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:53200,avgIncome:71800,salaryRatio:34},{name:'St. Gallen',canton:'St. Gallen (SG)',type:'Urban',pop:45000,landPrice:1400,lat:47.4245,lon:9.3767,scores:{costOfLiving:68,infrastructure:95,education:95,healthcare:95,energy:87,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:51400,avgIncome:68900,salaryRatio:70},{name:'Lugano',canton:'Ticino (TI)',type:'Urban',pop:45000,landPrice:2000,lat:46.0037,lon:8.9511,scores:{costOfLiving:54,infrastructure:95,education:95,healthcare:95,energy:77,sustainability:85,food:95,entertainment:80,nature:55},tags:['family','sustainable','urban'],medianIncome:57800,avgIncome:82300,salaryRatio:53},{name:'Biel/Bienne',canton:'Bern (BE)',type:'Urban',pop:45000,landPrice:950,lat:47.1368,lon:7.2467,scores:{costOfLiving:68,infrastructure:95,education:95,healthcare:95,energy:82,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:44200,avgIncome:58700,salaryRatio:92},{name:'Thun',canton:'Bern (BE)',type:'Urban',pop:45000,landPrice:1300,lat:46.758,lon:7.628,scores:{costOfLiving:63,infrastructure:95,education:95,healthcare:95,energy:82,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:48600,avgIncome:64200,salaryRatio:71},{name:'Köniz',canton:'Bern (BE)',type:'Suburban',pop:18000,landPrice:1600,lat:46.9267,lon:7.4101,scores:{costOfLiving:59,infrastructure:78,education:95,healthcare:89,energy:82,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:52400,avgIncome:68900,salaryRatio:61},{name:'La Chaux-de-Fonds',canton:'Neuchâtel (NE)',type:'Urban',pop:45000,landPrice:750,lat:47.1001,lon:6.8262,scores:{costOfLiving:67,infrastructure:95,education:95,healthcare:95,energy:79,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:43800,avgIncome:56400,salaryRatio:100},{name:'Schaffhausen',canton:'Schaffhausen (SH)',type:'Urban',pop:45000,landPrice:1200,lat:47.6959,lon:8.6317,scores:{costOfLiving:69,infrastructure:95,education:95,healthcare:95,energy:87,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:49800,avgIncome:65400,salaryRatio:81},{name:'Fribourg',canton:'Fribourg (FR)',type:'Urban',pop:45000,landPrice:1400,lat:46.8065,lon:7.162,scores:{costOfLiving:62,infrastructure:95,education:95,healthcare:95,energy:84,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:48200,avgIncome:64800,salaryRatio:65},{name:'Chur',canton:'Graubünden (GR)',type:'Urban',pop:45000,landPrice:1500,lat:46.8508,lon:9.5329,scores:{costOfLiving:69,infrastructure:95,education:95,healthcare:95,energy:100,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:51600,avgIncome:69200,salaryRatio:65},{name:'Vernier',canton:'Geneva (GE)',type:'Suburban',pop:18000,landPrice:2800,lat:46.2167,lon:6.0833,scores:{costOfLiving:39,infrastructure:78,education:95,healthcare:89,energy:75,sustainability:90,food:95,entertainment:65,nature:70},tags:['family','sustainable'],medianIncome:47200,avgIncome:61800,salaryRatio:26},{name:'Uster',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:2200,lat:47.35,lon:8.7167,scores:{costOfLiving:53,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:62400,avgIncome:84200,salaryRatio:51},{name:'Sion',canton:'Valais (VS)',type:'Urban',pop:45000,landPrice:1100,lat:46.233,lon:7.3598,scores:{costOfLiving:67,infrastructure:95,education:95,healthcare:95,energy:100,sustainability:85,food:95,entertainment:80,nature:55},tags:['family','sustainable','urban'],medianIncome:47800,avgIncome:63400,salaryRatio:85},{name:'Emmen',canton:'Lucerne (LU)',type:'Suburban',pop:18000,landPrice:1300,lat:47.0833,lon:8.3,scores:{costOfLiving:67,infrastructure:78,education:95,healthcare:89,energy:90,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:46800,avgIncome:61200,salaryRatio:68},{name:'Küsnacht',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:3800,lat:47.3167,lon:8.5833,scores:{costOfLiving:32,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:104200,avgIncome:198400,salaryRatio:49},{name:'Zug',canton:'Zug (ZG)',type:'Urban',pop:45000,landPrice:3200,lat:47.166,lon:8.516,scores:{costOfLiving:54,infrastructure:95,education:95,healthcare:95,energy:96,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:88400,avgIncome:162800,salaryRatio:50},{name:'Nyon',canton:'Vaud (VD)',type:'Urban',pop:45000,landPrice:2400,lat:46.3833,lon:6.2333,scores:{costOfLiving:47,infrastructure:95,education:95,healthcare:95,energy:81,sustainability:85,food:95,entertainment:80,nature:55},tags:['family','sustainable','urban'],medianIncome:74800,avgIncome:112400,salaryRatio:58},{name:'Morges',canton:'Vaud (VD)',type:'Urban',pop:45000,landPrice:2100,lat:46.5167,lon:6.5,scores:{costOfLiving:51,infrastructure:95,education:95,healthcare:95,energy:81,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:68400,avgIncome:98600,salaryRatio:61},{name:'Rapperswil-Jona',canton:'St. Gallen (SG)',type:'Suburban',pop:18000,landPrice:1700,lat:47.2263,lon:8.8182,scores:{costOfLiving:64,infrastructure:78,education:95,healthcare:89,energy:87,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:61200,avgIncome:82400,salaryRatio:68},{name:'Davos',canton:'Graubünden (GR)',type:'Alpine',pop:5000,landPrice:2200,lat:46.8008,lon:9.8355,scores:{costOfLiving:60,infrastructure:58,education:68,healthcare:60,energy:100,sustainability:73,food:60,entertainment:70,nature:95},tags:['nature'],medianIncome:54800,avgIncome:74200,salaryRatio:44},{name:'Verbier',canton:'Valais (VS)',type:'Alpine',pop:5000,landPrice:4500,lat:46.0964,lon:7.2278,scores:{costOfLiving:22,infrastructure:58,education:68,healthcare:60,energy:100,sustainability:73,food:60,entertainment:70,nature:100},tags:['nature'],medianIncome:72400,avgIncome:118600,salaryRatio:24},{name:'Gruyères',canton:'Fribourg (FR)',type:'Rural',pop:3500,landPrice:750,lat:46.5833,lon:7.0833,scores:{costOfLiving:71,infrastructure:58,education:68,healthcare:60,energy:84,sustainability:68,food:60,entertainment:55,nature:85},tags:['nature'],medianIncome:42800,avgIncome:56200,salaryRatio:100},{name:'Spiez',canton:'Bern (BE)',type:'Suburban',pop:18000,landPrice:1000,lat:46.6833,lon:7.6833,scores:{costOfLiving:66,infrastructure:78,education:95,healthcare:89,energy:82,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:48200,avgIncome:63800,salaryRatio:96},{name:'Solothurn',canton:'Solothurn (SO)',type:'Urban',pop:45000,landPrice:900,lat:47.2088,lon:7.5323,scores:{costOfLiving:71,infrastructure:95,education:95,healthcare:95,energy:84,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:47400,avgIncome:62800,salaryRatio:100},{name:'Carouge',canton:'Geneva (GE)',type:'Urban',pop:45000,landPrice:3500,lat:46.1833,lon:6.1333,scores:{costOfLiving:30,infrastructure:95,education:95,healthcare:95,energy:75,sustainability:85,food:95,entertainment:80,nature:55},tags:['family','sustainable','urban'],medianIncome:58800,avgIncome:79200,salaryRatio:26},{name:'Aarau',canton:'Aargau (AG)',type:'Urban',pop:45000,landPrice:1500,lat:47.3925,lon:8.04,scores:{costOfLiving:66,infrastructure:95,education:95,healthcare:95,energy:85,sustainability:85,food:95,entertainment:80,nature:50},tags:['family','sustainable','urban'],medianIncome:52400,avgIncome:70800,salaryRatio:66},{name:'Frenkendorf',canton:'Basel (BL)',type:'Suburban',pop:18000,landPrice:1400,lat:47.5,lon:7.7167,scores:{costOfLiving:61,infrastructure:78,education:95,healthcare:89,energy:81,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:56200,avgIncome:74600,salaryRatio:78},{name:'Arlesheim',canton:'Basel (BL)',type:'Suburban',pop:18000,landPrice:1900,lat:47.4833,lon:7.6167,scores:{costOfLiving:55,infrastructure:78,education:95,healthcare:89,energy:81,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:72800,avgIncome:108400,salaryRatio:74},{name:'Riehen',canton:'Basel (BS)',type:'Suburban',pop:18000,landPrice:2800,lat:47.5833,lon:7.65,scores:{costOfLiving:42,infrastructure:78,education:95,healthcare:89,energy:80,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:78400,avgIncome:128600,salaryRatio:51},{name:'Küssnacht',canton:'Schwyz (SZ)',type:'Suburban',pop:18000,landPrice:1600,lat:47.0833,lon:8.4333,scores:{costOfLiving:72,infrastructure:78,education:95,healthcare:89,energy:94,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:58400,avgIncome:78200,salaryRatio:70},{name:'Wollerau',canton:'Schwyz (SZ)',type:'Suburban',pop:18000,landPrice:3200,lat:47.1833,lon:8.7167,scores:{costOfLiving:52,infrastructure:78,education:95,healthcare:89,energy:94,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:124800,avgIncome:248600,salaryRatio:75},{name:'Freienbach',canton:'Schwyz (SZ)',type:'Suburban',pop:18000,landPrice:2800,lat:47.2,lon:8.75,scores:{costOfLiving:57,infrastructure:78,education:95,healthcare:89,energy:94,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:94200,avgIncome:162400,salaryRatio:63},{name:'Muri bei Bern',canton:'Bern (BE)',type:'Suburban',pop:18000,landPrice:1800,lat:46.9167,lon:7.4833,scores:{costOfLiving:56,infrastructure:78,education:95,healthcare:89,energy:82,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:68400,avgIncome:92800,salaryRatio:73},{name:'Binningen',canton:'Basel (BL)',type:'Suburban',pop:18000,landPrice:2000,lat:47.5333,lon:7.5667,scores:{costOfLiving:53,infrastructure:78,education:95,healthcare:89,energy:81,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:72800,avgIncome:104600,salaryRatio:69},{name:'Männedorf',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:2300,lat:47.2667,lon:8.7167,scores:{costOfLiving:52,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:76400,avgIncome:108200,salaryRatio:62},{name:'Thalwil',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:2900,lat:47.2833,lon:8.5667,scores:{costOfLiving:44,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:84200,avgIncome:124800,salaryRatio:53},{name:'Horgen',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:2400,lat:47.25,lon:8.5833,scores:{costOfLiving:50,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:78600,avgIncome:112400,salaryRatio:61},{name:'Volketswil',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:1800,lat:47.3833,lon:8.75,scores:{costOfLiving:58,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:68400,avgIncome:92600,salaryRatio:73},{name:'Muttenz',canton:'Basel (BL)',type:'Suburban',pop:18000,landPrice:1500,lat:47.5167,lon:7.65,scores:{costOfLiving:60,infrastructure:78,education:95,healthcare:89,energy:81,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:58400,avgIncome:78600,salaryRatio:75},{name:'Allschwil',canton:'Basel (BL)',type:'Suburban',pop:18000,landPrice:1600,lat:47.55,lon:7.5333,scores:{costOfLiving:58,infrastructure:78,education:95,healthcare:89,energy:81,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:56800,avgIncome:74800,salaryRatio:67},{name:'Kriens',canton:'Lucerne (LU)',type:'Suburban',pop:18000,landPrice:1400,lat:47.0333,lon:8.2667,scores:{costOfLiving:66,infrastructure:78,education:95,healthcare:89,energy:90,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:49800,avgIncome:65400,salaryRatio:67},{name:'Baar',canton:'Zug (ZG)',type:'Suburban',pop:18000,landPrice:2400,lat:47.1967,lon:8.5233,scores:{costOfLiving:64,infrastructure:78,education:95,healthcare:89,energy:96,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:82400,avgIncome:138600,salaryRatio:65},{name:'Steinhausen',canton:'Zug (ZG)',type:'Suburban',pop:18000,landPrice:2200,lat:47.1833,lon:8.4833,scores:{costOfLiving:67,infrastructure:78,education:95,healthcare:89,energy:96,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:76800,avgIncome:112400,salaryRatio:66},{name:'Opfikon',canton:'Zurich (ZH)',type:'Suburban',pop:18000,landPrice:2600,lat:47.4333,lon:8.5667,scores:{costOfLiving:48,infrastructure:78,education:95,healthcare:89,energy:86,sustainability:90,food:95,entertainment:65,nature:65},tags:['family','sustainable'],medianIncome:54200,avgIncome:72800,salaryRatio:35}];
@@ -836,33 +807,8 @@ document.addEventListener('DOMContentLoaded', function() {
   var btn = document.getElementById('hamburger-btn');
   if(btn) btn.addEventListener('click', toggleMobileNav);
 });
-renderWeights();renderRanking();
-// Hash routing - navigate to page from URL on load
-(function(){
-  const validPages = ['ranking','compare','index','map','reviews','privacy'];
-  const hash = window.location.hash.replace('#','');
-  if(hash && validPages.includes(hash)) {
-    showPage(hash);
-  } else {
-    history.replaceState(null,'','#ranking');
-  }
-  // Handle browser back/forward
-  window.addEventListener('popstate', function(){
-    const h = window.location.hash.replace('#','');
-    if(h && validPages.includes(h)) showPage(h);
-  });
-})();renderIndexPillars();renderCompare();applyWaitlistTranslations();applyRevTranslations();const ce=document.getElementById('community-count');if(ce)ce.textContent=COMMUNITIES.length.toLocaleString();if(document.getElementById('page-map').classList.contains('active'))renderMap();}
-function applyTranslations(){
-  // Update nav buttons
-  const t=getT;
-  ['nb-ranking','nb-compare','nb-index','nb-map','nb-reviews'].forEach((id,i)=>{
-    const el=document.getElementById(id);
-    if(!el) return;
-    const keys=['navRanking','navCompare','navIndex','navMap','navReviews'];
-    const icons=['📊 ','⚖️ ','📋 ','🗺️ ','<span style="color:#f5c518">★</span> '];
-    const val=t(keys[i]);
-    if(val) el.textContent=icons[i]+val;
-  });const st=(id,val,attr)=>{const el=document.getElementById(id);if(!el)return;if(attr==='html')el.innerHTML=val;else if(attr==='ph')el.placeholder=val;else el.textContent=val;};st('h-tag',getT('heroTag'));st('h-title',getT('heroTitle'),'html');st('h-sub',getT('heroSub'));st('h-cta1',getT('heroCta1'));st('h-cta2',getT('heroCta2'));st('h-s1',getT('hS1'));st('h-s2',getT('hS2'));st('h-s3',getT('hS3'));st('h-s4',getT('hS4'));st('h-s5',getT('hS5')||'Resident reviews');st('rank-title',getT('rankTitle'));st('rank-sub',getT('rankSub'));st('w-title',getT('wTitle'));st('cmp-title',getT('cmpTitle'));st('cmp-sub',getT('cmpSub'));st('cmp-add-btn',getT('cmpAdd'));st('cmp-chart-title',getT('cmpChartTitle'));st('ai-title',getT('aiTitle'));st('ai-page-title',getT('aiPageTitle'));st('ai-page-sub',getT('aiPageSub'));st('search-input',getT('searchPlaceholder'),'ph');st('cmp-search',getT('cmpSearchPlaceholder'),'ph');st('chip-all',getT('chipAll'));st('chip-family',getT('chipFamily'));st('chip-affordable',getT('chipAffordable'));st('chip-sustainable',getT('chipSustainable'));st('chip-nature',getT('chipNature'));st('chip-urban',getT('chipUrban'));}
+renderWeights();renderRanking();renderIndexPillars();renderCompare();applyWaitlistTranslations();applyRevTranslations();const ce=document.getElementById('community-count');if(ce)ce.textContent=COMMUNITIES.length.toLocaleString();if(document.getElementById('page-map').classList.contains('active'))renderMap();}
+function applyTranslations(){const st=(id,val,attr)=>{const el=document.getElementById(id);if(!el)return;if(attr==='html')el.innerHTML=val;else if(attr==='ph')el.placeholder=val;else el.textContent=val;};st('h-tag',getT('heroTag'));st('h-title',getT('heroTitle'),'html');st('h-sub',getT('heroSub'));st('h-cta1',getT('heroCta1'));st('h-cta2',getT('heroCta2'));st('h-s1',getT('hS1'));st('h-s2',getT('hS2'));st('h-s3',getT('hS3'));st('h-s4',getT('hS4'));st('h-s5',getT('hS5')||'Resident reviews');st('rank-title',getT('rankTitle'));st('rank-sub',getT('rankSub'));st('w-title',getT('wTitle'));st('cmp-title',getT('cmpTitle'));st('cmp-sub',getT('cmpSub'));st('cmp-add-btn',getT('cmpAdd'));st('cmp-chart-title',getT('cmpChartTitle'));st('ai-title',getT('aiTitle'));st('ai-page-title',getT('aiPageTitle'));st('ai-page-sub',getT('aiPageSub'));st('search-input',getT('searchPlaceholder'),'ph');st('cmp-search',getT('cmpSearchPlaceholder'),'ph');st('chip-all',getT('chipAll'));st('chip-family',getT('chipFamily'));st('chip-affordable',getT('chipAffordable'));st('chip-sustainable',getT('chipSustainable'));st('chip-nature',getT('chipNature'));st('chip-urban',getT('chipUrban'));}
 function calcScore(c){let t=0,w=0;for(const[k,d]of Object.entries(WEIGHTS_DEF)){t+=c.scores[k]*d.val;w+=d.val}return Math.round(t/w)}
 function renderWeights(){const g=document.getElementById('weights-grid');g.innerHTML='';for(const[k,w]of Object.entries(WEIGHTS_DEF)){const d=document.createElement('div');d.className='weight-item';d.innerHTML=`<label><span>${w.icon} ${w.label[lang]||w.label.en}</span><span class="weight-badge" id="wb-${k}">${w.val}%</span></label><input type="range" min="0" max="30" step="1" value="${w.val}" oninput="updateWeight('${k}',this.value)">`;g.appendChild(d)}}
 function updateWeight(k,v){WEIGHTS_DEF[k].val=parseInt(v);document.getElementById('wb-'+k).textContent=v+'%';renderRanking()}
@@ -905,7 +851,6 @@ en:{
   ],
   updateRows:[["Land prices","Annual (Q1)"],["Electricity tariffs","Annual (Oct)"],["Tax burden index","Annual"],["OSM infrastructure","Quarterly"],["Current dataset","2024-Q4"]],
   sourceCards:[
-    {abbr:"ESTV",color:"#fff3e0",textColor:"#b45309",name:"Swiss Federal Tax Administration",desc:"Provides annual cantonal income and salary statistics based on tax declarations. Used for our average and median salary data (2022 figures). Updated annually.",url:"https://www.estv.admin.ch",urlLabel:"estv.admin.ch →"},
     {abbr:"BFS/OFS",color:"var(--green3)",textColor:"var(--green)",name:"Federal Statistical Office",desc:"Switzerland's national statistics authority. Provides population data, housing statistics, income levels, and commune registers. Data updated annually.",url:"https://www.bfs.admin.ch",urlLabel:"bfs.admin.ch →"},
     {abbr:"ELCOM",color:"#e8f0ff",textColor:"#1a3a5c",name:"Electricity Commission",desc:"Swiss Federal Electricity Commission. Publishes official electricity tariffs for every grid operator in Switzerland. Updated annually each October.",url:"https://www.elcom.admin.ch",urlLabel:"elcom.admin.ch →"},
     {abbr:"OSM",color:"var(--gold2)",textColor:"#7a5a00",name:"OpenStreetMap",desc:"The world's largest open geographic database. Used to count infrastructure density: hospitals, schools, shops, transport stops, parks, and EV chargers.",url:"https://www.openstreetmap.org",urlLabel:"openstreetmap.org →"},
@@ -1030,7 +975,7 @@ it:{
     {abbr:"UFAM",color:"var(--green3)",textColor:"var(--green)",name:"Ufficio federale dell'ambiente",desc:"Fornisce dati sulla qualità dell'aria, biodiversità e spazi verdi per le dimensioni Sostenibilità e Natura.",url:"https://www.bafu.admin.ch",urlLabel:"bafu.admin.ch →"},
     {abbr:"swisstopo",color:"var(--green3)",textColor:"var(--green)",name:"Topografia federale",desc:"Dati geografici ufficiali svizzeri: confini comunali, coordinate, altitudine e prossimità a elementi naturali.",url:"https://www.swisstopo.admin.ch",urlLabel:"swisstopo.admin.ch →"},
   ]
-,guidelines:"<strong>⚠️ Linee guida della community</strong><br>Condividi la tua esperienza personale. Le recensioni non devono contenere linguaggio offensivo, contenuti discriminatori o nomi di persone specifiche. Tutte le recensioni vengono moderate. Inviando accetti la nostra <a href=\'#\' onclick=\'showPage(\"privacy\")\' style=\'color:#2d5a27\'>Informativa sulla privacy</a>."}};
+}};
 const t=IDX[lang]||IDX.en;
 const dimsHTML=t.dims.map(d=>`
 <div style="border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:10px;">
@@ -1099,29 +1044,8 @@ function addSelectedToCompare(){const n=document.getElementById('cmp-search').va
 function addToCompare(n){if(!n)return;const c=COMMUNITIES.find(c=>c.name===n);if(!c){showToast('Community not found');return}if(cmpSelected.includes(n)){showToast('Already in comparison');return}if(cmpSelected.length>=4){showToast('Max 4 communities');return}cmpSelected.push(n);renderCompare();showToast(n+' added')}
 function removeFromCompare(n){cmpSelected=cmpSelected.filter(x=>x!==n);renderCompare()}
 function renderCompare(){const sel=document.getElementById('cmp-selected');sel.innerHTML=cmpSelected.map(n=>`<span style="background:var(--green3);color:var(--green);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;" onclick="removeFromCompare('${n}')">${n} ×</span>`).join('');const g=document.getElementById('compare-grid');if(!cmpSelected.length){g.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--ink3);font-size:14px;">Add communities above to compare</div>`;return}const cs=cmpSelected.map(n=>COMMUNITIES.find(c=>c.name===n)).filter(Boolean);g.innerHTML=cs.map(c=>{const sc=calcScore(c);const _salLbl=lang==='fr'?'Revenu médian':lang==='de'?'Medianeinkommen':lang==='it'?'Reddito mediano':'Median Income';const _ratLbl=lang==='fr'?'Pouvoir d achat':lang==='de'?'Kaufkraft':lang==='it'?'Acquisto':'Purchasing Power';const salRows=c.medianIncome?`<div class="compare-row" style="background:var(--gold2);padding:4px 0;border-radius:4px;margin-bottom:4px;"><span class="compare-row-label">💵 ${_salLbl}</span><span style="font-weight:600;font-size:12px;color:#7a5a00;">CHF ${(c.medianIncome/1000).toFixed(0)}k</span></div><div class="compare-row" style="background:${c.salaryRatio>=60?'var(--green3)':c.salaryRatio>=40?'var(--gold2)':'#fde8e8'};padding:4px 0;border-radius:4px;margin-bottom:8px;"><span class="compare-row-label">⚖️ ${_ratLbl}</span><span class="badge ${c.salaryRatio>=60?'badge-green':c.salaryRatio>=40?'badge-gold':'badge-red'}">${c.salaryRatio}/100</span></div>`:'';const rows=INDEX_PILLARS.map(p=>{const v=c.scores[p.key];const cl=v>=80?'badge-green':v>=60?'badge-gold':'badge-red';return`<div class="compare-row"><span class="compare-row-label">${p.icon} ${p.title[lang]||p.title.en}</span><span class="badge ${cl}">${v}</span></div>`}).join('');return`<div class="compare-card"><h4>${c.name} <span style="color:var(--green);font-family:'Fraunces',serif;">${sc}</span></h4><div style="font-size:11px;color:var(--ink3);margin-bottom:10px;">${c.canton} · ${c.type} · ${c.landPrice} ${getT('cost')}</div>${salRows}${rows}</div>`}).join('');const wrap=document.getElementById('cmp-chart-wrap');wrap.style.display=cs.length>=2?'block':'none';if(cs.length>=2)renderRadar(cs)}
-function renderRadar(cs){if(cmpChart){cmpChart.destroy();cmpChart=null}const labels=INDEX_PILLARS.map(p=>p.title[lang]||p.title.en);const colors=['#2d5a27','#c8960c','#1a3a5c','#8b2020'];const datasets=cs.map((c,i)=>({label:c.name,data:INDEX_PILLARS.map(p=>c.scores[p.key]),borderColor:colors[i],backgroundColor:colors[i]+'22',borderWidth:2,pointRadius:3}));cmpChart=new Chart(document.getElementById('cmpChart'),{type:'radar',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,ticks:{stepSize:20,font:{size:9,navRanking:'Ranking',navCompare:'Compare',navIndex:'Our Index',navMap:'Map',navReviews:'Reviews',navRanking:'Classement',navCompare:'Comparer',navIndex:'Notre Index',navMap:'Carte',navReviews:'Avis',navRanking:'Rangliste',navCompare:'Vergleich',navIndex:'Unser Index',navMap:'Karte',navReviews:'Bewertungen',navRanking:'Classifica',navCompare:'Confronta',navIndex:'Il nostro Index',navMap:'Mappa',navReviews:'Recensioni'}},pointLabels:{font:{size:10}}}},plugins:{legend:{display:true,labels:{font:{size:11}}}}}})}
-function showPage(n){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const pg=document.getElementById('page-'+n);
-  if(!pg)return;
-  pg.classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.id==='nb-'+n));
-  // Update URL hash for sharing
-  history.pushState(null,'','#'+n);
-  if(n==='compare')renderCompare();
-  if(n==='index')renderIndexPillars();
-  if(n==='map')renderMap();if(n==='privacy')renderPrivacy();
-  if(n==='ai')applyWaitlistTranslations();
-  if(n==='reviews'){applyRevTranslations();renderRevStarGrid();if(ALL_SWISS_COMMUNES.length<100)loadCommuneListAsync();}
-  // Close mobile nav
-  const navLinks=document.getElementById('main-nav-links');
-  if(navLinks&&navLinks.classList.contains('open')){
-    navLinks.classList.remove('open');
-    document.body.style.overflow='';
-    const h1=document.getElementById('ham-line1'),h2=document.getElementById('ham-line2'),h3=document.getElementById('ham-line3');
-    if(h1)h1.style.transform='';if(h2)h2.style.opacity='1';if(h3)h3.style.transform='';
-  }
-}
+function renderRadar(cs){if(cmpChart){cmpChart.destroy();cmpChart=null}const labels=INDEX_PILLARS.map(p=>p.title[lang]||p.title.en);const colors=['#2d5a27','#c8960c','#1a3a5c','#8b2020'];const datasets=cs.map((c,i)=>({label:c.name,data:INDEX_PILLARS.map(p=>c.scores[p.key]),borderColor:colors[i],backgroundColor:colors[i]+'22',borderWidth:2,pointRadius:3}));cmpChart=new Chart(document.getElementById('cmpChart'),{type:'radar',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,ticks:{stepSize:20,font:{size:9}},pointLabels:{font:{size:10}}}},plugins:{legend:{display:true,labels:{font:{size:11}}}}}})}
+function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+n).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.id==='nb-'+n));if(n==='compare')renderCompare();if(n==='index')renderIndexPillars();if(n==='map')renderMap();if(n==='ai')applyWaitlistTranslations();if(n==='reviews'){applyRevTranslations();renderRevStarGrid();if(ALL_SWISS_COMMUNES.length<100)loadCommuneListAsync();};const navLinks=document.querySelector('.nav-links');if(navLinks&&navLinks.classList.contains('open')){navLinks.classList.remove('open');const h1=document.getElementById('ham-line1');const h2=document.getElementById('ham-line2');const h3=document.getElementById('ham-line3');if(h1)h1.style.transform='';if(h2)h2.style.opacity='1';if(h3)h3.style.transform='';}}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
 
 // ─── MAP ───────────────────────────────────────────────
@@ -2183,16 +2107,6 @@ function submitReview() {
     lang
   };
 
-  // Moderate before saving
-  const modResult = moderateReview(text, name);
-  if(!modResult.ok) {
-    const errEl = document.getElementById('rev-submit-error');
-    if(errEl) { errEl.textContent = modResult.reason; errEl.style.display='block'; }
-    else alert(modResult.reason);
-    return;
-  }
-  // Set status to pending - will show after moderation
-  review.status = 'pending';
   // Save locally first (instant feedback)
   const reviews = getReviews();
   reviews.unshift(review);
@@ -2213,7 +2127,7 @@ function submitReview() {
     proptype: review.proptype || null,
     ratings: review.ratings,
     lang: review.lang,
-    status: 'pending'
+    status: 'approved'
   }).then(() => {
     console.log('Review saved to Supabase ✓');
     updateHeroStats();
@@ -2446,17 +2360,7 @@ function renderPeoplesRanking() {
   }).join('');
 }
 
-function applyRevTranslations(){
-  const t = REV_T[lang] || REV_T.en;
-  // Community guidelines
-  const gl = document.getElementById('rev-guidelines');
-  if(gl && t.guidelines) gl.innerHTML = t.guidelines;
-  // Tab labels
-  const tabs = {'rtab-write':'tabWrite','rtab-browse':'tabBrowse','rtab-ranking':'tabRanking'};
-  Object.entries(tabs).forEach(([id,key])=>{
-    const el=document.getElementById(id); if(el&&t[key]) el.innerHTML=t[key];
-  });
-}function applyRevTranslations() {
+function applyRevTranslations() {
   const t = REV_T[lang] || REV_T.en;
   const st = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
   const sp = (id,v) => { const el=document.getElementById(id); if(el) el.placeholder=v; };
@@ -2618,7 +2522,7 @@ const PROF_T = {
   en:{scoreLbl:'Data index score',reviewLbl:'Resident rating',reviewsLbl:'Reviews',
       dimTitle:'Index scores (0–100)',revTitle:'Resident reviews',writeBtnLbl:'Write a review →',
       noReviews:'No reviews yet for this community. Be the first!',
-      sourceLbl:'Sources: BFS/OFS · ELCOM · Swiss Tax Conference (SSK) · ESTV (salary data) · OpenStreetMap · Resident reviews',
+      sourceLbl:'Sources: BFS/OFS · ELCOM · Swiss Tax Conference · OpenStreetMap · Resident reviews',
       facts:{pop:'Population',density:'Density',landPrice:'Land price',rent:'Est. rent',
              electricity:'Electricity',taxRate:'Tax burden',type:'Type',canton:'Canton'}},
   fr:{scoreLbl:'Score indice',reviewLbl:'Note résidents',reviewsLbl:'Avis',
@@ -2893,79 +2797,6 @@ function setMapMode(mode) {
 // ─── "View Profile" button in rank cards ─────────────────────────────
 // Patch renderRanking to add profile button to action buttons
 
-
-function renderPrivacy() {
-  const PRIV = {
-    en: {
-      title: "Privacy Policy",
-      sub: "Last updated: May 2026 · Swiss nDSG & EU GDPR compliant",
-      sections: [
-        {h:"1. Who we are", p:"CommunaRank is a Swiss community intelligence platform. Contact: <a href='mailto:info@communarank.ch' style='color:var(--green)'>info@communarank.ch</a>"},
-        {h:"2. Data we collect", p:"<ul style='padding-left:20px;line-height:2'><li><strong>Reviews:</strong> Nickname, rating, text — stored in Supabase (Frankfurt, EU)</li><li><strong>Waitlist:</strong> Email address only</li><li><strong>Analytics:</strong> Page views via Vercel Analytics (no cookies, no personal data)</li><li><strong>Local storage:</strong> Language preference — stored in your browser only</li></ul>"},
-        {h:"3. How we use your data", p:"Reviews are published after manual moderation. Waitlist emails are used only to notify you of new features. Analytics are aggregated and anonymous."},
-        {h:"4. Storage & security", p:"All data is stored in the EU (Frankfurt) via Supabase (SOC 2 Type II certified). Data is encrypted at rest and in transit."},
-        {h:"5. Your rights (nDSG / GDPR)", p:"You have the right to access, correct, delete, and port your data. Email <a href='mailto:info@communarank.ch' style='color:var(--green)'>info@communarank.ch</a>. We respond within 30 days."},
-        {h:"6. Cookies", p:"We use no advertising cookies. Vercel Analytics is privacy-first and cookie-free."},
-        {h:"7. Review moderation", p:"All reviews are stored as 'pending' and manually reviewed before publication. Offensive or false reviews are deleted within 7 days."},
-        {h:"8. Contact", p:"Privacy questions: <a href='mailto:info@communarank.ch' style='color:var(--green)'>info@communarank.ch</a><br>Swiss data protection authority: <a href='https://www.edoeb.admin.ch' target='_blank' style='color:var(--green)'>edoeb.admin.ch</a>"}
-      ]
-    },
-    fr: {
-      title: "Politique de confidentialité",
-      sub: "Dernière mise à jour: mai 2026 · Conforme nDSG suisse & RGPD UE",
-      sections: [
-        {h:"1. Qui sommes-nous", p:"CommunaRank est une plateforme suisse d'intelligence communautaire. Contact: <a href='mailto:info@communarank.ch' style='color:var(--green)'>info@communarank.ch</a>"},
-        {h:"2. Données collectées", p:"<ul style='padding-left:20px;line-height:2'><li><strong>Avis:</strong> Pseudonyme, note, texte — stockés dans Supabase (Francfort, UE)</li><li><strong>Liste d'attente:</strong> Adresse e-mail uniquement</li><li><strong>Analytiques:</strong> Vues de pages via Vercel Analytics (sans cookies)</li><li><strong>Stockage local:</strong> Préférence de langue — dans votre navigateur uniquement</li></ul>"},
-        {h:"3. Utilisation des données", p:"Les avis sont publiés après modération manuelle. Les e-mails de la liste d'attente sont utilisés uniquement pour vous informer des nouveautés. Les analytiques sont agrégées et anonymes."},
-        {h:"4. Stockage & sécurité", p:"Toutes les données sont stockées dans l'UE (Francfort) via Supabase (certifié SOC 2 Type II). Les données sont chiffrées au repos et en transit."},
-        {h:"5. Vos droits (nLPD / RGPD)", p:"Vous avez le droit d'accéder, corriger, supprimer et porter vos données. Écrivez à <a href='mailto:info@communarank.ch' style='color:var(--green)'>info@communarank.ch</a>. Nous répondons dans les 30 jours."},
-        {h:"6. Cookies", p:"Nous n'utilisons aucun cookie publicitaire. Vercel Analytics respecte la vie privée et est sans cookie."},
-        {h:"7. Modération des avis", p:"Tous les avis sont stockés comme 'en attente' et examinés manuellement avant publication. Les avis offensants sont supprimés dans les 7 jours."},
-        {h:"8. Contact", p:"Questions: <a href='mailto:info@communarank.ch' style='color:var(--green)'>info@communarank.ch</a><br>Autorité suisse: <a href='https://www.edoeb.admin.ch' target='_blank' style='color:var(--green)'>edoeb.admin.ch</a>"}
-      ]
-    },
-    de: {
-      title: "Datenschutzerklärung",
-      sub: "Zuletzt aktualisiert: Mai 2026 · Konform mit Schweizer DSG & EU DSGVO",
-      sections: [
-        {h:"1. Wer wir sind", p:"CommunaRank ist eine Schweizer Plattform für Community-Intelligence. Kontakt: <a href='mailto:info@communarank.ch' style='color:var(--green)'>info@communarank.ch</a>"},
-        {h:"2. Erhobene Daten", p:"<ul style='padding-left:20px;line-height:2'><li><strong>Bewertungen:</strong> Spitzname, Note, Text — gespeichert in Supabase (Frankfurt, EU)</li><li><strong>Warteliste:</strong> Nur E-Mail-Adresse</li><li><strong>Analytik:</strong> Seitenaufrufe via Vercel Analytics (keine Cookies)</li><li><strong>Lokaler Speicher:</strong> Sprachpräferenz — nur in Ihrem Browser</li></ul>"},
-        {h:"3. Datennutzung", p:"Bewertungen werden nach manueller Prüfung veröffentlicht. Wartelisten-E-Mails werden nur für Neuigkeiten genutzt. Analysen sind aggregiert und anonym."},
-        {h:"4. Speicherung & Sicherheit", p:"Alle Daten werden in der EU (Frankfurt) via Supabase gespeichert (SOC 2 Typ II zertifiziert). Daten sind verschlüsselt."},
-        {h:"5. Ihre Rechte (DSG / DSGVO)", p:"Sie haben das Recht auf Zugang, Berichtigung, Löschung und Übertragung Ihrer Daten. Schreiben Sie an <a href='mailto:info@communarank.ch' style='color:var(--green)'>info@communarank.ch</a>. Wir antworten innerhalb von 30 Tagen."},
-        {h:"6. Cookies", p:"Wir verwenden keine Werbe-Cookies. Vercel Analytics ist datenschutzfreundlich und cookie-frei."},
-        {h:"7. Bewertungsmoderation", p:"Alle Bewertungen werden als 'ausstehend' gespeichert und manuell geprüft. Beleidigende Bewertungen werden innerhalb von 7 Tagen gelöscht."},
-        {h:"8. Kontakt", p:"Fragen: <a href='mailto:info@communarank.ch' style='color:var(--green)'>info@communarank.ch</a><br>Schweizer Datenschutzbehörde: <a href='https://www.edoeb.admin.ch' target='_blank' style='color:var(--green)'>edoeb.admin.ch</a>"}
-      ]
-    },
-    it: {
-      title: "Informativa sulla privacy",
-      sub: "Ultimo aggiornamento: maggio 2026 · Conforme alla LPD svizzera e al GDPR UE",
-      sections: [
-        {h:"1. Chi siamo", p:"CommunaRank è una piattaforma svizzera di community intelligence. Contatto: <a href='mailto:info@communarank.ch' style='color:var(--green)'>info@communarank.ch</a>"},
-        {h:"2. Dati raccolti", p:"<ul style='padding-left:20px;line-height:2'><li><strong>Recensioni:</strong> Nickname, voto, testo — conservati in Supabase (Francoforte, UE)</li><li><strong>Lista d'attesa:</strong> Solo indirizzo e-mail</li><li><strong>Analitiche:</strong> Visualizzazioni pagina via Vercel Analytics (senza cookie)</li><li><strong>Memoria locale:</strong> Preferenza lingua — solo nel browser</li></ul>"},
-        {h:"3. Utilizzo dei dati", p:"Le recensioni vengono pubblicate dopo moderazione manuale. Le email vengono usate solo per notifiche di novità. Le analitiche sono aggregate e anonime."},
-        {h:"4. Archiviazione & sicurezza", p:"Tutti i dati sono archiviati nell'UE (Francoforte) tramite Supabase (certificato SOC 2 Tipo II). I dati sono crittografati."},
-        {h:"5. I tuoi diritti (LPD / GDPR)", p:"Hai il diritto di accedere, correggere, cancellare e portare i tuoi dati. Scrivi a <a href='mailto:info@communarank.ch' style='color:var(--green)'>info@communarank.ch</a>. Rispondiamo entro 30 giorni."},
-        {h:"6. Cookie", p:"Non utilizziamo cookie pubblicitari. Vercel Analytics rispetta la privacy ed è senza cookie."},
-        {h:"7. Moderazione recensioni", p:"Tutte le recensioni sono salvate come 'in attesa' e revisionate manualmente. Le recensioni offensive vengono eliminate entro 7 giorni."},
-        {h:"8. Contatto", p:"Domande: <a href='mailto:info@communarank.ch' style='color:var(--green)'>info@communarank.ch</a><br>Autorità svizzera: <a href='https://www.edoeb.admin.ch' target='_blank' style='color:var(--green)'>edoeb.admin.ch</a>"}
-      ]
-    }
-  };
-  const p = PRIV[lang] || PRIV.en;
-  const title = document.getElementById('priv-title');
-  const sub = document.getElementById('priv-sub');
-  const content = document.getElementById('priv-content');
-  if(title) title.textContent = p.title;
-  if(sub) sub.textContent = p.sub;
-  if(content) content.innerHTML = p.sections.map(s =>
-    '<div class="card" style="padding:16px 20px;">' +
-    '<h3 style="font-family:Fraunces,serif;font-size:16px;margin-bottom:10px;">' + s.h + '</h3>' +
-    '<p style="line-height:1.8;color:var(--ink2);font-size:14px;">' + s.p + '</p></div>'
-  ).join('');
-}
-
 seedSampleReviews();
 renderRevStarGrid();
 renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();loadReviewsFromSupabase().catch(()=>{});applyRevTranslations();updateHeroStats();loadReviewsFromSupabase();
@@ -2973,16 +2804,5 @@ renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWa
 const countEl=document.getElementById('community-count');
 if(countEl)countEl.textContent=COMMUNITIES.length.toLocaleString();
 </script>
-<div <div id="page-privacy" class="page">
-  <div class="section">
-    <div class="section-header">
-      <h2 class="section-title" id="priv-title">Privacy Policy</h2>
-      <p class="section-sub" id="priv-sub">Last updated: May 2026 · Swiss nDSG & EU GDPR compliant</p>
-    </div>
-    <div style="max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:12px;" id="priv-content">
-    </div>
-  </div>
-</div>
-</div>
 </body>
-</html>,guidelines:"⚠️ Community Guidelines · Please share your genuine personal experience. Reviews must not contain offensive language, discriminatory content, or name specific individuals. All reviews go through a moderation process before being published.",guidelines:"⚠️ Community Guidelines · Partagez votre expérience personnelle sincère. Les avis ne doivent pas contenir de langage offensant, de contenu discriminatoire ni nommer des individus. Tous les avis sont modérés avant publication.",guidelines:"⚠️ Community Guidelines · Teilen Sie Ihre persönliche Erfahrung. Bewertungen dürfen keine beleidigenden Inhalte, diskriminierende Aussagen oder Personennamen enthalten. Alle Bewertungen werden vor der Veröffentlichung moderiert.",guidelines:"⚠️ Community Guidelines · Condividi la tua esperienza personale. Le recensioni non devono contenere linguaggio offensivo, contenuti discriminatori o nomi di persone. Tutte le recensioni vengono moderate prima della pubblicazione."
+</html>
