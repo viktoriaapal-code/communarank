@@ -2123,8 +2123,9 @@ function loadCommuneListAsync() {
       console.log('Communes loaded:', ALL_SWISS_COMMUNES.length);
     })
     .catch(e => {
-      console.warn('Could not load full commune list, using index communes');
-      ALL_SWISS_COMMUNES = COMMUNITIES.map(c => ({name:c.name, canton:c.canton, code:c.canton.match(/\(([A-Z]+)\)/)?.[1]||''}));
+      console.warn('Could not load full commune list, falling back to supplement+index');
+      // Keep the supplement entries — never lose Bolligen + friends because of a network error
+      ALL_SWISS_COMMUNES = buildCommuneListFromTopo(null);
     });
 }
 
@@ -2160,6 +2161,10 @@ function setOverallStar(val) {
   });
 }
 
+// Track which queries we've already asked the Geo Admin API about (so we don't refetch)
+const _geoAdminCache = new Set();
+let _geoAdminTimer = null;
+
 function showRevSuggestions() {
   const input = document.getElementById('rev-community-input');
   const div = document.getElementById('rev-suggestions');
@@ -2167,7 +2172,18 @@ function showRevSuggestions() {
   const q = input.value.toLowerCase().trim();
   if(q.length < 2) { div.style.display = 'none'; return; }
 
-  // Search ALL Swiss communes first, then our index
+  // Render local matches immediately (instant feedback)
+  renderRevSuggestions(q);
+
+  // Also query the official Swiss Geo Admin API (covers all 2,131 communes)
+  // Debounced so we don't fire on every keystroke
+  clearTimeout(_geoAdminTimer);
+  _geoAdminTimer = setTimeout(() => fetchCommunesFromGeoAdmin(q), 200);
+}
+
+function renderRevSuggestions(q) {
+  const div = document.getElementById('rev-suggestions');
+  if(!div) return;
   const allMatches = ALL_SWISS_COMMUNES.filter(c =>
     c.name.toLowerCase().startsWith(q)
   );
@@ -2182,7 +2198,7 @@ function showRevSuggestions() {
     const inIndex = COMMUNITIES.some(ic => ic.name.toLowerCase() === c.name.toLowerCase());
     return `<div style="padding:9px 14px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;"
       onmouseover="this.style.background='var(--paper)'" onmouseout="this.style.background=''"
-      onclick="selectRevCommunity('${c.name.replace(/'/g,"\'")}','${c.canton}')">
+      onclick="selectRevCommunity('${c.name.replace(/'/g,"\\'")}','${c.canton}')">
       <span>${c.name}</span>
       <span style="display:flex;align-items:center;gap:6px;">
         ${inIndex ? '<span style="background:var(--green3);color:var(--green);font-size:10px;padding:1px 6px;border-radius:3px;font-weight:500;">in index</span>' : ''}
@@ -2190,6 +2206,51 @@ function showRevSuggestions() {
       </span>
     </div>`;
   }).join('');
+}
+
+// Live query against the official Swiss Federal Geo Admin search API.
+// Returns all matching municipalities (origin=gg25). No auth, public CORS-enabled.
+function fetchCommunesFromGeoAdmin(q) {
+  if(!q || q.length < 2) return;
+  if(_geoAdminCache.has(q)) return;
+  _geoAdminCache.add(q);
+  const url = 'https://api3.geo.admin.ch/rest/services/api/SearchServer'
+    + '?searchText=' + encodeURIComponent(q)
+    + '&type=locations&origins=gg25&sr=4326&limit=15';
+  fetch(url)
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if(!data || !data.results) return;
+      const seen = new Set(ALL_SWISS_COMMUNES.map(c => c.name.toLowerCase().trim()));
+      let added = 0;
+      data.results.forEach(r => {
+        const label = (r.attrs && r.attrs.label) || '';
+        // label looks like '<b>Bolligen</b> (BE)'
+        const m = label.match(/<b>([^<]+)<\/b>\s*\(([A-Z]{2})\)/);
+        if(!m) return;
+        const name = m[1].trim();
+        const cantonCode = m[2];
+        // Resolve canton code to full canton display name (e.g. 'BE' → 'Bern (BE)')
+        let canton = cantonCode;
+        if(typeof BFS_CANTON_MAP !== 'undefined') {
+          const full = Object.values(BFS_CANTON_MAP).find(v => v.endsWith('(' + cantonCode + ')'));
+          if(full) canton = full;
+        }
+        const key = name.toLowerCase().trim();
+        if(!seen.has(key)) {
+          seen.add(key);
+          ALL_SWISS_COMMUNES.push({ name, canton, code: cantonCode });
+          added++;
+        }
+      });
+      if(added > 0) {
+        ALL_SWISS_COMMUNES.sort((a, b) => a.name.localeCompare(b.name, 'de'));
+        // Re-render dropdown if the user's query hasn't changed
+        const input = document.getElementById('rev-community-input');
+        if(input && input.value.toLowerCase().trim() === q) renderRevSuggestions(q);
+      }
+    })
+    .catch(e => console.warn('Geo Admin commune search failed:', e.message));
 }
 
 let selectedCommunityData = null;
@@ -2551,6 +2612,100 @@ const BFS_CANTON_MAP = {
 
 // Small supplement of known important communes not always in TopoJSON
 const COMMUNE_SUPPLEMENT = [
+  // ── Bern canton suburbs & common communes (the gap that was hiding Bolligen)
+  {name:'Bolligen',canton:'Bern (BE)',code:'BE'},
+  {name:'Münsingen',canton:'Bern (BE)',code:'BE'},
+  {name:'Worb',canton:'Bern (BE)',code:'BE'},
+  {name:'Belp',canton:'Bern (BE)',code:'BE'},
+  {name:'Muri bei Bern',canton:'Bern (BE)',code:'BE'},
+  {name:'Ostermundigen',canton:'Bern (BE)',code:'BE'},
+  {name:'Ittigen',canton:'Bern (BE)',code:'BE'},
+  {name:'Zollikofen',canton:'Bern (BE)',code:'BE'},
+  {name:'Wohlen bei Bern',canton:'Bern (BE)',code:'BE'},
+  {name:'Kehrsatz',canton:'Bern (BE)',code:'BE'},
+  {name:'Köniz',canton:'Bern (BE)',code:'BE'},
+  {name:'Bremgarten bei Bern',canton:'Bern (BE)',code:'BE'},
+  {name:'Burgdorf',canton:'Bern (BE)',code:'BE'},
+  {name:'Langenthal',canton:'Bern (BE)',code:'BE'},
+  {name:'Spiez',canton:'Bern (BE)',code:'BE'},
+  {name:'Steffisburg',canton:'Bern (BE)',code:'BE'},
+  {name:'Heimberg',canton:'Bern (BE)',code:'BE'},
+  {name:'Hilterfingen',canton:'Bern (BE)',code:'BE'},
+  {name:'Sigriswil',canton:'Bern (BE)',code:'BE'},
+  {name:'Langnau im Emmental',canton:'Bern (BE)',code:'BE'},
+  {name:'Konolfingen',canton:'Bern (BE)',code:'BE'},
+  {name:'Münchenbuchsee',canton:'Bern (BE)',code:'BE'},
+  {name:'Jegenstorf',canton:'Bern (BE)',code:'BE'},
+  {name:'Lyss',canton:'Bern (BE)',code:'BE'},
+  {name:'Aarberg',canton:'Bern (BE)',code:'BE'},
+  {name:'Nidau',canton:'Bern (BE)',code:'BE'},
+  {name:'Brügg',canton:'Bern (BE)',code:'BE'},
+  {name:'Interlaken',canton:'Bern (BE)',code:'BE'},
+  {name:'Unterseen',canton:'Bern (BE)',code:'BE'},
+  {name:'Brienz',canton:'Bern (BE)',code:'BE'},
+  {name:'Meiringen',canton:'Bern (BE)',code:'BE'},
+  {name:'Adelboden',canton:'Bern (BE)',code:'BE'},
+  {name:'Frutigen',canton:'Bern (BE)',code:'BE'},
+  {name:'Zweisimmen',canton:'Bern (BE)',code:'BE'},
+  {name:'Saanen',canton:'Bern (BE)',code:'BE'},
+  {name:'Moutier',canton:'Bern (BE)',code:'BE'},
+  {name:'Tramelan',canton:'Bern (BE)',code:'BE'},
+  {name:'Saint-Imier',canton:'Bern (BE)',code:'BE'},
+  {name:'La Neuveville',canton:'Bern (BE)',code:'BE'},
+  // ── Zurich canton common suburbs
+  {name:'Bülach',canton:'Zurich (ZH)',code:'ZH'},
+  {name:'Dübendorf',canton:'Zurich (ZH)',code:'ZH'},
+  {name:'Uster',canton:'Zurich (ZH)',code:'ZH'},
+  {name:'Wetzikon',canton:'Zurich (ZH)',code:'ZH'},
+  {name:'Kloten',canton:'Zurich (ZH)',code:'ZH'},
+  {name:'Opfikon',canton:'Zurich (ZH)',code:'ZH'},
+  {name:'Wallisellen',canton:'Zurich (ZH)',code:'ZH'},
+  {name:'Regensdorf',canton:'Zurich (ZH)',code:'ZH'},
+  {name:'Schlieren',canton:'Zurich (ZH)',code:'ZH'},
+  {name:'Dietikon',canton:'Zurich (ZH)',code:'ZH'},
+  {name:'Adliswil',canton:'Zurich (ZH)',code:'ZH'},
+  {name:'Horgen',canton:'Zurich (ZH)',code:'ZH'},
+  {name:'Wädenswil',canton:'Zurich (ZH)',code:'ZH'},
+  {name:'Thalwil',canton:'Zurich (ZH)',code:'ZH'},
+  {name:'Küsnacht',canton:'Zurich (ZH)',code:'ZH'},
+  {name:'Meilen',canton:'Zurich (ZH)',code:'ZH'},
+  {name:'Stäfa',canton:'Zurich (ZH)',code:'ZH'},
+  // ── Vaud / Geneva / Fribourg suburbs commonly needed
+  {name:'Renens',canton:'Vaud (VD)',code:'VD'},
+  {name:'Pully',canton:'Vaud (VD)',code:'VD'},
+  {name:'Vevey',canton:'Vaud (VD)',code:'VD'},
+  {name:'Morges',canton:'Vaud (VD)',code:'VD'},
+  {name:'Yverdon-les-Bains',canton:'Vaud (VD)',code:'VD'},
+  {name:'Ecublens',canton:'Vaud (VD)',code:'VD'},
+  {name:'Prilly',canton:'Vaud (VD)',code:'VD'},
+  {name:'Lutry',canton:'Vaud (VD)',code:'VD'},
+  {name:'Bulle',canton:'Fribourg (FR)',code:'FR'},
+  {name:'Villars-sur-Glâne',canton:'Fribourg (FR)',code:'FR'},
+  {name:'Marly',canton:'Fribourg (FR)',code:'FR'},
+  {name:'Düdingen',canton:'Fribourg (FR)',code:'FR'},
+  {name:'Murten',canton:'Fribourg (FR)',code:'FR'},
+  {name:'Carouge',canton:'Geneva (GE)',code:'GE'},
+  {name:'Vernier',canton:'Geneva (GE)',code:'GE'},
+  {name:'Lancy',canton:'Geneva (GE)',code:'GE'},
+  {name:'Meyrin',canton:'Geneva (GE)',code:'GE'},
+  {name:'Onex',canton:'Geneva (GE)',code:'GE'},
+  // ── Basel / Aargau / Solothurn / others
+  {name:'Allschwil',canton:'Basel (BL)',code:'BL'},
+  {name:'Pratteln',canton:'Basel (BL)',code:'BL'},
+  {name:'Muttenz',canton:'Basel (BL)',code:'BL'},
+  {name:'Liestal',canton:'Basel (BL)',code:'BL'},
+  {name:'Reinach',canton:'Basel (BL)',code:'BL'},
+  {name:'Birsfelden',canton:'Basel (BL)',code:'BL'},
+  {name:'Riehen',canton:'Basel (BS)',code:'BS'},
+  {name:'Wettingen',canton:'Aargau (AG)',code:'AG'},
+  {name:'Aarau',canton:'Aargau (AG)',code:'AG'},
+  {name:'Baden',canton:'Aargau (AG)',code:'AG'},
+  {name:'Olten',canton:'Solothurn (SO)',code:'SO'},
+  {name:'Grenchen',canton:'Solothurn (SO)',code:'SO'},
+  {name:'Solothurn',canton:'Solothurn (SO)',code:'SO'},
+  {name:'Schaffhausen',canton:'Schaffhausen (SH)',code:'SH'},
+  {name:'Neuhausen am Rheinfall',canton:'Schaffhausen (SH)',code:'SH'},
+  // ── Existing mountain / resort communes (kept from before)
   {name:'Grächen',canton:'Valais (VS)',code:'VS'},
   {name:'Bellwald',canton:'Valais (VS)',code:'VS'},
   {name:'Riederalp',canton:'Valais (VS)',code:'VS'},
@@ -2935,6 +3090,9 @@ function setMapMode(mode) {
 
 seedSampleReviews();
 renderRevStarGrid();
+// Seed the commune list with supplement + index immediately so Bolligen and friends
+// are findable without waiting for any async TopoJSON fetch.
+try { ALL_SWISS_COMMUNES = buildCommuneListFromTopo(null); } catch(e) { console.warn('seed communes:', e); }
 renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();loadReviewsFromSupabase().catch(()=>{});applyRevTranslations();updateHeroStats();loadReviewsFromSupabase();
 // Update community count from real data
 const countEl=document.getElementById('community-count');
