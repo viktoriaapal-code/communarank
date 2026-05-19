@@ -11,7 +11,9 @@ CREATE TABLE IF NOT EXISTS reviews (
   canton        TEXT NOT NULL,
   overall       INTEGER NOT NULL CHECK (overall BETWEEN 1 AND 5),
   name          TEXT NOT NULL,
-  text          TEXT NOT NULL,
+  text          TEXT DEFAULT '',
+  tags          TEXT[] DEFAULT '{}',
+  bfs_number    INTEGER,
   pros          TEXT,
   cons          TEXT,
   years         TEXT,
@@ -31,6 +33,22 @@ CREATE INDEX IF NOT EXISTS reviews_community_idx ON reviews(community);
 CREATE INDEX IF NOT EXISTS reviews_canton_idx ON reviews(canton);
 CREATE INDEX IF NOT EXISTS reviews_status_idx ON reviews(status);
 CREATE INDEX IF NOT EXISTS reviews_created_idx ON reviews(created_at DESC);
+CREATE INDEX IF NOT EXISTS reviews_bfs_number_idx ON reviews(bfs_number);
+
+-- 1b. REVIEW_TAGS TABLE (quick-tag options for the review form)
+CREATE TABLE IF NOT EXISTS review_tags (
+  id            SERIAL PRIMARY KEY,
+  slug          TEXT NOT NULL UNIQUE,
+  label_en      TEXT NOT NULL,
+  label_fr      TEXT,
+  label_de      TEXT,
+  label_it      TEXT,
+  sort_order    INTEGER DEFAULT 0,
+  active        BOOLEAN DEFAULT TRUE,
+  created_at    TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS review_tags_active_idx ON review_tags(active, sort_order);
 
 -- 2. WAITLIST TABLE
 -- Stores early access signups
@@ -95,6 +113,7 @@ ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
 ALTER TABLE waitlist ENABLE ROW LEVEL SECURITY;
 ALTER TABLE communities ENABLE ROW LEVEL SECURITY;
 ALTER TABLE all_communes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE review_tags ENABLE ROW LEVEL SECURITY;
 
 -- REVIEWS: anyone can read approved reviews, anyone can insert
 CREATE POLICY "Anyone can read approved reviews"
@@ -132,6 +151,11 @@ CREATE POLICY "Service role manages communities"
 CREATE POLICY "Public can read communes"
   ON all_communes FOR SELECT
   USING (true);
+
+-- REVIEW_TAGS: public read active tags only
+CREATE POLICY "Public can read active review tags"
+  ON review_tags FOR SELECT
+  USING (active = true);
 
 -- ============================================================
 -- HELPFUL VIEWS

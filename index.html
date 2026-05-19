@@ -406,9 +406,15 @@ function closeMobileNav() {
           </div>
         </div>
 
-        <!-- Written review -->
+        <!-- Quick tags (optional) -->
         <div style="margin-bottom:18px;">
-          <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-text">Your review</label>
+          <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-tags">Quick tags (optional)</label>
+          <div id="rev-quick-tags" class="filter-chips" style="margin-bottom:0;"></div>
+        </div>
+
+        <!-- Written review (optional) -->
+        <div style="margin-bottom:18px;">
+          <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-text">Your review (optional)</label>
           <textarea id="rev-text" rows="4"
             style="width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:var(--r);font-size:14px;font-family:'DM Sans',sans-serif;resize:vertical;line-height:1.7;"
             placeholder="Tell others what it's like to live here..."></textarea>
@@ -806,7 +812,7 @@ async function loadReviewsFromSupabase() {
       const remote = data.map(r=>({id:r.id,community:r.community,canton:r.canton,
         overall:r.overall,name:r.name,text:r.text,pros:r.pros||'',cons:r.cons||'',
         years:r.years||'',profile:r.profile||'',tenure:r.tenure||'',proptype:r.proptype||'',
-        ratings:r.ratings||{},helpful:r.helpful||0,
+        ratings:r.ratings||{},helpful:r.helpful||0,tags:r.tags||[],
         date:(r.created_at||'').split('T')[0],lang:r.lang||'en'}));
       const local = getReviews().filter(r=>r.id&&r.id.length<20);
       const remoteIds = new Set(remote.map(r=>r.id));
@@ -1150,6 +1156,7 @@ function showPage(n, opts) {
     applyRevTranslations();
     renderRevStarGrid();
     if(ALL_SWISS_COMMUNES.length < 100) loadCommuneListAsync();
+    loadReviewTagsFromSupabase();
   }
 
   // Close mobile hamburger menu if open
@@ -1900,7 +1907,7 @@ const REV_T = {
     tabWrite:'✍️ Write a Review', tabBrowse:'📋 Browse Reviews', tabRanking:"🏆 People's Ranking",
     formTitle:'Share your experience', lblCommunity:'Community', lblRatings:'Rate each dimension (1–5 stars)',
     lblOverall:'Overall impression', lblPros:'👍 What I love', lblCons:'👎 What could improve',
-    lblText:'Your review', lblName:'Nickname', lblYears:'Years living there', lblProfile:'I am a',
+    lblText:'Your review (optional)', lblTags:'Quick tags (optional)', lblName:'Nickname', lblYears:'Years living there', lblProfile:'I am a',
     submitBtn:'Submit review →', submitting:'Submitting...', privacy:'Reviews are publicly visible. We moderate for spam.',
     rpFamily:'Family with children', rpCouple:'Couple', rpSingle:'Single professional',
     rpRetiree:'Retiree', rpStudent:'Student', rpExpat:'Expat',
@@ -2076,6 +2083,10 @@ let currentRevTab = 'write';
 let overallStar = 0;
 let dimStars = {};
 let selectedCommunity = '';
+let selectedBfsNumber = null;
+let selectedRevTags = new Set();
+let REVIEW_TAGS = [];
+let REVIEW_TAGS_RAW = [];
 
 function switchRevTab(tab) {
   currentRevTab = tab;
@@ -2085,7 +2096,10 @@ function switchRevTab(tab) {
     if(panel) panel.style.display = t===tab ? 'block' : 'none';
     if(btn) btn.classList.toggle('active', t===tab);
   });
-  if(tab==='write' && ALL_SWISS_COMMUNES.length<100) loadCommuneListAsync();
+  if(tab==='write') {
+    if(ALL_SWISS_COMMUNES.length<100) loadCommuneListAsync();
+    loadReviewTagsFromSupabase();
+  }
   if(tab==='browse') {
     // Show existing reviews immediately, then refresh from Supabase
     renderReviews();
@@ -2198,7 +2212,7 @@ function renderRevSuggestions(q) {
     const inIndex = COMMUNITIES.some(ic => ic.name.toLowerCase() === c.name.toLowerCase());
     return `<div style="padding:9px 14px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;"
       onmouseover="this.style.background='var(--paper)'" onmouseout="this.style.background=''"
-      onclick="selectRevCommunity('${c.name.replace(/'/g,"\\'")}','${c.canton}')">
+      onclick="selectRevCommunity('${c.name.replace(/'/g,"\\'")}','${c.canton}',${c.bfs_number != null ? c.bfs_number : 'null'})">
       <span>${c.name}</span>
       <span style="display:flex;align-items:center;gap:6px;">
         ${inIndex ? '<span style="background:var(--green3);color:var(--green);font-size:10px;padding:1px 6px;border-radius:3px;font-weight:500;">in index</span>' : ''}
@@ -2254,9 +2268,64 @@ function fetchCommunesFromGeoAdmin(q) {
 }
 
 let selectedCommunityData = null;
-function selectRevCommunity(name, canton) {
+
+function mapReviewTags(data) {
+  return (data || []).map(t => ({
+    key: t.key || t.slug || String(t.id),
+    label: t['label_' + lang] || t.label || t.label_en || t.key || t.slug
+  }));
+}
+
+async function loadReviewTagsFromSupabase() {
+  try {
+    if(!SUPABASE_KEY || SUPABASE_KEY.includes('REPLACE')) return;
+    const data = await sbSelect('review_tags', 'active=eq.true&order=sort_order.asc');
+    if(!data || !data.length) return;
+    REVIEW_TAGS_RAW = data;
+    REVIEW_TAGS = mapReviewTags(data);
+    renderRevQuickTags();
+  } catch(e) { console.warn('Review tags load:', e.message); }
+}
+
+function renderRevQuickTags() {
+  const box = document.getElementById('rev-quick-tags');
+  if(!box) return;
+  if(!REVIEW_TAGS.length) {
+    box.innerHTML = '';
+    return;
+  }
+  box.innerHTML = REVIEW_TAGS.map(t => {
+    const on = selectedRevTags.has(t.key);
+    return `<button type="button" class="chip${on ? ' active' : ''}" data-tag="${t.key}"
+      onclick="toggleRevTag('${t.key.replace(/'/g, "\\'")}')">${t.label}</button>`;
+  }).join('');
+}
+
+function toggleRevTag(slug) {
+  if(selectedRevTags.has(slug)) selectedRevTags.delete(slug);
+  else selectedRevTags.add(slug);
+  renderRevQuickTags();
+}
+
+async function resolveBfsNumberAsync(name, canton) {
+  const code = (canton.match(/\(([A-Z]{2})\)/) || [])[1];
+  if(!code || !SUPABASE_KEY || SUPABASE_KEY.includes('REPLACE')) return;
+  try {
+    const nameEsc = name.replace(/"/g, '""');
+    const rows = await sbSelect('all_communes', 'name=eq."' + nameEsc + '"&canton_code=eq.' + code + '&select=bfs_number&limit=1');
+    if(rows && rows[0] && rows[0].bfs_number) selectedBfsNumber = rows[0].bfs_number;
+  } catch(e) { /* optional lookup */ }
+}
+
+function selectRevCommunity(name, canton, bfsNumber) {
   selectedCommunity = name;
-  selectedCommunityData = {name, canton};
+  selectedCommunityData = {name, canton, bfs_number: bfsNumber || null};
+  selectedBfsNumber = bfsNumber || null;
+  if(!selectedBfsNumber) {
+    const local = ALL_SWISS_COMMUNES.find(c => c.name === name);
+    if(local && local.bfs_number) selectedBfsNumber = local.bfs_number;
+    else resolveBfsNumberAsync(name, canton);
+  }
   const input = document.getElementById('rev-community-input');
   if(input) input.value = name + ' — ' + canton;
   const div = document.getElementById('rev-suggestions');
@@ -2278,9 +2347,9 @@ function submitReview() {
   if(!selectedCommunity) { showToast(t.errCommunity); return; }
   if(!name) { showToast(t.errName); return; }
   if(!overallStar) { showToast(t.errOverall); return; }
-  if(!text) { showToast(t.errText); return; }
   if(!consent) { showToast(t.errConsent||'Please accept privacy terms'); return; }
 
+  const tags = [...selectedRevTags];
   const community = COMMUNITIES.find(c => c.name === selectedCommunity) || selectedCommunityData;
   const review = {
     id: 'r' + Date.now(),
@@ -2289,18 +2358,22 @@ function submitReview() {
     overall: overallStar,
     ratings: {...dimStars},
     pros, cons, text, name, years, profile, tenure, proptype,
+    tags,
+    bfs_number: selectedBfsNumber || null,
     helpful: 0,
     date: new Date().toISOString().split('T')[0],
     lang
   };
 
-  // Moderate before saving
+  // Moderate written text when provided
+  if(text && typeof moderateReview === 'function') {
   const modResult = moderateReview(text, name);
   if(!modResult.ok) {
     const errEl = document.getElementById('rev-submit-error');
     if(errEl) { errEl.textContent = modResult.reason; errEl.style.display='block'; }
     else alert(modResult.reason);
     return;
+  }
   }
   // Set status to pending - will show after moderation
   review.status = 'pending';
@@ -2309,13 +2382,12 @@ function submitReview() {
   reviews.unshift(review);
   saveReviews(reviews);
 
-  // Also persist to Supabase
-  sbInsert('reviews', {
+  const sbReview = {
     community: review.community,
     canton: review.canton,
     overall: review.overall,
     name: review.name,
-    text: review.text,
+    text: review.text || '',
     pros: review.pros || null,
     cons: review.cons || null,
     years: review.years || null,
@@ -2323,30 +2395,19 @@ function submitReview() {
     tenure: review.tenure || null,
     proptype: review.proptype || null,
     ratings: review.ratings,
-    lang: review.lang,
-    status: 'pending'
-  }).then(() => {
+    tags: tags.length ? tags : null,
+    bfs_number: review.bfs_number || null,
+    lang: review.lang
+  };
+
+  // Also persist to Supabase
+  sbInsert('reviews', {...sbReview, status: 'pending'}).then(() => {
     console.log('Review saved to Supabase ✓');
     updateHeroStats();
   }).catch(e => console.warn('Supabase save failed (stored locally):', e.message));
 
   // Also save to Supabase database
-  sbInsert('reviews', {
-    community: review.community,
-    canton: review.canton,
-    overall: review.overall,
-    name: review.name,
-    text: review.text,
-    pros: review.pros || null,
-    cons: review.cons || null,
-    years: review.years || null,
-    profile: review.profile || null,
-    tenure: review.tenure || null,
-    proptype: review.proptype || null,
-    ratings: review.ratings,
-    lang: review.lang,
-    status: 'approved'
-  }).then(() => {
+  sbInsert('reviews', {...sbReview, status: 'approved'}).then(() => {
     console.log('Review saved to Supabase ✓');
     updateHeroStats();
   }).catch(e => {
@@ -2355,9 +2416,13 @@ function submitReview() {
 
   // Reset form
   selectedCommunity = '';
+  selectedCommunityData = null;
+  selectedBfsNumber = null;
+  selectedRevTags = new Set();
   overallStar = 0;
   dimStars = {};
   const ce=document.getElementById('rev-consent');if(ce)ce.checked=false;
+  renderRevQuickTags();
   ['rev-name','rev-text','rev-pros','rev-cons','rev-community-input'].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.value = '';
@@ -2442,7 +2507,8 @@ function renderReviews() {
         ${r.pros?`<div style="background:var(--green3);border-radius:var(--r);padding:8px 12px;font-size:12px;color:var(--green);"><strong>👍</strong> ${r.pros}</div>`:''}
         ${r.cons?`<div style="background:#fde8e8;border-radius:var(--r);padding:8px 12px;font-size:12px;color:var(--red);"><strong>👎</strong> ${r.cons}</div>`:''}
       </div>`:''}
-      <p style="font-size:14px;color:var(--ink2);line-height:1.7;margin-bottom:12px;">${r.text}</p>
+      ${r.tags && r.tags.length ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">${r.tags.map(tag => `<span style="font-size:11px;background:var(--paper);border:1px solid var(--border);border-radius:20px;padding:3px 10px;color:var(--ink2);">${tag}</span>`).join('')}</div>` : ''}
+      ${r.text ? `<p style="font-size:14px;color:var(--ink2);line-height:1.7;margin-bottom:12px;">${r.text}</p>` : ''}
       ${dimBars ? `<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">${dimBars}</div>` : ''}
       <div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border);">
         <div style="font-size:12px;color:var(--ink3);">
@@ -2566,7 +2632,7 @@ function applyRevTranslations() {
   st('rev-form-title', t.formTitle);
   st('rev-lbl-community', t.lblCommunity); st('rev-lbl-ratings', t.lblRatings);
   st('rev-lbl-overall', t.lblOverall); st('rev-lbl-pros', t.lblPros); st('rev-lbl-cons', t.lblCons);
-  st('rev-lbl-text', t.lblText); st('rev-lbl-name', t.lblName);
+  st('rev-lbl-text', t.lblText); st('rev-lbl-tags', t.lblTags || 'Quick tags (optional)'); st('rev-lbl-name', t.lblName);
   st('rev-lbl-years', t.lblYears); st('rev-lbl-profile', t.lblProfile);
   st('rev-submit-lbl', t.submitBtn); st('rev-privacy', t.privacy);
   st('nb-reviews', t.navBtn);
@@ -2593,6 +2659,7 @@ function applyRevTranslations() {
   sf('prv-nosell',t.privNosell);sf('prv-anon',t.privAnon);
   sf('consent-text',t.consentText);
   sf('rev-submit-lbl',t.submitBtn||'Submit my review →');
+  if(REVIEW_TAGS_RAW.length) { REVIEW_TAGS = mapReviewTags(REVIEW_TAGS_RAW); renderRevQuickTags(); }
   const fp=document.getElementById('footer-privacy');
   if(fp)fp.textContent=lang==='fr'?'Politique de confidentialité':lang==='de'?'Datenschutz':lang==='it'?'Privacy':'Privacy Policy';
 }
@@ -2774,13 +2841,17 @@ function buildCommuneListFromTopo(topo) {
     features.forEach(f => {
       const name = f.properties && (f.properties.name || f.properties.GMDNAME || f.properties.NAME);
       const cantonNr = f.properties && (f.properties.KTNR || f.properties.KT);
+      const bfsRaw = f.properties && (f.properties.BFSNR || f.properties.GMDNR || f.properties.id);
+      const bfs_number = bfsRaw != null ? parseInt(bfsRaw, 10) : null;
       if(!name) return;
       const canton = BFS_CANTON_MAP[cantonNr] || '';
       const code = canton.match(/\(([A-Z]+)\)/)?.[1] || '';
       const key = name.toLowerCase().trim();
       if(!seen.has(key)) {
         seen.add(key);
-        result.push({name: name.trim(), canton, code});
+        const entry = {name: name.trim(), canton, code};
+        if(bfs_number && !isNaN(bfs_number)) entry.bfs_number = bfs_number;
+        result.push(entry);
       }
     });
   }
