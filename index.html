@@ -1091,7 +1091,87 @@ function addToCompare(n){if(!n)return;const c=COMMUNITIES.find(c=>c.name===n);if
 function removeFromCompare(n){cmpSelected=cmpSelected.filter(x=>x!==n);renderCompare()}
 function renderCompare(){const sel=document.getElementById('cmp-selected');sel.innerHTML=cmpSelected.map(n=>`<span style="background:var(--green3);color:var(--green);padding:4px 10px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;" onclick="removeFromCompare('${n}')">${n} ×</span>`).join('');const g=document.getElementById('compare-grid');if(!cmpSelected.length){g.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--ink3);font-size:14px;">Add communities above to compare</div>`;return}const cs=cmpSelected.map(n=>COMMUNITIES.find(c=>c.name===n)).filter(Boolean);g.innerHTML=cs.map(c=>{const sc=calcScore(c);const _salLbl=lang==='fr'?'Revenu médian':lang==='de'?'Medianeinkommen':lang==='it'?'Reddito mediano':'Median Income';const _ratLbl=lang==='fr'?'Pouvoir d achat':lang==='de'?'Kaufkraft':lang==='it'?'Acquisto':'Purchasing Power';const salRows=c.medianIncome?`<div class="compare-row" style="background:var(--gold2);padding:4px 0;border-radius:4px;margin-bottom:4px;"><span class="compare-row-label">💵 ${_salLbl}</span><span style="font-weight:600;font-size:12px;color:#7a5a00;">CHF ${(c.medianIncome/1000).toFixed(0)}k</span></div><div class="compare-row" style="background:${c.salaryRatio>=60?'var(--green3)':c.salaryRatio>=40?'var(--gold2)':'#fde8e8'};padding:4px 0;border-radius:4px;margin-bottom:8px;"><span class="compare-row-label">⚖️ ${_ratLbl}</span><span class="badge ${c.salaryRatio>=60?'badge-green':c.salaryRatio>=40?'badge-gold':'badge-red'}">${c.salaryRatio}/100</span></div>`:'';const rows=INDEX_PILLARS.map(p=>{const v=c.scores[p.key];const cl=v>=80?'badge-green':v>=60?'badge-gold':'badge-red';return`<div class="compare-row"><span class="compare-row-label">${p.icon} ${p.title[lang]||p.title.en}</span><span class="badge ${cl}">${v}</span></div>`}).join('');return`<div class="compare-card"><h4>${c.name} <span style="color:var(--green);font-family:'Fraunces',serif;">${sc}</span></h4><div style="font-size:11px;color:var(--ink3);margin-bottom:10px;">${c.canton} · ${c.type} · ${c.landPrice} ${getT('cost')}</div>${salRows}${rows}</div>`}).join('');const wrap=document.getElementById('cmp-chart-wrap');wrap.style.display=cs.length>=2?'block':'none';if(cs.length>=2)renderRadar(cs)}
 function renderRadar(cs){if(cmpChart){cmpChart.destroy();cmpChart=null}const labels=INDEX_PILLARS.map(p=>p.title[lang]||p.title.en);const colors=['#2d5a27','#c8960c','#1a3a5c','#8b2020'];const datasets=cs.map((c,i)=>({label:c.name,data:INDEX_PILLARS.map(p=>c.scores[p.key]),borderColor:colors[i],backgroundColor:colors[i]+'22',borderWidth:2,pointRadius:3}));cmpChart=new Chart(document.getElementById('cmpChart'),{type:'radar',data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,ticks:{stepSize:20,font:{size:9,navRanking:'Ranking',navCompare:'Compare',navIndex:'Our Index',navMap:'Map',navReviews:'Reviews',navRanking:'Classement',navCompare:'Comparer',navIndex:'Notre Index',navMap:'Carte',navReviews:'Avis',navRanking:'Rangliste',navCompare:'Vergleich',navIndex:'Unser Index',navMap:'Karte',navReviews:'Bewertungen',navRanking:'Classifica',navCompare:'Confronta',navIndex:'Il nostro Index',navMap:'Mappa',navReviews:'Recensioni'}},pointLabels:{font:{size:10}}}},plugins:{legend:{display:true,labels:{font:{size:11}}}}}})}
-function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+n).classList.add('active');document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.id==='nb-'+n));if(n==='compare')renderCompare();if(n==='index')renderIndexPillars();if(n==='map')renderMap();if(n==='ai')applyWaitlistTranslations();if(n==='privacy')renderPrivacy();if(n==='reviews'){applyRevTranslations();renderRevStarGrid();if(ALL_SWISS_COMMUNES.length<100)loadCommuneListAsync();};const navLinks=document.querySelector('.nav-links');if(navLinks&&navLinks.classList.contains('open')){navLinks.classList.remove('open');const h1=document.getElementById('ham-line1');const h2=document.getElementById('ham-line2');const h3=document.getElementById('ham-line3');if(h1)h1.style.transform='';if(h2)h2.style.opacity='1';if(h3)h3.style.transform='';}}
+// ─── CLIENT-SIDE ROUTING ─────────────────────────────────────
+// Maps each menu page to a clean URL. Vercel's catch-all route already
+// serves index.html for every path, so /reviews, /map, etc. all hit this file
+// and we resolve the page from window.location.pathname on load.
+const ROUTES = {
+  ranking: '/',
+  compare: '/compare',
+  index:   '/our-index',
+  map:     '/map',
+  reviews: '/reviews',
+  ai:      '/waitlist',
+  privacy: '/privacy'
+};
+const PATH_TO_PAGE = {};
+Object.keys(ROUTES).forEach(k => { PATH_TO_PAGE[ROUTES[k]] = k; });
+// Legacy / alias paths so old links and bookmarks keep working
+PATH_TO_PAGE[''] = 'ranking';
+PATH_TO_PAGE['/index'] = 'index';
+PATH_TO_PAGE['/early-access'] = 'ai';
+PATH_TO_PAGE['/ai'] = 'ai';
+
+const PAGE_TITLES = {
+  ranking:  'CommunaRank — Swiss Community Rankings',
+  compare:  'Compare Communities — CommunaRank',
+  index:    'Our Index — CommunaRank',
+  map:      'Community Map — CommunaRank',
+  reviews:  'Community Reviews — CommunaRank',
+  ai:       'Early Access — CommunaRank',
+  privacy:  'Privacy Policy — CommunaRank'
+};
+
+function pageFromUrl() {
+  let path = (window.location.pathname || '/').replace(/\/+$/, '') || '/';
+  // Legacy hash links like /#reviews take priority on the root path
+  const hash = (window.location.hash || '').replace('#', '');
+  if(path === '/' && hash && document.getElementById('page-' + hash)) return hash;
+  if(PATH_TO_PAGE[path]) return PATH_TO_PAGE[path];
+  if(hash && document.getElementById('page-' + hash)) return hash;
+  return 'ranking';
+}
+
+function showPage(n, opts) {
+  opts = opts || {};
+  const target = document.getElementById('page-' + n);
+  if(!target) { n = 'ranking'; }
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + n).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.id === 'nb-' + n));
+
+  // Per-page render hooks (unchanged from original)
+  if(n === 'compare') renderCompare();
+  if(n === 'index')   renderIndexPillars();
+  if(n === 'map')     renderMap();
+  if(n === 'ai')      applyWaitlistTranslations();
+  if(n === 'privacy') renderPrivacy();
+  if(n === 'reviews') {
+    applyRevTranslations();
+    renderRevStarGrid();
+    if(ALL_SWISS_COMMUNES.length < 100) loadCommuneListAsync();
+  }
+
+  // Close mobile hamburger menu if open
+  const navLinks = document.querySelector('.nav-links');
+  if(navLinks && navLinks.classList.contains('open')) {
+    navLinks.classList.remove('open');
+    const h1 = document.getElementById('ham-line1');
+    const h2 = document.getElementById('ham-line2');
+    const h3 = document.getElementById('ham-line3');
+    if(h1) h1.style.transform = '';
+    if(h2) h2.style.opacity = '1';
+    if(h3) h3.style.transform = '';
+  }
+
+  // Update browser URL + tab title (skip when called from popstate / initial load)
+  if(PAGE_TITLES[n]) document.title = PAGE_TITLES[n];
+  const newPath = ROUTES[n] || '/';
+  if(!opts.skipPush && window.location.pathname !== newPath) {
+    try { history.pushState({page: n}, '', newPath); } catch(e) {}
+  }
+  if(!opts.skipScroll) window.scrollTo(0, 0);
+}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
 
 // ─── MAP ───────────────────────────────────────────────
@@ -2880,6 +2960,28 @@ function renderPrivacy() {
       "<div style=\"line-height:1.8;color:var(--ink2);font-size:14px;\">" + sec.p + "</div></div>";
   }).join("");
 }
+
+// ─── ROUTER WIRING ───────────────────────────────────────────
+// Handle browser back/forward buttons
+window.addEventListener('popstate', function(e) {
+  const n = (e.state && e.state.page) ? e.state.page : pageFromUrl();
+  showPage(n, { skipPush: true });
+});
+
+// Resolve initial route from the URL on page load
+(function initRouter() {
+  const n = pageFromUrl();
+  // Replace the default history entry so back-button has the correct state
+  try {
+    history.replaceState({ page: n }, '', ROUTES[n] || window.location.pathname);
+  } catch(e) {}
+  // If the URL points to anything other than ranking, switch to it
+  if(n !== 'ranking') {
+    showPage(n, { skipPush: true, skipScroll: true });
+  } else if(PAGE_TITLES.ranking) {
+    document.title = PAGE_TITLES.ranking;
+  }
+})();
 
 </script>
 <div id="page-privacy" class="page">
