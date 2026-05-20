@@ -819,7 +819,8 @@ async function loadReviewsFromSupabase() {
         years:r.years||'',profile:r.profile||'',tenure:r.tenure||'',proptype:r.proptype||'',
         ratings:r.ratings||{},helpful:r.helpful||0,tags:r.tags||[],
         date:(r.created_at||'').split('T')[0],lang:r.lang||'en'}));
-      const local = getReviews().filter(r=>r.id&&r.id.length<20);
+      const SEED_IDS = new Set(['r1','r2','r3','r4','r5']);
+      const local = getReviews().filter(r=>r.id&&r.id.length<20&&!SEED_IDS.has(r.id));
       const remoteIds = new Set(remote.map(r=>r.id));
       saveReviews([...remote,...local.filter(r=>!remoteIds.has(r.id))]);
       updateHeroStats();
@@ -2515,7 +2516,7 @@ function renderReviews() {
           <span style="font-size:11px;color:var(--ink3);">${r.date}</span>
         </div>
       </div>
-      ${r.pros || r.cons ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+      ${r.pros || r.cons ? `<div style="display:grid;grid-template-columns:${r.pros&&r.cons?'1fr 1fr':'1fr'};gap:10px;margin-bottom:12px;">
         ${r.pros?`<div style="background:var(--green3);border-radius:var(--r);padding:8px 12px;font-size:12px;color:var(--green);"><strong>👍</strong> ${r.pros}</div>`:''}
         ${r.cons?`<div style="background:#fde8e8;border-radius:var(--r);padding:8px 12px;font-size:12px;color:var(--red);"><strong>👎</strong> ${r.cons}</div>`:''}
       </div>`:''}
@@ -3066,6 +3067,7 @@ function closeProfile() {
 
 // ─── UPDATE HERO REVIEW COUNT ─────────────────────────────────────────
 function updateHeroStats() {
+  // Counts Supabase-approved reviews. Locally-stored pending reviews (only present when Supabase insert failed) are also included.
   const reviews = getReviews();
   const reviewEl = document.getElementById('review-count');
   if(reviewEl) reviewEl.textContent = reviews.length.toLocaleString();
@@ -3179,7 +3181,7 @@ renderRevStarGrid();
 // are findable without waiting for any async TopoJSON fetch.
 try { ALL_SWISS_COMMUNES = buildCommuneListFromTopo(null); } catch(e) { console.warn('seed communes:', e); }
 _crReady=true;
-renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();loadReviewsFromSupabase().catch(()=>{});applyRevTranslations();updateHeroStats();loadReviewsFromSupabase();
+renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();loadReviewsFromSupabase().catch(()=>{});applyRevTranslations();updateHeroStats();
 // Update community count from real data
 const countEl=document.getElementById('community-count');
 if(countEl)countEl.textContent=COMMUNITIES.length.toLocaleString();
