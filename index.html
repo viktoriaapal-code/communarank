@@ -372,12 +372,6 @@ function closeMobileNav() {
           </div>
         </div>
 
-        <!-- Star ratings per dimension -->
-        <div style="margin-bottom:18px;">
-          <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:12px;" id="rev-lbl-ratings">Rate each dimension (1–5 stars)</label>
-          <div id="rev-star-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;"></div>
-        </div>
-
         <!-- Overall impression -->
         <div style="margin-bottom:18px;">
           <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-overall">Overall impression</label>
@@ -389,7 +383,23 @@ function closeMobileNav() {
             <span class="rev-overall-star" data-val="5" style="font-size:28px;cursor:pointer;opacity:0.35;transition:all 0.15s;" onclick="setOverallStar(5)">★</span>
           </div>
         </div>
+        <!-- Quick tags -->
+        <div style="margin-bottom:18px;">
+          <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-tags">Quick tags</label>
+          <div id="rev-quick-tags" class="filter-chips" style="margin-bottom:0;"></div>
+        </div>
+        <details id="rev-more-section" style="margin-bottom:18px;border:1px solid var(--border);border-radius:var(--r);background:var(--paper);">
+          <summary style="padding:14px 16px;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+            <span style="font-family:'Fraunces',serif;font-size:15px;color:var(--green);" id="rev-more-toggle-lbl">Want to share more?</span>
+            <span style="font-size:11px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.6px;font-family:'DM Sans',sans-serif;" id="rev-more-hint">Optional</span>
+          </summary>
+          <div style="padding:0 16px 16px;border-top:1px solid var(--border);">
 
+        <!-- Star ratings per dimension -->
+        <div style="margin-bottom:18px;padding-top:16px;">
+          <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:12px;" id="rev-lbl-ratings">Rate each dimension (1–5 stars)</label>
+          <div id="rev-star-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;"></div>
+        </div>
         <!-- Pros & Cons -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
           <div>
@@ -405,13 +415,6 @@ function closeMobileNav() {
               placeholder="e.g. Expensive parking, limited nightlife..."></textarea>
           </div>
         </div>
-
-        <!-- Quick tags (optional) -->
-        <div style="margin-bottom:18px;">
-          <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-tags">Quick tags (optional)</label>
-          <div id="rev-quick-tags" class="filter-chips" style="margin-bottom:0;"></div>
-        </div>
-
         <!-- Written review (optional) -->
         <div style="margin-bottom:18px;">
           <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-text">Your review (optional)</label>
@@ -419,7 +422,6 @@ function closeMobileNav() {
             style="width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:var(--r);font-size:14px;font-family:'DM Sans',sans-serif;resize:vertical;line-height:1.7;"
             placeholder="Tell others what it's like to live here..."></textarea>
         </div>
-
         <!-- Resident info -->
         <!-- Housing situation -->
         <div style="margin-bottom:18px;">
@@ -451,9 +453,8 @@ function closeMobileNav() {
             </div>
           </div>
         </div>
-
         <!-- Resident info -->
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:4px;">
           <div>
             <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-name">Nickname</label>
             <input id="rev-name" type="text"
@@ -482,6 +483,10 @@ function closeMobileNav() {
             </select>
           </div>
         </div>
+
+          </div>
+        </details>
+
 
         <!-- Encouragement & privacy consent -->
         <div style="background:linear-gradient(135deg,var(--green3),#f0f8ee);border:1px solid rgba(45,90,39,0.15);border-radius:var(--r2);padding:16px 18px;margin-bottom:18px;">
@@ -814,7 +819,8 @@ async function loadReviewsFromSupabase() {
         years:r.years||'',profile:r.profile||'',tenure:r.tenure||'',proptype:r.proptype||'',
         ratings:r.ratings||{},helpful:r.helpful||0,tags:r.tags||[],
         date:(r.created_at||'').split('T')[0],lang:r.lang||'en'}));
-      const local = getReviews().filter(r=>r.id&&r.id.length<20);
+      const SEED_IDS = new Set(['r1','r2','r3','r4','r5']);
+      const local = getReviews().filter(r=>r.id&&r.id.length<20&&!SEED_IDS.has(r.id));
       const remoteIds = new Set(remote.map(r=>r.id));
       saveReviews([...remote,...local.filter(r=>!remoteIds.has(r.id))]);
       updateHeroStats();
@@ -1908,7 +1914,8 @@ const REV_T = {
     tabWrite:'✍️ Write a Review', tabBrowse:'📋 Browse Reviews', tabRanking:"🏆 People's Ranking",
     formTitle:'Share your experience', lblCommunity:'Community', lblRatings:'Rate each dimension (1–5 stars)',
     lblOverall:'Overall impression', lblPros:'👍 What I love', lblCons:'👎 What could improve',
-    lblText:'Your review (optional)', lblTags:'Quick tags (optional)', lblName:'Nickname', lblYears:'Years living there', lblProfile:'I am a',
+    lblText:'Your review (optional)', lblTags:'Quick tags', lblName:'Nickname', lblYears:'Years living there', lblProfile:'I am a',
+    moreToggle:'Want to share more?', moreHint:'Optional',
     submitBtn:'Submit review →', submitting:'Submitting...', privacy:'Reviews are publicly visible. We moderate for spam.',
     rpFamily:'Family with children', rpCouple:'Couple', rpSingle:'Single professional',
     rpRetiree:'Retiree', rpStudent:'Student', rpExpat:'Expat',
@@ -1946,7 +1953,8 @@ const REV_T = {
     tabWrite:'✍️ Écrire un avis', tabBrowse:'📋 Parcourir les avis', tabRanking:'🏆 Classement populaire',
     formTitle:'Partagez votre expérience', lblCommunity:'Commune', lblRatings:'Notez chaque dimension (1–5 étoiles)',
     lblOverall:'Impression générale', lblPros:'👍 Ce que j\'aime', lblCons:'👎 Ce qui pourrait s\'améliorer',
-    lblText:'Votre avis', lblName:'Pseudonyme', lblYears:'Années de résidence', lblProfile:'Je suis',
+    lblText:'Votre avis (optionnel)', lblTags:'Étiquettes rapides', lblName:'Pseudonyme', lblYears:'Années de résidence', lblProfile:'Je suis',
+    moreToggle:'Envie d\'en dire plus ?', moreHint:'Optionnel',
     submitBtn:'Soumettre l\'avis →', submitting:'Envoi en cours...', privacy:'Les avis sont publics. Nous modérons le spam.',
     rpFamily:'Famille avec enfants', rpCouple:'Couple', rpSingle:'Professionnel célibataire',
     rpRetiree:'Retraité', rpStudent:'Étudiant', rpExpat:'Expatrié',
@@ -1984,7 +1992,8 @@ const REV_T = {
     tabWrite:'✍️ Bewertung schreiben', tabBrowse:'📋 Bewertungen durchsuchen', tabRanking:'🏆 Volksranking',
     formTitle:'Teilen Sie Ihre Erfahrung', lblCommunity:'Gemeinde', lblRatings:'Bewerten Sie jede Dimension (1–5 Sterne)',
     lblOverall:'Gesamteindruck', lblPros:'👍 Was mir gefällt', lblCons:'👎 Was verbessert werden könnte',
-    lblText:'Ihre Bewertung', lblName:'Spitzname', lblYears:'Jahre dort wohnhaft', lblProfile:'Ich bin',
+    lblText:'Ihre Bewertung (optional)', lblTags:'Schnell-Tags', lblName:'Spitzname', lblYears:'Jahre dort wohnhaft', lblProfile:'Ich bin',
+    moreToggle:'Mehr erzählen?', moreHint:'Optional',
     submitBtn:'Bewertung einreichen →', submitting:'Wird gesendet...', privacy:'Bewertungen sind öffentlich sichtbar. Spam wird moderiert.',
     rpFamily:'Familie mit Kindern', rpCouple:'Paar', rpSingle:'Single/Berufstätige',
     rpRetiree:'Rentner/in', rpStudent:'Student/in', rpExpat:'Expat',
@@ -2022,7 +2031,8 @@ const REV_T = {
     tabWrite:'✍️ Scrivi recensione', tabBrowse:'📋 Sfoglia recensioni', tabRanking:'🏆 Classifica popolare',
     formTitle:'Condividi la tua esperienza', lblCommunity:'Comune', lblRatings:'Valuta ogni dimensione (1–5 stelle)',
     lblOverall:'Impressione generale', lblPros:'👍 Cosa amo', lblCons:'👎 Cosa potrebbe migliorare',
-    lblText:'La tua recensione', lblName:'Soprannome', lblYears:'Anni di residenza', lblProfile:'Sono',
+    lblText:'La tua recensione (opzionale)', lblTags:'Tag rapidi', lblName:'Soprannome', lblYears:'Anni di residenza', lblProfile:'Sono',
+    moreToggle:'Vuoi aggiungere altro?', moreHint:'Opzionale',
     submitBtn:'Invia recensione →', submitting:'Invio in corso...', privacy:'Le recensioni sono pubbliche. Moderiamo lo spam.',
     rpFamily:'Famiglia con figli', rpCouple:'Coppia', rpSingle:'Professionista single',
     rpRetiree:'Pensionato/a', rpStudent:'Studente', rpExpat:'Expat',
@@ -2350,7 +2360,6 @@ function submitReview() {
   const consent = document.getElementById('rev-consent')?.checked || false;
 
   if(!selectedCommunity) { showToast(t.errCommunity); return; }
-  if(!name) { showToast(t.errName); return; }
   if(!overallStar) { showToast(t.errOverall); return; }
   if(!consent) { showToast(t.errConsent||'Please accept privacy terms'); return; }
 
@@ -2380,12 +2389,7 @@ function submitReview() {
     return;
   }
   }
-  // Set status to pending - will show after moderation
   review.status = 'pending';
-  // Save locally first (instant feedback)
-  const reviews = getReviews();
-  reviews.unshift(review);
-  saveReviews(reviews);
 
   const sbReview = {
     community: review.community,
@@ -2405,18 +2409,19 @@ function submitReview() {
     lang: review.lang
   };
 
-  // Also persist to Supabase
-  sbInsert('reviews', {...sbReview, status: 'pending'}).then(() => {
-    console.log('Review saved to Supabase ✓');
-    updateHeroStats();
-  }).catch(e => console.warn('Supabase save failed (stored locally):', e.message));
+  const submitBtn = document.getElementById('rev-submit-btn');
+  if (submitBtn) submitBtn.disabled = true;
 
-  // Also save to Supabase database
   sbInsert('reviews', {...sbReview, status: 'approved'}).then(() => {
     console.log('Review saved to Supabase ✓');
     updateHeroStats();
   }).catch(e => {
-    console.warn('Supabase save failed (stored locally):', e.message);
+    console.warn('Supabase save failed, storing locally:', e.message);
+    const reviews = getReviews();
+    reviews.unshift(review);
+    saveReviews(reviews);
+  }).finally(() => {
+    if (submitBtn) submitBtn.disabled = false;
   });
 
   // Reset form
@@ -2435,6 +2440,9 @@ function submitReview() {
   document.querySelectorAll('.rev-overall-star').forEach(s => {
     s.style.opacity = '0.35'; s.style.color = 'inherit';
   });
+  document.querySelectorAll('input[name="rev-tenure"]').forEach(r => { r.checked = false; });
+  const moreSec = document.getElementById('rev-more-section');
+  if(moreSec) moreSec.open = false;
   renderRevStarGrid();
 
   showToast(t.successMsg);
@@ -2508,7 +2516,7 @@ function renderReviews() {
           <span style="font-size:11px;color:var(--ink3);">${r.date}</span>
         </div>
       </div>
-      ${r.pros || r.cons ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+      ${r.pros || r.cons ? `<div style="display:grid;grid-template-columns:${r.pros&&r.cons?'1fr 1fr':'1fr'};gap:10px;margin-bottom:12px;">
         ${r.pros?`<div style="background:var(--green3);border-radius:var(--r);padding:8px 12px;font-size:12px;color:var(--green);"><strong>👍</strong> ${r.pros}</div>`:''}
         ${r.cons?`<div style="background:#fde8e8;border-radius:var(--r);padding:8px 12px;font-size:12px;color:var(--red);"><strong>👎</strong> ${r.cons}</div>`:''}
       </div>`:''}
@@ -2638,7 +2646,8 @@ function applyRevTranslations() {
   st('rev-form-title', t.formTitle);
   st('rev-lbl-community', t.lblCommunity); st('rev-lbl-ratings', t.lblRatings);
   st('rev-lbl-overall', t.lblOverall); st('rev-lbl-pros', t.lblPros); st('rev-lbl-cons', t.lblCons);
-  st('rev-lbl-text', t.lblText); st('rev-lbl-tags', t.lblTags || 'Quick tags (optional)'); st('rev-lbl-name', t.lblName);
+  st('rev-lbl-text', t.lblText); st('rev-lbl-tags', t.lblTags || 'Quick tags'); st('rev-lbl-name', t.lblName);
+  st('rev-more-toggle-lbl', t.moreToggle || 'Want to share more?'); st('rev-more-hint', t.moreHint || 'Optional');
   st('rev-lbl-years', t.lblYears); st('rev-lbl-profile', t.lblProfile);
   st('rev-submit-lbl', t.submitBtn); st('rev-privacy', t.privacy);
   st('nb-reviews', t.navBtn);
@@ -3058,6 +3067,7 @@ function closeProfile() {
 
 // ─── UPDATE HERO REVIEW COUNT ─────────────────────────────────────────
 function updateHeroStats() {
+  // Counts Supabase-approved reviews. Locally-stored pending reviews (only present when Supabase insert failed) are also included.
   const reviews = getReviews();
   const reviewEl = document.getElementById('review-count');
   if(reviewEl) reviewEl.textContent = reviews.length.toLocaleString();
@@ -3171,7 +3181,7 @@ renderRevStarGrid();
 // are findable without waiting for any async TopoJSON fetch.
 try { ALL_SWISS_COMMUNES = buildCommuneListFromTopo(null); } catch(e) { console.warn('seed communes:', e); }
 _crReady=true;
-renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();loadReviewsFromSupabase().catch(()=>{});applyRevTranslations();updateHeroStats();loadReviewsFromSupabase();
+renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();loadReviewsFromSupabase().catch(()=>{});applyRevTranslations();updateHeroStats();
 // Update community count from real data
 const countEl=document.getElementById('community-count');
 if(countEl)countEl.textContent=COMMUNITIES.length.toLocaleString();
