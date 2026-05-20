@@ -2388,12 +2388,7 @@ function submitReview() {
     return;
   }
   }
-  // Set status to pending - will show after moderation
   review.status = 'pending';
-  // Save locally first (instant feedback)
-  const reviews = getReviews();
-  reviews.unshift(review);
-  saveReviews(reviews);
 
   const sbReview = {
     community: review.community,
@@ -2413,18 +2408,19 @@ function submitReview() {
     lang: review.lang
   };
 
-  // Also persist to Supabase
+  const submitBtn = document.getElementById('rev-submit-btn');
+  if (submitBtn) submitBtn.disabled = true;
+
   sbInsert('reviews', {...sbReview, status: 'pending'}).then(() => {
     console.log('Review saved to Supabase ✓');
     updateHeroStats();
-  }).catch(e => console.warn('Supabase save failed (stored locally):', e.message));
-
-  // Also save to Supabase database
-  sbInsert('reviews', {...sbReview, status: 'approved'}).then(() => {
-    console.log('Review saved to Supabase ✓');
-    updateHeroStats();
   }).catch(e => {
-    console.warn('Supabase save failed (stored locally):', e.message);
+    console.warn('Supabase save failed, storing locally:', e.message);
+    const reviews = getReviews();
+    reviews.unshift(review);
+    saveReviews(reviews);
+  }).finally(() => {
+    if (submitBtn) submitBtn.disabled = false;
   });
 
   // Reset form
