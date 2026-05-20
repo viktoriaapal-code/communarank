@@ -2412,7 +2412,7 @@ function submitReview() {
   const submitBtn = document.getElementById('rev-submit-btn');
   if (submitBtn) submitBtn.disabled = true;
 
-  sbInsert('reviews', {...sbReview, status: 'pending'}).then(() => {
+  sbInsert('reviews', {...sbReview, status: 'approved'}).then(() => {
     console.log('Review saved to Supabase ✓');
     updateHeroStats();
   }).catch(e => {
