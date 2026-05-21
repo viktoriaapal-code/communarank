@@ -769,6 +769,55 @@ function closeMobileNav() {
 
   </div>
 </div>
+<div id="page-community" class="page">
+  <div class="section">
+    <div style="max-width:760px;margin:0 auto;">
+      <button onclick="if(history.length>1)history.back();else showPage('ranking');" style="background:none;border:none;color:var(--green);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;padding:0 0 20px;display:flex;align-items:center;gap:6px;">← Back to rankings</button>
+      <!-- Dark header -->
+      <div style="background:var(--ink);border-radius:var(--r2) var(--r2) 0 0;padding:28px 28px 24px;position:relative;">
+        <div id="cprof-tag" style="display:inline-block;background:rgba(125,191,110,0.2);color:#7dbf6e;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:10px;border:1px solid rgba(125,191,110,0.3);"></div>
+        <h1 id="cprof-name" style="font-family:'Fraunces',serif;font-size:28px;color:var(--paper);margin-bottom:4px;font-weight:400;"></h1>
+        <div id="cprof-meta" style="font-size:13px;color:rgba(245,242,235,0.55);"></div>
+        <div style="display:flex;gap:20px;margin-top:18px;flex-wrap:wrap;">
+          <div style="text-align:center;">
+            <div id="cprof-score" style="font-family:'Fraunces',serif;font-size:36px;color:#7dbf6e;line-height:1;"></div>
+            <div id="cprof-score-lbl" style="font-size:11px;color:rgba(245,242,235,0.45);margin-top:2px;">Data index score</div>
+          </div>
+          <div id="cprof-review-score-wrap" style="text-align:center;">
+            <div id="cprof-review-score" style="font-family:'Fraunces',serif;font-size:36px;color:#c8960c;line-height:1;"></div>
+            <div id="cprof-review-lbl" style="font-size:11px;color:rgba(245,242,235,0.45);margin-top:2px;">Resident rating</div>
+          </div>
+          <div style="text-align:center;">
+            <div id="cprof-review-count" style="font-family:'Fraunces',serif;font-size:36px;color:rgba(245,242,235,0.7);line-height:1;"></div>
+            <div id="cprof-reviews-lbl" style="font-size:11px;color:rgba(245,242,235,0.45);margin-top:2px;">Reviews</div>
+          </div>
+        </div>
+      </div>
+      <!-- Intro paragraph -->
+      <div id="comm-intro" style="background:white;border-left:1px solid var(--border);border-right:1px solid var(--border);padding:16px 24px;font-size:14px;color:var(--ink2);line-height:1.7;"></div>
+      <!-- Key facts grid -->
+      <div id="cprof-facts" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:1px;background:var(--border);"></div>
+      <!-- Dimension scores -->
+      <div style="padding:24px 28px;background:var(--paper);border:1px solid var(--border);border-top:none;">
+        <h3 id="cprof-dim-title" style="font-family:'Fraunces',serif;font-size:16px;margin-bottom:16px;">Index scores</h3>
+        <div id="cprof-dimensions" style="display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+      <!-- Reviews -->
+      <div style="padding:0 28px 28px;background:var(--paper);border:1px solid var(--border);border-top:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-top:24px;">
+          <h3 id="cprof-rev-title" style="font-family:'Fraunces',serif;font-size:16px;">Resident reviews</h3>
+          <button id="cprof-write-btn" style="background:var(--green);color:white;border:none;padding:7px 14px;border-radius:8px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;">Write a review →</button>
+        </div>
+        <div id="cprof-reviews-list"></div>
+        <div id="cprof-no-reviews" style="display:none;text-align:center;padding:28px;color:var(--ink3);font-size:13px;background:var(--paper2);border-radius:var(--r);"></div>
+      </div>
+      <!-- Data sources -->
+      <div id="cprof-source" style="padding:16px 28px;background:var(--paper2);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--r2) var(--r2);font-size:11px;color:var(--ink3);">
+        Sources: BFS/OFS · ELCOM · Swiss Tax Conference (SSK) · ESTV (salary data) · OpenStreetMap · Resident reviews
+      </div>
+    </div>
+  </div>
+</div>
 <footer>
   <div class="footer-brand">CommunaRank</div>
   <p>Smart Community Index for Switzerland · Data updated quarterly · Not investment advice</p>
@@ -3351,55 +3400,6 @@ window.addEventListener('popstate', function(e) {
 })();
 
 </script>
-<div id="page-community" class="page">
-  <div class="section">
-    <div style="max-width:760px;margin:0 auto;">
-      <button onclick="if(history.length>1)history.back();else showPage('ranking');" style="background:none;border:none;color:var(--green);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;padding:0 0 20px;display:flex;align-items:center;gap:6px;">← Back to rankings</button>
-      <!-- Dark header -->
-      <div style="background:var(--ink);border-radius:var(--r2) var(--r2) 0 0;padding:28px 28px 24px;position:relative;">
-        <div id="cprof-tag" style="display:inline-block;background:rgba(125,191,110,0.2);color:#7dbf6e;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:10px;border:1px solid rgba(125,191,110,0.3);"></div>
-        <h1 id="cprof-name" style="font-family:'Fraunces',serif;font-size:28px;color:var(--paper);margin-bottom:4px;font-weight:400;"></h1>
-        <div id="cprof-meta" style="font-size:13px;color:rgba(245,242,235,0.55);"></div>
-        <div style="display:flex;gap:20px;margin-top:18px;flex-wrap:wrap;">
-          <div style="text-align:center;">
-            <div id="cprof-score" style="font-family:'Fraunces',serif;font-size:36px;color:#7dbf6e;line-height:1;"></div>
-            <div id="cprof-score-lbl" style="font-size:11px;color:rgba(245,242,235,0.45);margin-top:2px;">Data index score</div>
-          </div>
-          <div id="cprof-review-score-wrap" style="text-align:center;">
-            <div id="cprof-review-score" style="font-family:'Fraunces',serif;font-size:36px;color:#c8960c;line-height:1;"></div>
-            <div id="cprof-review-lbl" style="font-size:11px;color:rgba(245,242,235,0.45);margin-top:2px;">Resident rating</div>
-          </div>
-          <div style="text-align:center;">
-            <div id="cprof-review-count" style="font-family:'Fraunces',serif;font-size:36px;color:rgba(245,242,235,0.7);line-height:1;"></div>
-            <div id="cprof-reviews-lbl" style="font-size:11px;color:rgba(245,242,235,0.45);margin-top:2px;">Reviews</div>
-          </div>
-        </div>
-      </div>
-      <!-- Intro paragraph -->
-      <div id="comm-intro" style="background:white;border-left:1px solid var(--border);border-right:1px solid var(--border);padding:16px 24px;font-size:14px;color:var(--ink2);line-height:1.7;"></div>
-      <!-- Key facts grid -->
-      <div id="cprof-facts" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:1px;background:var(--border);"></div>
-      <!-- Dimension scores -->
-      <div style="padding:24px 28px;background:var(--paper);border:1px solid var(--border);border-top:none;">
-        <h3 id="cprof-dim-title" style="font-family:'Fraunces',serif;font-size:16px;margin-bottom:16px;">Index scores</h3>
-        <div id="cprof-dimensions" style="display:flex;flex-direction:column;gap:8px;"></div>
-      </div>
-      <!-- Reviews -->
-      <div style="padding:0 28px 28px;background:var(--paper);border:1px solid var(--border);border-top:none;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-top:24px;">
-          <h3 id="cprof-rev-title" style="font-family:'Fraunces',serif;font-size:16px;">Resident reviews</h3>
-          <button id="cprof-write-btn" style="background:var(--green);color:white;border:none;padding:7px 14px;border-radius:8px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;">Write a review →</button>
-        </div>
-        <div id="cprof-reviews-list"></div>
-        <div id="cprof-no-reviews" style="display:none;text-align:center;padding:28px;color:var(--ink3);font-size:13px;background:var(--paper2);border-radius:var(--r);"></div>
-      </div>
-      <!-- Data sources -->
-      <div id="cprof-source" style="padding:16px 28px;background:var(--paper2);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--r2) var(--r2);font-size:11px;color:var(--ink3);">
-        Sources: BFS/OFS · ELCOM · Swiss Tax Conference (SSK) · ESTV (salary data) · OpenStreetMap · Resident reviews
-      </div>
-    </div>
-  </div>
-</div>
 <div id="page-terms" class="page">
   <div class="section">
     <div class="section-header">
