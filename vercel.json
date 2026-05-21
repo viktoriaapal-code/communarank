@@ -9,7 +9,8 @@
     { "src": "/sitemap.xml", "dest": "/sitemap.xml" },
     { "src": "/robots.txt",  "dest": "/robots.txt"  },
     { "src": "/community/(.*)", "dest": "/index.html" },
-    { "src": "/(.*)", "dest": "/index.html" }
+    { "src": "/blog/(.*)",      "dest": "/index.html" },
+    { "src": "/(.*)",           "dest": "/index.html" }
   ],
   "headers": [
     {
