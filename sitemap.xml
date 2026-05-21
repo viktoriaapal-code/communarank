@@ -8,4 +8,54 @@
   <url><loc>https://www.communarank.ch/privacy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://www.communarank.ch/terms</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://www.communarank.ch/contact</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://www.communarank.ch/community/zurich</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.communarank.ch/community/geneve</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.communarank.ch/community/basel</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.communarank.ch/community/bern</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.communarank.ch/community/lausanne</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.communarank.ch/community/winterthur</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.communarank.ch/community/luzern</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.communarank.ch/community/st-gallen</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.communarank.ch/community/lugano</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.communarank.ch/community/biel-bienne</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.communarank.ch/community/thun</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.communarank.ch/community/koniz</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/la-chaux-de-fonds</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.communarank.ch/community/schaffhausen</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.communarank.ch/community/fribourg</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.communarank.ch/community/chur</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.communarank.ch/community/vernier</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/uster</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/sion</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.communarank.ch/community/emmen</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/kusnacht</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/zug</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.communarank.ch/community/nyon</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.communarank.ch/community/morges</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/rapperswil-jona</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/davos</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.communarank.ch/community/verbier</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.communarank.ch/community/gruyeres</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/spiez</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/solothurn</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.communarank.ch/community/carouge</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/aarau</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.communarank.ch/community/frenkendorf</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/arlesheim</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/riehen</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/kussnacht</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/wollerau</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/freienbach</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/muri-bei-bern</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/binningen</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/mannedorf</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/thalwil</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/horgen</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/volketswil</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/muttenz</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/allschwil</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/kriens</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/baar</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/steinhausen</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.communarank.ch/community/opfikon</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
 </urlset>

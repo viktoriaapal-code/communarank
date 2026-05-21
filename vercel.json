@@ -7,6 +7,7 @@
   "routes": [
     { "src": "/sitemap.xml", "dest": "/sitemap.xml" },
     { "src": "/robots.txt",  "dest": "/robots.txt"  },
+    { "src": "/community/(.*)", "dest": "/index.html" },
     { "src": "/(.*)", "dest": "/index.html" }
   ],
   "headers": [
