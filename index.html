@@ -773,6 +773,7 @@ function closeMobileNav() {
   <p>Smart Community Index for Switzerland · Data updated quarterly · Not investment advice</p>
   <p style="margin-top:8px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
     <a href="#" onclick="showPage('privacy');return false;" style="color:rgba(245,242,235,0.5);font-size:11px;text-decoration:underline;" id="footer-privacy">Privacy Policy</a>
+    <a href="#" onclick="showPage('terms');return false;" style="color:rgba(245,242,235,0.5);font-size:11px;text-decoration:underline;">Terms of Use</a>
     <a href="#" onclick="showPage('contact');return false;" style="color:rgba(245,242,235,0.5);font-size:11px;text-decoration:underline;">Contact</a>
     <a href="mailto:info@communarank.ch" style="color:rgba(245,242,235,0.5);font-size:11px;">info@communarank.ch</a>
     <a href="https://www.facebook.com/profile.php?id=61590276629537" target="_blank" rel="noopener noreferrer" style="color:rgba(245,242,235,0.5);font-size:11px;display:inline-flex;align-items:center;gap:4px;text-decoration:none;">
@@ -1116,7 +1117,8 @@ const ROUTES = {
   reviews: '/reviews',
   ai:      '/waitlist',
   privacy: '/privacy',
-  contact: '/contact'
+  contact: '/contact',
+  terms:   '/terms'
 };
 const PATH_TO_PAGE = {};
 Object.keys(ROUTES).forEach(k => { PATH_TO_PAGE[ROUTES[k]] = k; });
@@ -1134,7 +1136,8 @@ const PAGE_TITLES = {
   reviews:  'Community Reviews — CommunaRank',
   ai:       'Early Access — CommunaRank',
   privacy:  'Privacy Policy — CommunaRank',
-  contact:  'Contact — CommunaRank'
+  contact:  'Contact — CommunaRank',
+  terms:    'Terms of Use — CommunaRank'
 };
 
 function pageFromUrl() {
@@ -3233,6 +3236,44 @@ window.addEventListener('popstate', function(e) {
 })();
 
 </script>
+<div id="page-terms" class="page">
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title">Terms of Use</h2>
+      <p class="section-sub">Last updated: May 2026 · By using CommunaRank you agree to these terms.</p>
+    </div>
+    <div style="max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:8px;">
+      <div class="card" style="padding:16px 24px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:8px;">1. Informational purposes only</h3>
+        <div style="line-height:1.8;color:var(--ink2);font-size:14px;">CommunaRank provides community rankings, scores, and reviews for informational purposes only. Nothing on this platform constitutes professional, legal, financial, or investment advice. Always consult qualified professionals before making residential or financial decisions.</div>
+      </div>
+      <div class="card" style="padding:16px 24px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:8px;">2. No guarantee of accuracy or completeness</h3>
+        <div style="line-height:1.8;color:var(--ink2);font-size:14px;">Data is sourced from publicly available records (BFS, ELCOM, OSM, and others) and updated periodically. CommunaRank makes no warranty, express or implied, regarding the accuracy, completeness, or currency of any information on this platform. Data may be incomplete, outdated, or subject to error.</div>
+      </div>
+      <div class="card" style="padding:16px 24px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:8px;">3. User reviews reflect personal opinions</h3>
+        <div style="line-height:1.8;color:var(--ink2);font-size:14px;">Reviews submitted by users reflect their personal experiences and opinions only. CommunaRank does not verify the factual accuracy of individual reviews and is not responsible for their content. Reviews do not represent the views of CommunaRank.</div>
+      </div>
+      <div class="card" style="padding:16px 24px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:8px;">4. No liability for decisions made</h3>
+        <div style="line-height:1.8;color:var(--ink2);font-size:14px;">CommunaRank accepts no liability for any loss, damage, or consequence arising directly or indirectly from decisions made in reliance on information, rankings, scores, or reviews published on this platform. Use of this platform is entirely at your own risk.</div>
+      </div>
+      <div class="card" style="padding:16px 24px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:8px;">5. Review moderation</h3>
+        <div style="line-height:1.8;color:var(--ink2);font-size:14px;">CommunaRank reserves the right to moderate, edit, or remove any user-submitted review at its sole discretion — including content that is offensive, defamatory, spam, or otherwise in violation of community guidelines — without prior notice.</div>
+      </div>
+      <div class="card" style="padding:16px 24px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:8px;">6. Governing law</h3>
+        <div style="line-height:1.8;color:var(--ink2);font-size:14px;">These terms are governed by and construed in accordance with Swiss law. Any disputes arising out of or in connection with the use of CommunaRank shall be subject to the exclusive jurisdiction of the competent courts of Switzerland.</div>
+      </div>
+      <div class="card" style="padding:16px 24px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:8px;">7. Contact</h3>
+        <div style="line-height:1.8;color:var(--ink2);font-size:14px;">Questions about these terms? Contact us at <a href="mailto:info@communarank.ch" style="color:var(--green);">info@communarank.ch</a>.</div>
+      </div>
+    </div>
+  </div>
+</div>
 <div id="page-contact" class="page">
   <div class="section">
     <div class="section-header">
