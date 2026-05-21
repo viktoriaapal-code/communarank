@@ -8,6 +8,8 @@
   <url><loc>https://www.communarank.ch/privacy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://www.communarank.ch/terms</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://www.communarank.ch/contact</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://www.communarank.ch/blog</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.communarank.ch/blog/geneva-vs-lausanne</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.communarank.ch/community/zurich</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.communarank.ch/community/geneve</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.communarank.ch/community/basel</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
