@@ -831,7 +831,10 @@ function closeMobileNav() {
 <div id="page-blog-article" class="page">
   <div class="section">
     <div style="max-width:720px;margin:0 auto;">
-      <button onclick="showPage('blog');" style="background:none;border:none;color:var(--green);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;padding:0 0 20px;display:flex;align-items:center;gap:6px;">← Back to Insights</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+        <button onclick="showPage('blog');" style="background:none;border:none;color:var(--green);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;padding:0;display:flex;align-items:center;gap:6px;">← Back to Insights</button>
+        <button onclick="shareBlogArticle();" style="background:none;border:1px solid var(--border);color:var(--ink2);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;padding:6px 12px;border-radius:6px;display:inline-flex;align-items:center;gap:5px;">⬆ Share</button>
+      </div>
       <article>
         <div id="barticle-category" style="display:inline-block;background:var(--green3);color:var(--green);font-size:11px;font-weight:500;padding:3px 12px;border-radius:20px;margin-bottom:14px;"></div>
         <h1 id="barticle-title" style="font-family:'Fraunces',serif;font-size:30px;color:var(--ink);font-weight:400;line-height:1.3;margin-bottom:10px;"></h1>
@@ -3344,6 +3347,25 @@ function renderBlogArticle(slug) {
 function openBlogArticle(slug) {
   _currentBlogSlug = slug;
   showPage('blog-article');
+}
+
+function shareBlogArticle() {
+  var title = (document.getElementById('barticle-title') || {}).textContent || document.title;
+  var url   = window.location.href;
+  if(navigator.share) {
+    navigator.share({ title: title, text: title, url: url }).catch(function(){});
+  } else {
+    (navigator.clipboard
+      ? navigator.clipboard.writeText(url)
+      : Promise.reject()
+    ).then(function(){ showToast('Link copied'); })
+     .catch(function(){
+       var ta = document.createElement('textarea');
+       ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+       document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+       document.body.removeChild(ta); showToast('Link copied');
+     });
+  }
 }
 
 // ─── UPDATE HERO REVIEW COUNT ─────────────────────────────────────────
