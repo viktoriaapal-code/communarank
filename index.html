@@ -219,6 +219,7 @@ function closeMobileNav() {
     <button class="nav-btn" onclick="showPage('index');closeMobileNav();" id="nb-index">📋 Our Index</button>
     <button class="nav-btn" onclick="showPage('map');closeMobileNav();" id="nb-map">🗺️ Map</button>
     <button class="nav-btn" onclick="showPage('reviews');closeMobileNav();" id="nb-reviews"><span style="color:#f5c518">★</span> Reviews</button>
+    <button class="nav-btn" onclick="showPage('blog');closeMobileNav();"    id="nb-blog">📰 Insights</button>
   </div>
   <div class="lang-sel">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
@@ -1350,7 +1351,7 @@ function showPage(n, opts) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     const bp = document.getElementById('page-blog-article');
     if(bp) bp.classList.add('active');
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.id === 'nb-blog'));
     renderBlogArticle(_currentBlogSlug);
     const navLinks2 = document.querySelector('.nav-links');
     if(navLinks2 && navLinks2.classList.contains('open')) {
@@ -2909,6 +2910,8 @@ function applyRevTranslations() {
   if(fc)fc.textContent=lang==='fr'?'Contact':lang==='de'?'Kontakt':lang==='it'?'Contatto':'Contact';
   const fbl=document.getElementById('footer-blog');
   if(fbl)fbl.textContent=lang==='fr'?'Analyses':lang==='de'?'Einblicke':lang==='it'?'Analisi':'Insights';
+  const nblog=document.getElementById('nb-blog');
+  if(nblog)nblog.textContent='📰 '+(lang==='fr'?'Analyses':lang==='de'?'Einblicke':lang==='it'?'Analisi':'Insights');
 }
 
 // ALL_SWISS_COMMUNES is built dynamically from TopoJSON + supplement
