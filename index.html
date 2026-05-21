@@ -773,7 +773,8 @@ function closeMobileNav() {
   <p>Smart Community Index for Switzerland · Data updated quarterly · Not investment advice</p>
   <p style="margin-top:8px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
     <a href="#" onclick="showPage('privacy');return false;" style="color:rgba(245,242,235,0.5);font-size:11px;text-decoration:underline;" id="footer-privacy">Privacy Policy</a>
-    <a href="#" onclick="showPage('contact');return false;" style="color:rgba(245,242,235,0.5);font-size:11px;text-decoration:underline;">Contact</a>
+    <a href="#" onclick="showPage('terms');return false;" style="color:rgba(245,242,235,0.5);font-size:11px;text-decoration:underline;" id="footer-terms">Terms of Use</a>
+    <a href="#" onclick="showPage('contact');return false;" style="color:rgba(245,242,235,0.5);font-size:11px;text-decoration:underline;" id="footer-contact">Contact</a>
     <a href="mailto:info@communarank.ch" style="color:rgba(245,242,235,0.5);font-size:11px;">info@communarank.ch</a>
     <a href="https://www.facebook.com/profile.php?id=61590276629537" target="_blank" rel="noopener noreferrer" style="color:rgba(245,242,235,0.5);font-size:11px;display:inline-flex;align-items:center;gap:4px;text-decoration:none;">
       <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.413c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
@@ -866,6 +867,7 @@ function applyTranslations(){
   });const st=(id,val,attr)=>{const el=document.getElementById(id);if(!el)return;if(attr==='html')el.innerHTML=val;else if(attr==='ph')el.placeholder=val;else el.textContent=val;};st('h-tag',getT('heroTag'));st('h-title',getT('heroTitle'),'html');st('h-sub',getT('heroSub'));st('h-cta1',getT('heroCta1'));st('h-cta2',getT('heroCta2'));st('h-s1',getT('hS1'));st('h-s2',getT('hS2'));st('h-s3',getT('hS3'));st('h-s4',getT('hS4'));st('h-s5',getT('hS5')||'Resident reviews');st('rank-title',getT('rankTitle'));st('rank-sub',getT('rankSub'));st('w-title',getT('wTitle'));st('cmp-title',getT('cmpTitle'));st('cmp-sub',getT('cmpSub'));st('cmp-add-btn',getT('cmpAdd'));st('cmp-chart-title',getT('cmpChartTitle'));st('ai-title',getT('aiTitle'));st('ai-page-title',getT('aiPageTitle'));st('ai-page-sub',getT('aiPageSub'));st('search-input',getT('searchPlaceholder'),'ph');st('cmp-search',getT('cmpSearchPlaceholder'),'ph');st('chip-all',getT('chipAll'));st('chip-family',getT('chipFamily'));st('chip-affordable',getT('chipAffordable'));st('chip-sustainable',getT('chipSustainable'));st('chip-nature',getT('chipNature'));st('chip-urban',getT('chipUrban'));
   // Re-render privacy page if currently shown
   var pp=document.getElementById('page-privacy');if(pp&&pp.style.display!=='none')renderPrivacy();
+  renderContact();renderTerms();
 }
 function calcScore(c){let t=0,w=0;for(const[k,d]of Object.entries(WEIGHTS_DEF)){t+=c.scores[k]*d.val;w+=d.val}return Math.round(t/w)}
 function renderWeights(){const g=document.getElementById('weights-grid');g.innerHTML='';for(const[k,w]of Object.entries(WEIGHTS_DEF)){const d=document.createElement('div');d.className='weight-item';d.innerHTML=`<label><span>${w.icon} ${w.label[lang]||w.label.en}</span><span class="weight-badge" id="wb-${k}">${w.val}%</span></label><input type="range" min="0" max="30" step="1" value="${w.val}" oninput="updateWeight('${k}',this.value)">`;g.appendChild(d)}}
@@ -1116,7 +1118,8 @@ const ROUTES = {
   reviews: '/reviews',
   ai:      '/waitlist',
   privacy: '/privacy',
-  contact: '/contact'
+  contact: '/contact',
+  terms:   '/terms'
 };
 const PATH_TO_PAGE = {};
 Object.keys(ROUTES).forEach(k => { PATH_TO_PAGE[ROUTES[k]] = k; });
@@ -1134,7 +1137,8 @@ const PAGE_TITLES = {
   reviews:  'Community Reviews — CommunaRank',
   ai:       'Early Access — CommunaRank',
   privacy:  'Privacy Policy — CommunaRank',
-  contact:  'Contact — CommunaRank'
+  contact:  'Contact — CommunaRank',
+  terms:    'Terms of Use — CommunaRank'
 };
 
 function pageFromUrl() {
@@ -1161,6 +1165,8 @@ function showPage(n, opts) {
   if(n === 'map')     renderMap();
   if(n === 'ai')      applyWaitlistTranslations();
   if(n === 'privacy') renderPrivacy();
+  if(n === 'contact') renderContact();
+  if(n === 'terms')   renderTerms();
   if(n === 'reviews') {
     applyRevTranslations();
     renderRevStarGrid();
@@ -2680,6 +2686,10 @@ function applyRevTranslations() {
   if(REVIEW_TAGS_RAW.length) { REVIEW_TAGS = mapReviewTags(REVIEW_TAGS_RAW); renderRevQuickTags(); }
   const fp=document.getElementById('footer-privacy');
   if(fp)fp.textContent=lang==='fr'?'Politique de confidentialité':lang==='de'?'Datenschutz':lang==='it'?'Privacy':'Privacy Policy';
+  const ft=document.getElementById('footer-terms');
+  if(ft)ft.textContent=lang==='fr'?"Conditions d'utilisation":lang==='de'?'Nutzungsbedingungen':lang==='it'?'Termini di utilizzo':'Terms of Use';
+  const fc=document.getElementById('footer-contact');
+  if(fc)fc.textContent=lang==='fr'?'Contact':lang==='de'?'Kontakt':lang==='it'?'Contatto':'Contact';
 }
 
 // ALL_SWISS_COMMUNES is built dynamically from TopoJSON + supplement
@@ -3210,6 +3220,87 @@ function renderPrivacy() {
   }).join("");
 }
 
+function renderContact() {
+  var T_CONTACT = {
+    en: { title:'Contact', sub:"Questions, partnerships, media or feedback? We’d love to hear from you.", fb:'Facebook' },
+    de: { title:'Kontakt', sub:'Fragen, Partnerschaften, Medienanfragen oder Feedback? Wir freuen uns von Ihnen zu hören.', fb:'Facebook' },
+    fr: { title:'Contact', sub:'Questions, partenariats, médias ou commentaires ? Nous serions ravis de vous entendre.', fb:'Facebook' },
+    it: { title:'Contatto', sub:'Domande, collaborazioni, media o feedback? Saremo lieti di sentirti.', fb:'Facebook' }
+  };
+  var c = T_CONTACT[lang] || T_CONTACT.en;
+  var el = function(id){return document.getElementById(id);};
+  if(el('contact-title')) el('contact-title').textContent = c.title;
+  if(el('contact-sub'))   el('contact-sub').textContent   = c.sub;
+  if(el('contact-fb'))    el('contact-fb').textContent    = c.fb;
+}
+
+function renderTerms() {
+  var T_TERMS = {
+    en: {
+      title:'Terms of Use',
+      sub:'Last updated: May 2026 · By using CommunaRank you agree to these terms.',
+      secs:[
+        {h:'1. Informational purposes only', p:'CommunaRank provides community rankings, scores, and reviews for informational purposes only. Nothing on this platform constitutes professional, legal, financial, or investment advice. Always consult qualified professionals before making residential or financial decisions.'},
+        {h:'2. No guarantee of accuracy or completeness', p:'Data is sourced from publicly available records (BFS, ELCOM, OSM, and others) and updated periodically. CommunaRank makes no warranty, express or implied, regarding the accuracy, completeness, or currency of any information on this platform. Data may be incomplete, outdated, or subject to error.'},
+        {h:'3. User reviews reflect personal opinions', p:'Reviews submitted by users reflect their personal experiences and opinions only. CommunaRank does not verify the factual accuracy of individual reviews and is not responsible for their content. Reviews do not represent the views of CommunaRank.'},
+        {h:'4. No liability for decisions made', p:'CommunaRank accepts no liability for any loss, damage, or consequence arising directly or indirectly from decisions made in reliance on information, rankings, scores, or reviews published on this platform. Use of this platform is entirely at your own risk.'},
+        {h:'5. Review moderation', p:'CommunaRank reserves the right to moderate, edit, or remove any user-submitted review at its sole discretion — including content that is offensive, defamatory, spam, or otherwise in violation of community guidelines — without prior notice.'},
+        {h:'6. Governing law', p:'These terms are governed by and construed in accordance with Swiss law. Any disputes arising out of or in connection with the use of CommunaRank shall be subject to the exclusive jurisdiction of the competent courts of Switzerland.'},
+        {h:'7. Contact', p:'Questions about these terms? Contact us at <a href="mailto:info@communarank.ch" style="color:var(--green);">info@communarank.ch</a>.'}
+      ]
+    },
+    de: {
+      title:'Nutzungsbedingungen',
+      sub:'Stand: Mai 2026 · Mit der Nutzung von CommunaRank stimmen Sie diesen Bedingungen zu.',
+      secs:[
+        {h:'1. Nur zu Informationszwecken', p:'CommunaRank stellt Gemeinderankings, Bewertungen und Rezensionen ausschließlich zu Informationszwecken bereit. Nichts auf dieser Plattform stellt eine professionelle, rechtliche, finanzielle oder Anlageberatung dar. Konsultieren Sie stets qualifizierte Fachleute, bevor Sie Wohn- oder finanzielle Entscheidungen treffen.'},
+        {h:'2. Keine Gewähr für Richtigkeit oder Vollständigkeit', p:'Die Daten stammen aus öffentlich zugänglichen Quellen (BFS, ELCOM, OSM u.a.) und werden regelmässig aktualisiert. CommunaRank übernimmt keine ausdrückliche oder stillschweigende Gewährleistung für die Richtigkeit, Vollständigkeit oder Aktualität der Informationen. Daten können unvollständig, veraltet oder fehlerhaft sein.'},
+        {h:'3. Nutzerrezensionen geben persönliche Meinungen wieder', p:'Von Nutzern eingereichte Rezensionen geben deren persönliche Erfahrungen und Meinungen wieder. CommunaRank überprüft nicht die sachliche Richtigkeit einzelner Rezensionen und ist für deren Inhalt nicht verantwortlich. Rezensionen stellen nicht die Ansichten von CommunaRank dar.'},
+        {h:'4. Keine Haftung für getroffene Entscheidungen', p:'CommunaRank übernimmt keine Haftung für Verluste, Schäden oder Folgen, die direkt oder indirekt aus Entscheidungen resultieren, die auf der Grundlage von Informationen, Rankings, Bewertungen oder Rezensionen auf dieser Plattform getroffen wurden. Die Nutzung dieser Plattform erfolgt auf eigene Gefahr.'},
+        {h:'5. Moderationsrecht', p:'CommunaRank behält sich das Recht vor, nutzereingereichte Rezensionen nach eigenem Ermessen zu moderieren, zu bearbeiten oder zu entfernen — einschliesslich Inhalten, die beleidigend, verleumd erisch, Spam oder anderweitig gegen die Community-Richtlinien verstossen — ohne vorherige Ankündigung.'},
+        {h:'6. Anwendbares Recht', p:'Diese Nutzungsbedingungen unterliegen dem Schweizer Recht. Alle Streitigkeiten im Zusammenhang mit der Nutzung von CommunaRank unterliegen der ausschliesslichen Zuständigkeit der zuständigen Gerichte der Schweiz.'},
+        {h:'7. Kontakt', p:'Fragen zu diesen Nutzungsbedingungen? Kontaktieren Sie uns unter <a href="mailto:info@communarank.ch" style="color:var(--green);">info@communarank.ch</a>.'}
+      ]
+    },
+    fr: {
+      title:"Conditions d'utilisation",
+      sub:'Dernière mise à jour : mai 2026 · En utilisant CommunaRank vous acceptez ces conditions.',
+      secs:[
+        {h:'À titre informatif uniquement', p:'CommunaRank fournit des classements, scores et avis de communes à titre informatif uniquement. Rien sur cette plateforme ne constitue un conseil professionnel, juridique, financier ou en investissement. Consultez toujours des professionnels qualifiés avant toute décision résidentielle ou financière.'},
+        {h:"Aucune garantie d'exactitude ou d'exhaustivité", p:"Les données proviennent de sources publiques (BFS, ELCOM, OSM, etc.) et sont mises à jour périodiquement. CommunaRank ne fournit aucune garantie, expresse ou implicite, quant à l'exactitude, l'exhaustivité ou l'actualité des informations. Les données peuvent être incomplètes, obsolètes ou erronées."},
+        {h:'Les avis reflètent des opinions personnelles', p:"Les avis soumis par les utilisateurs reflètent uniquement leurs expériences et opinions personnelles. CommunaRank ne vérifie pas l'exactitude factuelle des avis individuels et n'est pas responsable de leur contenu. Les avis ne représentent pas les opinions de CommunaRank."},
+        {h:'Aucune responsabilité pour les décisions prises', p:"CommunaRank n'accepte aucune responsabilité pour toute perte, dommage ou conséquence découlant directement ou indirectement de décisions prises en se basant sur les informations, classements, scores ou avis publiés sur cette plateforme. L'utilisation de cette plateforme est entièrement à vos risques."},
+        {h:'Modération des avis', p:"CommunaRank se réserve le droit de modérer, modifier ou supprimer tout avis soumis par un utilisateur, à sa seule discrétion — y compris les contenus offensants, diffamatoires, spam ou enfreignant les règles communautaires — sans préavis."},
+        {h:'Droit applicable', p:'Ces conditions sont régies par le droit suisse. Tout litige lié à l’utilisation de CommunaRank sera soumis à la compétence exclusive des tribunaux compétents de Suisse.'},
+        {h:'Contact', p:'Des questions sur ces conditions ? Contactez-nous à <a href="mailto:info@communarank.ch" style="color:var(--green);">info@communarank.ch</a>.'}
+      ]
+    },
+    it: {
+      title:'Termini di utilizzo',
+      sub:'Ultimo aggiornamento: maggio 2026 · Usando CommunaRank accetti questi termini.',
+      secs:[
+        {h:'1. Solo a scopo informativo', p:'CommunaRank fornisce classifiche, punteggi e recensioni di comunità esclusivamente a scopo informativo. Nulla su questa piattaforma costituisce una consulenza professionale, legale, finanziaria o di investimento. Consultare sempre professionisti qualificati prima di prendere decisioni residenziali o finanziarie.'},
+        {h:'2. Nessuna garanzia di accuratezza o completezza', p:"I dati provengono da fonti pubbliche (BFS, ELCOM, OSM, ecc.) e vengono aggiornati periodicamente. CommunaRank non fornisce alcuna garanzia, espressa o implicita, riguardo all'accuratezza, completezza o attualità delle informazioni. I dati possono essere incompleti, obsoleti o soggetti a errori."},
+        {h:'3. Le recensioni riflettono opinioni personali', p:'Le recensioni inviate dagli utenti riflettono esclusivamente le loro esperienze e opinioni personali. CommunaRank non verifica l’accuratezza fattuale delle singole recensioni e non è responsabile del loro contenuto. Le recensioni non rappresentano le opinioni di CommunaRank.'},
+        {h:'4. Nessuna responsabilità per le decisioni prese', p:'CommunaRank non accetta alcuna responsabilità per perdite, danni o conseguenze derivanti direttamente o indirettamente da decisioni prese sulla base di informazioni, classifiche, punteggi o recensioni pubblicate su questa piattaforma. L’uso di questa piattaforma è interamente a proprio rischio.'},
+        {h:'5. Moderazione delle recensioni', p:'CommunaRank si riserva il diritto di moderare, modificare o rimuovere qualsiasi recensione inviata dagli utenti, a sua esclusiva discrezione — inclusi contenuti offensivi, diffamatori, spam o in violazione delle linee guida della community — senza preavviso.'},
+        {h:'6. Legge applicabile', p:'Questi termini sono disciplinati dalla legge svizzera. Qualsiasi controversia relativa all’uso di CommunaRank sarà soggetta alla giurisdizione esclusiva dei tribunali competenti della Svizzera.'},
+        {h:'7. Contatto', p:'Domande su questi termini? Contattaci all’indirizzo <a href="mailto:info@communarank.ch" style="color:var(--green);">info@communarank.ch</a>.'}
+      ]
+    }
+  };
+  var c = T_TERMS[lang] || T_TERMS.en;
+  var title = document.getElementById('terms-title'); if(title) title.textContent = c.title;
+  var sub   = document.getElementById('terms-sub');   if(sub)   sub.textContent   = c.sub;
+  var content = document.getElementById('terms-content');
+  if(!content) return;
+  content.innerHTML = c.secs.map(function(s) {
+    return '<div class="card" style="padding:16px 24px;margin-bottom:4px;">' +
+      '<h3 style="font-family:\'Fraunces\',serif;font-size:15px;margin-bottom:8px;">' + s.h + '</h3>' +
+      '<div style="line-height:1.8;color:var(--ink2);font-size:14px;">' + s.p + '</div></div>';
+  }).join('');
+}
+
 // ─── ROUTER WIRING ───────────────────────────────────────────
 // Handle browser back/forward buttons
 window.addEventListener('popstate', function(e) {
@@ -3233,11 +3324,49 @@ window.addEventListener('popstate', function(e) {
 })();
 
 </script>
+<div id="page-terms" class="page">
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title" id="terms-title">Terms of Use</h2>
+      <p class="section-sub" id="terms-sub">Last updated: May 2026 · By using CommunaRank you agree to these terms.</p>
+    </div>
+    <div id="terms-content" style="max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:8px;">
+      <div class="card" style="padding:16px 24px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:8px;">1. Informational purposes only</h3>
+        <div style="line-height:1.8;color:var(--ink2);font-size:14px;">CommunaRank provides community rankings, scores, and reviews for informational purposes only. Nothing on this platform constitutes professional, legal, financial, or investment advice. Always consult qualified professionals before making residential or financial decisions.</div>
+      </div>
+      <div class="card" style="padding:16px 24px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:8px;">2. No guarantee of accuracy or completeness</h3>
+        <div style="line-height:1.8;color:var(--ink2);font-size:14px;">Data is sourced from publicly available records (BFS, ELCOM, OSM, and others) and updated periodically. CommunaRank makes no warranty, express or implied, regarding the accuracy, completeness, or currency of any information on this platform. Data may be incomplete, outdated, or subject to error.</div>
+      </div>
+      <div class="card" style="padding:16px 24px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:8px;">3. User reviews reflect personal opinions</h3>
+        <div style="line-height:1.8;color:var(--ink2);font-size:14px;">Reviews submitted by users reflect their personal experiences and opinions only. CommunaRank does not verify the factual accuracy of individual reviews and is not responsible for their content. Reviews do not represent the views of CommunaRank.</div>
+      </div>
+      <div class="card" style="padding:16px 24px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:8px;">4. No liability for decisions made</h3>
+        <div style="line-height:1.8;color:var(--ink2);font-size:14px;">CommunaRank accepts no liability for any loss, damage, or consequence arising directly or indirectly from decisions made in reliance on information, rankings, scores, or reviews published on this platform. Use of this platform is entirely at your own risk.</div>
+      </div>
+      <div class="card" style="padding:16px 24px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:8px;">5. Review moderation</h3>
+        <div style="line-height:1.8;color:var(--ink2);font-size:14px;">CommunaRank reserves the right to moderate, edit, or remove any user-submitted review at its sole discretion — including content that is offensive, defamatory, spam, or otherwise in violation of community guidelines — without prior notice.</div>
+      </div>
+      <div class="card" style="padding:16px 24px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:8px;">6. Governing law</h3>
+        <div style="line-height:1.8;color:var(--ink2);font-size:14px;">These terms are governed by and construed in accordance with Swiss law. Any disputes arising out of or in connection with the use of CommunaRank shall be subject to the exclusive jurisdiction of the competent courts of Switzerland.</div>
+      </div>
+      <div class="card" style="padding:16px 24px;">
+        <h3 style="font-family:'Fraunces',serif;font-size:15px;margin-bottom:8px;">7. Contact</h3>
+        <div style="line-height:1.8;color:var(--ink2);font-size:14px;">Questions about these terms? Contact us at <a href="mailto:info@communarank.ch" style="color:var(--green);">info@communarank.ch</a>.</div>
+      </div>
+    </div>
+  </div>
+</div>
 <div id="page-contact" class="page">
   <div class="section">
     <div class="section-header">
-      <h2 class="section-title">Contact</h2>
-      <p class="section-sub">Questions, partnerships, media or feedback? We'd love to hear from you.</p>
+      <h2 class="section-title" id="contact-title">Contact</h2>
+      <p class="section-sub" id="contact-sub">Questions, partnerships, media or feedback? We'd love to hear from you.</p>
     </div>
     <div style="max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:16px;">
       <a href="mailto:info@communarank.ch" style="display:flex;align-items:center;gap:12px;background:white;border:1px solid var(--border);border-radius:var(--r2);padding:18px 22px;text-decoration:none;color:var(--ink);font-size:14px;">
@@ -3246,7 +3375,7 @@ window.addEventListener('popstate', function(e) {
       </a>
       <a href="https://www.facebook.com/profile.php?id=61590276629537" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:12px;background:white;border:1px solid var(--border);border-radius:var(--r2);padding:18px 22px;text-decoration:none;color:var(--ink);font-size:14px;">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#1877f2" aria-hidden="true"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.413c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
-        <span>Facebook</span>
+        <span id="contact-fb">Facebook</span>
       </a>
     </div>
   </div>
