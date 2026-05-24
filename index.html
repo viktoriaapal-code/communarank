@@ -832,8 +832,8 @@ function closeMobileNav() {
   <div class="section">
     <div style="max-width:720px;margin:0 auto;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-        <button onclick="showPage('blog');" style="background:none;border:none;color:var(--green);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;padding:0;display:flex;align-items:center;gap:6px;">← Back to Insights</button>
-        <button onclick="shareBlogArticle();" style="background:none;border:1px solid var(--border);color:var(--ink2);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;padding:6px 12px;border-radius:6px;display:inline-flex;align-items:center;gap:5px;">⬆ Share</button>
+        <button id="barticle-back" onclick="showPage('blog');" style="background:none;border:none;color:var(--green);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;padding:0;display:flex;align-items:center;gap:6px;">← Back to Insights</button>
+        <button id="barticle-share" onclick="shareBlogArticle();" style="background:none;border:1px solid var(--border);color:var(--ink2);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;padding:6px 12px;border-radius:6px;display:inline-flex;align-items:center;gap:5px;">⬆ Share</button>
       </div>
       <article>
         <div id="barticle-category" style="display:inline-block;background:var(--green3);color:var(--green);font-size:11px;font-weight:500;padding:3px 12px;border-radius:20px;margin-bottom:14px;"></div>
@@ -1192,11 +1192,22 @@ function renderRadar(cs){if(cmpChart){cmpChart.destroy();cmpChart=null}const lab
 const BLOG_POSTS = [
   {
     slug: 'geneva-vs-lausanne',
-    title: 'Geneva vs Lausanne: Which Swiss City Offers Better Quality of Life?',
-    excerpt: 'Two of Switzerland\'s most prestigious Lake Geneva cities go head to head. We compare affordability, infrastructure, and quality of life scores to help you choose.',
     category: 'City Comparison',
     publishDate: '2026-05-15',
-    content: `<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:20px;">Switzerland's Lake Geneva arc is home to two of Europe's most coveted addresses. <strong>Geneva</strong> — the global capital of diplomacy — and <strong>Lausanne</strong> — the Olympic city on the northern shore — both offer world-class infrastructure and stunning scenery. But for families, professionals, and property buyers, the differences matter enormously.</p>
+    title: {
+      en: 'Geneva vs Lausanne: Which Swiss City Offers Better Quality of Life?',
+      fr: 'Genève vs Lausanne : quelle ville suisse offre la meilleure qualité de vie ?',
+      de: 'Genf vs. Lausanne: Welche Schweizer Stadt bietet die bessere Lebensqualität?',
+      it: 'Ginevra vs Losanna: quale città svizzera offre la migliore qualità della vita?'
+    },
+    excerpt: {
+      en: 'Two of Switzerland\'s most prestigious Lake Geneva cities go head to head. We compare affordability, infrastructure, and quality of life scores to help you choose.',
+      fr: 'Deux des adresses les plus prisées de l\'arc lémanique s\'affrontent. Nous comparons l\'accessibilité financière, les infrastructures et les scores de qualité de vie pour vous aider à choisir.',
+      de: 'Zwei der renommiertesten Städte am Genfersee im direkten Vergleich. Wir vergleichen Erschwinglichkeit, Infrastruktur und Lebensqualitätsscores, um Ihnen die Wahl zu erleichtern.',
+      it: 'Due delle mete più ambite dell\'arco del Lago di Ginevra a confronto. Confrontiamo accessibilità, infrastrutture e punteggi di qualità della vita per aiutarti a scegliere.'
+    },
+    content: {
+      en: `<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:20px;">Switzerland's Lake Geneva arc is home to two of Europe's most coveted addresses. <strong>Geneva</strong> — the global capital of diplomacy — and <strong>Lausanne</strong> — the Olympic city on the northern shore — both offer world-class infrastructure and stunning scenery. But for families, professionals, and property buyers, the differences matter enormously.</p>
 <p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:32px;">We put both cities through the <strong>CommunaRank Smart Community Index</strong> — 9 dimensions of quality of life built from official Swiss federal data — to give you a fully objective comparison.</p>
 <h2 style="font-family:'Fraunces',serif;font-size:22px;color:var(--ink);margin:0 0 16px;font-weight:400;">At a Glance</h2>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px;">
@@ -1251,7 +1262,174 @@ const BLOG_POSTS = [
     </ul>
   </div>
 </div>`,
-    cta: `<div style="background:var(--ink);border-radius:var(--r2);padding:28px;margin-top:40px;">
+      fr: `<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:20px;">L'arc lémanique abrite deux des adresses les plus convoitées d'Europe. <strong>Genève</strong> — capitale mondiale de la diplomatie — et <strong>Lausanne</strong> — la cité olympique sur la rive nord — offrent toutes deux des infrastructures de classe mondiale et des paysages époustouflants. Mais pour les familles, les professionnels et les acquéreurs immobiliers, les différences comptent énormément.</p>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:32px;">Nous avons soumis les deux villes au <strong>CommunaRank Smart Community Index</strong> — 9 dimensions de qualité de vie issues des données officielles fédérales suisses — pour vous offrir une comparaison entièrement objective.</p>
+<h2 style="font-family:'Fraunces',serif;font-size:22px;color:var(--ink);margin:0 0 16px;font-weight:400;">En un coup d'œil</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px;">
+  <div style="background:var(--paper2);border:1px solid var(--border);border-radius:var(--r2);padding:20px;text-align:center;">
+    <div style="font-size:11px;color:var(--green);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Genève</div>
+    <div style="font-family:'Fraunces',serif;font-size:44px;color:var(--ink);line-height:1;">74</div>
+    <div style="font-size:11px;color:var(--ink3);margin-bottom:16px;">Score CommunaRank</div>
+    <div style="font-size:13px;color:var(--ink2);margin-bottom:2px;"><strong>4 200 CHF/m²</strong></div>
+    <div style="font-size:11px;color:var(--ink3);margin-bottom:10px;">Prix du terrain</div>
+    <div style="font-size:13px;color:var(--ink2);margin-bottom:2px;"><strong>CHF 62 100</strong></div>
+    <div style="font-size:11px;color:var(--ink3);">Revenu médian</div>
+  </div>
+  <div style="background:var(--paper2);border:1px solid var(--border);border-radius:var(--r2);padding:20px;text-align:center;">
+    <div style="font-size:11px;color:var(--green);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Lausanne</div>
+    <div style="font-family:'Fraunces',serif;font-size:44px;color:var(--ink);line-height:1;">78</div>
+    <div style="font-size:11px;color:var(--ink3);margin-bottom:16px;">Score CommunaRank</div>
+    <div style="font-size:13px;color:var(--ink2);margin-bottom:2px;"><strong>3 100 CHF/m²</strong></div>
+    <div style="font-size:11px;color:var(--ink3);margin-bottom:10px;">Prix du terrain</div>
+    <div style="font-size:13px;color:var(--ink2);margin-bottom:2px;"><strong>CHF 55 400</strong></div>
+    <div style="font-size:11px;color:var(--ink3);">Revenu médian</div>
+  </div>
+</div>
+<p style="font-size:12px;color:var(--ink3);font-style:italic;margin-bottom:32px;">CommunaRank Smart Community Index, mai 2026. Source : OFS, ELCOM, AFC, Conférence suisse des impôts.</p>
+<h2 style="font-family:'Fraunces',serif;font-size:22px;color:var(--ink);margin:32px 0 14px;font-weight:400;">Accessibilité : Lausanne l'emporte sur les prix</h2>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:14px;">Les prix du terrain à Genève atteignent en moyenne <strong>4 200 CHF/m²</strong> — parmi les plus élevés de Suisse — portés par la demande internationale, une zone à bâtir contrainte et un secteur financier concentré. Lausanne affiche <strong>3 100 CHF/m²</strong>, soit environ 26 % de moins, tout en offrant un accès au même corridor lémanique et une proximité avec la France voisine.</p>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:14px;">Sur le plan du revenu, le médian genevois de CHF 62 100 compense partiellement la prime immobilière, mais la fiscalité amplifie l'écart : le multiplicateur cantonal et communal de Genève est parmi les plus élevés de Suisse, tandis que Vaud (dont dépend Lausanne) est nettement plus modéré.</p>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:32px;"><strong>Verdict :</strong> Pour les acquéreurs avec un budget défini, Lausanne offre un meilleur rapport qualité-prix pour un style de vie équivalent sur l'arc lémanique.</p>
+<h2 style="font-family:'Fraunces',serif;font-size:22px;color:var(--ink);margin:32px 0 14px;font-weight:400;">Infrastructures : ex æquo au sommet</h2>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:14px;">Les deux villes obtiennent <strong>95/100</strong> en infrastructures — reflet d'excellents transports publics, d'un haut taux de couverture haut débit et de réseaux routiers bien entretenus. Genève exploite un vaste réseau de tramways avec un accès intercontinental direct via l'aéroport de Genève (GVA). Lausanne dispose de l'un des plus petits métros entièrement automatisés au monde et se trouve à 40 minutes de GVA en train.</p>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:32px;">Pour les voyageurs fréquents à l'international, la proximité de l'aéroport genevois est un vrai atout qualité de vie. Pour la plupart des résidents, les deux villes sont excellemment reliées au réseau ferroviaire suisse.</p>
+<h2 style="font-family:'Fraunces',serif;font-size:22px;color:var(--ink);margin:32px 0 14px;font-weight:400;">Éducation &amp; Santé</h2>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:14px;">Les deux villes obtiennent <strong>95/100</strong> en éducation et santé. Genève abrite l'Université de Genève, un dense réseau d'écoles internationales et bilingues, et côtoie le CERN et le siège de l'OMS. Lausanne héberge <strong>l'EPFL</strong> — régulièrement classée parmi les cinq meilleures universités techniques d'Europe — ainsi que l'UNIL et un excellent système scolaire public cantonal vaudois.</p>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:32px;">Les familles expatriées privilégiant le choix des écoles internationales préféreront peut-être la diversité genevoise. Celles qui s'inscrivent dans le système public suisse ou souhaitent la proximité d'une université technique de rang mondial trouveront Lausanne tout aussi convaincante.</p>
+<h2 style="font-family:'Fraunces',serif;font-size:22px;color:var(--ink);margin:32px 0 14px;font-weight:400;">Qui devrait choisir quoi ?</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px;">
+  <div style="background:#f2f7f0;border:1px solid rgba(45,90,39,0.15);border-radius:var(--r);padding:18px;">
+    <div style="font-family:'Fraunces',serif;font-size:15px;color:var(--ink);margin-bottom:12px;">Choisissez Genève si…</div>
+    <ul style="font-size:14px;color:var(--ink2);line-height:2;padding-left:16px;margin:0;">
+      <li>Vous travaillez dans des organisations internationales ou la finance</li>
+      <li>Vous avez besoin de vols intercontinentaux fréquents</li>
+      <li>Vous souhaitez le plus large choix d'écoles internationales</li>
+      <li>Votre package employeur compense les coûts immobiliers élevés</li>
+    </ul>
+  </div>
+  <div style="background:#f2f7f0;border:1px solid rgba(45,90,39,0.15);border-radius:var(--r);padding:18px;">
+    <div style="font-family:'Fraunces',serif;font-size:15px;color:var(--ink);margin-bottom:12px;">Choisissez Lausanne si…</div>
+    <ul style="font-size:14px;color:var(--ink2);line-height:2;padding-left:16px;margin:0;">
+      <li>L'accessibilité et la valeur immobilière sont essentielles</li>
+      <li>Vous êtes lié à l'EPFL, l'UNIL ou le CIO</li>
+      <li>Vous préférez une échelle urbaine plus compacte et piétonne</li>
+      <li>Une charge fiscale globale réduite est une priorité</li>
+    </ul>
+  </div>
+</div>`,
+      de: `<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:20px;">Der Genferseebogen ist Heimat zweier der begehrtesten Adressen Europas. <strong>Genf</strong> — die globale Hauptstadt der Diplomatie — und <strong>Lausanne</strong> — die Olympiastadt am Nordufer — bieten beide erstklassige Infrastruktur und atemberaubende Landschaften. Doch für Familien, Berufstätige und Immobilienkäufer sind die Unterschiede enorm.</p>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:32px;">Wir haben beide Städte durch den <strong>CommunaRank Smart Community Index</strong> — 9 Lebensqualitätsdimensionen aus offiziellen Schweizer Bundesdaten — analysiert, um Ihnen einen vollständig objektiven Vergleich zu liefern.</p>
+<h2 style="font-family:'Fraunces',serif;font-size:22px;color:var(--ink);margin:0 0 16px;font-weight:400;">Auf einen Blick</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px;">
+  <div style="background:var(--paper2);border:1px solid var(--border);border-radius:var(--r2);padding:20px;text-align:center;">
+    <div style="font-size:11px;color:var(--green);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Genf</div>
+    <div style="font-family:'Fraunces',serif;font-size:44px;color:var(--ink);line-height:1;">74</div>
+    <div style="font-size:11px;color:var(--ink3);margin-bottom:16px;">CommunaRank-Score</div>
+    <div style="font-size:13px;color:var(--ink2);margin-bottom:2px;"><strong>4 200 CHF/m²</strong></div>
+    <div style="font-size:11px;color:var(--ink3);margin-bottom:10px;">Bodenpreis</div>
+    <div style="font-size:13px;color:var(--ink2);margin-bottom:2px;"><strong>CHF 62 100</strong></div>
+    <div style="font-size:11px;color:var(--ink3);">Medianeinkommen</div>
+  </div>
+  <div style="background:var(--paper2);border:1px solid var(--border);border-radius:var(--r2);padding:20px;text-align:center;">
+    <div style="font-size:11px;color:var(--green);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Lausanne</div>
+    <div style="font-family:'Fraunces',serif;font-size:44px;color:var(--ink);line-height:1;">78</div>
+    <div style="font-size:11px;color:var(--ink3);margin-bottom:16px;">CommunaRank-Score</div>
+    <div style="font-size:13px;color:var(--ink2);margin-bottom:2px;"><strong>3 100 CHF/m²</strong></div>
+    <div style="font-size:11px;color:var(--ink3);margin-bottom:10px;">Bodenpreis</div>
+    <div style="font-size:13px;color:var(--ink2);margin-bottom:2px;"><strong>CHF 55 400</strong></div>
+    <div style="font-size:11px;color:var(--ink3);">Medianeinkommen</div>
+  </div>
+</div>
+<p style="font-size:12px;color:var(--ink3);font-style:italic;margin-bottom:32px;">CommunaRank Smart Community Index, Mai 2026. Quelle: BFS, ELCOM, ESTV, Schweizerische Steuerkonferenz.</p>
+<h2 style="font-family:'Fraunces',serif;font-size:22px;color:var(--ink);margin:32px 0 14px;font-weight:400;">Erschwinglichkeit: Lausanne gewinnt beim Preis</h2>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:14px;">Die Bodenpreise in Genf liegen im Durchschnitt bei <strong>4 200 CHF/m²</strong> — zu den höchsten in der Schweiz — getrieben von internationaler Nachfrage, einer eingeschränkten Bauzone und einem konzentrierten Finanzsektor. Lausanne liegt bei <strong>3 100 CHF/m²</strong>, rund 26 % günstiger, bietet aber dennoch Zugang zum selben Seekorridor und die Nähe zu Frankreich.</p>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:14px;">Beim Einkommen gleicht das Genfer Median von CHF 62 100 die Immobilienprämie teilweise aus, doch das Steuerumfeld verstärkt die Lücke: Genfs kombinierter kantonaler und kommunaler Steuermultiplikator gehört zu den höchsten der Schweiz, während Waadt (Heimat von Lausanne) deutlich moderater ist.</p>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:32px;"><strong>Fazit:</strong> Für Immobilienkäufer mit einem definierten Budget bietet Lausanne für einen gleichwertigen Lebensstil am Genfersee besseren Gegenwert.</p>
+<h2 style="font-family:'Fraunces',serif;font-size:22px;color:var(--ink);margin:32px 0 14px;font-weight:400;">Infrastruktur: Gleichstand an der Spitze</h2>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:14px;">Beide Städte erzielen <strong>95/100</strong> bei der Infrastruktur — Ausdruck hervorragender öffentlicher Verkehrsmittel, hoher Breitbandversorgung und gut gewarteter Strassennetze. Genf betreibt ein weitläufiges Tramnetz mit direktem interkontinentalem Zugang über den Flughafen Genf (GVA). Lausanne verfügt über eine der kleinsten vollautomatischen U-Bahnen der Welt und liegt 40 Minuten per Zug von GVA entfernt.</p>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:32px;">Für häufige Fernreisende ist die Flughafennähe Genfs ein echter Lebensqualitätsfaktor. Für die meisten Bewohner sind beide Städte hervorragend an das Schweizer Schienennetz angebunden.</p>
+<h2 style="font-family:'Fraunces',serif;font-size:22px;color:var(--ink);margin:32px 0 14px;font-weight:400;">Bildung &amp; Gesundheit</h2>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:14px;">Beide Städte erzielen <strong>95/100</strong> in Bildung und Gesundheit. Genf beherbergt die Universität Genf, ein dichtes Netz an internationalen und zweisprachigen Schulen sowie CERN und WHO-Hauptsitz. Lausanne ist Heimat der <strong>EPFL</strong> — regelmässig unter den fünf besten technischen Universitäten Europas — sowie der UNIL und eines hervorragenden öffentlichen Schulsystems im Kanton Waadt.</p>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:32px;">Expat-Familien, die die grösste Auswahl an internationalen Schulen priorisieren, bevorzugen vielleicht Genfs Bandbreite. Familien, die dem Schweizer öffentlichen System folgen oder die Nähe zu einer Weltklasse-Technologieuniversität suchen, werden Lausanne ebenso überzeugend finden.</p>
+<h2 style="font-family:'Fraunces',serif;font-size:22px;color:var(--ink);margin:32px 0 14px;font-weight:400;">Wer sollte was wählen?</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px;">
+  <div style="background:#f2f7f0;border:1px solid rgba(45,90,39,0.15);border-radius:var(--r);padding:18px;">
+    <div style="font-family:'Fraunces',serif;font-size:15px;color:var(--ink);margin-bottom:12px;">Wählen Sie Genf, wenn…</div>
+    <ul style="font-size:14px;color:var(--ink2);line-height:2;padding-left:16px;margin:0;">
+      <li>Sie in internationalen Organisationen oder im Finanzsektor arbeiten</li>
+      <li>Sie häufige interkontinentale Flüge benötigen</li>
+      <li>Sie die grösste Auswahl an internationalen Schulen wünschen</li>
+      <li>Ihr Arbeitgeberpaket die höheren Wohnkosten ausgleicht</li>
+    </ul>
+  </div>
+  <div style="background:#f2f7f0;border:1px solid rgba(45,90,39,0.15);border-radius:var(--r);padding:18px;">
+    <div style="font-family:'Fraunces',serif;font-size:15px;color:var(--ink);margin-bottom:12px;">Wählen Sie Lausanne, wenn…</div>
+    <ul style="font-size:14px;color:var(--ink2);line-height:2;padding-left:16px;margin:0;">
+      <li>Erschwinglichkeit und Immobilienwert an erster Stelle stehen</li>
+      <li>Sie mit EPFL, UNIL oder IOC verbunden sind</li>
+      <li>Sie einen kompakteren, fussgängerfreundlichen Stadtmassstab bevorzugen</li>
+      <li>Eine insgesamt niedrigere Steuerlast Priorität hat</li>
+    </ul>
+  </div>
+</div>`,
+      it: `<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:20px;">L'arco del Lago di Ginevra ospita due degli indirizzi più ambiti d'Europa. <strong>Ginevra</strong> — la capitale mondiale della diplomazia — e <strong>Losanna</strong> — la città olimpica sulla riva nord — offrono entrambe infrastrutture di livello mondiale e paesaggi mozzafiato. Ma per le famiglie, i professionisti e gli acquirenti immobiliari, le differenze contano enormemente.</p>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:32px;">Abbiamo sottoposto entrambe le città al <strong>CommunaRank Smart Community Index</strong> — 9 dimensioni della qualità della vita basate su dati federali svizzeri ufficiali — per offrire un confronto completamente oggettivo.</p>
+<h2 style="font-family:'Fraunces',serif;font-size:22px;color:var(--ink);margin:0 0 16px;font-weight:400;">In sintesi</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px;">
+  <div style="background:var(--paper2);border:1px solid var(--border);border-radius:var(--r2);padding:20px;text-align:center;">
+    <div style="font-size:11px;color:var(--green);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Ginevra</div>
+    <div style="font-family:'Fraunces',serif;font-size:44px;color:var(--ink);line-height:1;">74</div>
+    <div style="font-size:11px;color:var(--ink3);margin-bottom:16px;">Punteggio CommunaRank</div>
+    <div style="font-size:13px;color:var(--ink2);margin-bottom:2px;"><strong>4 200 CHF/m²</strong></div>
+    <div style="font-size:11px;color:var(--ink3);margin-bottom:10px;">Prezzo del terreno</div>
+    <div style="font-size:13px;color:var(--ink2);margin-bottom:2px;"><strong>CHF 62 100</strong></div>
+    <div style="font-size:11px;color:var(--ink3);">Reddito mediano</div>
+  </div>
+  <div style="background:var(--paper2);border:1px solid var(--border);border-radius:var(--r2);padding:20px;text-align:center;">
+    <div style="font-size:11px;color:var(--green);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Losanna</div>
+    <div style="font-family:'Fraunces',serif;font-size:44px;color:var(--ink);line-height:1;">78</div>
+    <div style="font-size:11px;color:var(--ink3);margin-bottom:16px;">Punteggio CommunaRank</div>
+    <div style="font-size:13px;color:var(--ink2);margin-bottom:2px;"><strong>3 100 CHF/m²</strong></div>
+    <div style="font-size:11px;color:var(--ink3);margin-bottom:10px;">Prezzo del terreno</div>
+    <div style="font-size:13px;color:var(--ink2);margin-bottom:2px;"><strong>CHF 55 400</strong></div>
+    <div style="font-size:11px;color:var(--ink3);">Reddito mediano</div>
+  </div>
+</div>
+<p style="font-size:12px;color:var(--ink3);font-style:italic;margin-bottom:32px;">CommunaRank Smart Community Index, maggio 2026. Fonte: UST, ELCOM, AFC, Conferenza fiscale svizzera.</p>
+<h2 style="font-family:'Fraunces',serif;font-size:22px;color:var(--ink);margin:32px 0 14px;font-weight:400;">Accessibilità: Losanna vince sul prezzo</h2>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:14px;">I prezzi del terreno a Ginevra raggiungono in media <strong>4 200 CHF/m²</strong> — tra i più alti in Svizzera — sostenuti dalla domanda internazionale, una zona edificabile limitata e un settore finanziario concentrato. Losanna si attesta a <strong>3 100 CHF/m²</strong>, circa il 26% in meno, offrendo comunque accesso allo stesso corridoio lacustre e la prossimità alla Francia.</p>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:14px;">Sul fronte del reddito, il mediano ginevrina di CHF 62 100 compensa in parte il premio immobiliare, ma la fiscalità amplifica il divario: il moltiplicatore cantonale e comunale di Ginevra è tra i più alti della Svizzera, mentre Vaud (dove si trova Losanna) è notevolmente più moderato.</p>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:32px;"><strong>Verdetto:</strong> Per gli acquirenti con un budget definito, Losanna offre un miglior rapporto qualità-prezzo per uno stile di vita equivalente sull'arco del Lemano.</p>
+<h2 style="font-family:'Fraunces',serif;font-size:22px;color:var(--ink);margin:32px 0 14px;font-weight:400;">Infrastrutture: parità al vertice</h2>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:14px;">Entrambe le città ottengono <strong>95/100</strong> sulle infrastrutture — un riflesso di eccellenti trasporti pubblici, alta copertura a banda larga e reti stradali ben mantenute. Ginevra gestisce un'ampia rete tranviaria con accesso intercontinentale diretto tramite l'aeroporto di Ginevra (GVA). Losanna dispone di una delle metropolitane automatiche più piccole al mondo ed è a 40 minuti da GVA in treno.</p>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:32px;">Per chi viaggia spesso a livello internazionale, la vicinanza all'aeroporto di Ginevra è un reale fattore di qualità della vita. Per la maggior parte dei residenti, entrambe le città sono egregiamente collegate alla rete ferroviaria svizzera.</p>
+<h2 style="font-family:'Fraunces',serif;font-size:22px;color:var(--ink);margin:32px 0 14px;font-weight:400;">Istruzione &amp; Sanità</h2>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:14px;">Entrambe le città ottengono <strong>95/100</strong> in istruzione e sanità. Ginevra ospita l'Università di Ginevra, una densa rete di scuole internazionali e bilingue, e confina con CERN e la sede dell'OMS. Losanna ospita <strong>l'EPFL</strong> — costantemente classificata tra le cinque migliori università tecniche d'Europa — insieme all'UNIL e a un eccellente sistema scolastico pubblico nel Canton Vaud.</p>
+<p style="font-size:16px;color:var(--ink2);line-height:1.85;margin-bottom:32px;">Le famiglie espatriate che privilegiano la scelta delle scuole internazionali potrebbero preferire l'ampiezza ginevrina. Le famiglie allineate con il sistema pubblico svizzero o che cercano la prossimità a un'università tecnica di livello mondiale troveranno Losanna altrettanto convincente.</p>
+<h2 style="font-family:'Fraunces',serif;font-size:22px;color:var(--ink);margin:32px 0 14px;font-weight:400;">Chi dovrebbe scegliere cosa?</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px;">
+  <div style="background:#f2f7f0;border:1px solid rgba(45,90,39,0.15);border-radius:var(--r);padding:18px;">
+    <div style="font-family:'Fraunces',serif;font-size:15px;color:var(--ink);margin-bottom:12px;">Scegli Ginevra se…</div>
+    <ul style="font-size:14px;color:var(--ink2);line-height:2;padding-left:16px;margin:0;">
+      <li>Lavori in organizzazioni internazionali o nella finanza</li>
+      <li>Hai bisogno di frequenti voli intercontinentali</li>
+      <li>Vuoi la più ampia scelta di scuole internazionali</li>
+      <li>Il tuo pacchetto datoriale compensa i costi abitativi più elevati</li>
+    </ul>
+  </div>
+  <div style="background:#f2f7f0;border:1px solid rgba(45,90,39,0.15);border-radius:var(--r);padding:18px;">
+    <div style="font-family:'Fraunces',serif;font-size:15px;color:var(--ink);margin-bottom:12px;">Scegli Losanna se…</div>
+    <ul style="font-size:14px;color:var(--ink2);line-height:2;padding-left:16px;margin:0;">
+      <li>L'accessibilità e il valore immobiliare sono prioritari</li>
+      <li>Sei collegato all'EPFL, all'UNIL o al CIO</li>
+      <li>Preferisci una scala urbana più compatta e pedonale</li>
+      <li>Un onere fiscale complessivo ridotto è una priorità</li>
+    </ul>
+  </div>
+</div>`
+    },
+    cta: {
+      en: `<div style="background:var(--ink);border-radius:var(--r2);padding:28px;margin-top:40px;">
   <div style="font-family:'Fraunces',serif;font-size:18px;color:var(--paper);margin-bottom:8px;">Explore the data yourself</div>
   <p style="font-size:14px;color:rgba(245,242,235,0.65);margin-bottom:20px;line-height:1.7;">Use the CommunaRank tools to compare Geneva and Lausanne side by side, or dive into each city's full profile.</p>
   <div style="display:flex;flex-wrap:wrap;gap:10px;">
@@ -1266,7 +1444,56 @@ const BLOG_POSTS = [
   <div style="display:flex;flex-wrap:wrap;gap:10px;">
     <button onclick="showPage('reviews');setTimeout(()=>switchRevTab('write'),100);" style="background:var(--green);color:white;border:none;padding:10px 18px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;">Leave a resident review →</button>
   </div>
+</div>`,
+      fr: `<div style="background:var(--ink);border-radius:var(--r2);padding:28px;margin-top:40px;">
+  <div style="font-family:'Fraunces',serif;font-size:18px;color:var(--paper);margin-bottom:8px;">Explorez les données vous-même</div>
+  <p style="font-size:14px;color:rgba(245,242,235,0.65);margin-bottom:20px;line-height:1.7;">Utilisez les outils CommunaRank pour comparer Genève et Lausanne côte à côte, ou plongez dans le profil complet de chaque ville.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;">
+    <button onclick="cmpSelected=['Genève','Lausanne'];showPage('compare');" style="background:var(--green);color:white;border:none;padding:10px 18px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;">Comparer côte à côte →</button>
+    <button onclick="openProfile('Genève');" style="background:rgba(255,255,255,0.1);color:var(--paper);border:1px solid rgba(255,255,255,0.2);padding:10px 18px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;">Profil complet de Genève</button>
+    <button onclick="openProfile('Lausanne');" style="background:rgba(255,255,255,0.1);color:var(--paper);border:1px solid rgba(255,255,255,0.2);padding:10px 18px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;">Profil complet de Lausanne</button>
+  </div>
+</div>
+<div style="background:var(--ink);border-radius:var(--r2);padding:28px;margin-top:16px;">
+  <div style="font-family:'Fraunces',serif;font-size:18px;color:var(--paper);margin-bottom:8px;">Avez-vous vécu à Genève ou à Lausanne ?</div>
+  <p style="font-size:14px;color:rgba(245,242,235,0.65);margin-bottom:20px;line-height:1.7;">Votre expérience peut aider d'autres personnes à faire un meilleur choix. Partagez ce que la vie quotidienne implique vraiment — esprit de communauté, transports, accessibilité, sécurité, intégration et qualité de vie.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;">
+    <button onclick="showPage('reviews');setTimeout(()=>switchRevTab('write'),100);" style="background:var(--green);color:white;border:none;padding:10px 18px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;">Laisser un avis →</button>
+  </div>
+</div>`,
+      de: `<div style="background:var(--ink);border-radius:var(--r2);padding:28px;margin-top:40px;">
+  <div style="font-family:'Fraunces',serif;font-size:18px;color:var(--paper);margin-bottom:8px;">Erkunden Sie die Daten selbst</div>
+  <p style="font-size:14px;color:rgba(245,242,235,0.65);margin-bottom:20px;line-height:1.7;">Nutzen Sie die CommunaRank-Tools, um Genf und Lausanne direkt zu vergleichen, oder tauchen Sie in das vollständige Profil jeder Stadt ein.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;">
+    <button onclick="cmpSelected=['Genève','Lausanne'];showPage('compare');" style="background:var(--green);color:white;border:none;padding:10px 18px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;">Direktvergleich →</button>
+    <button onclick="openProfile('Genève');" style="background:rgba(255,255,255,0.1);color:var(--paper);border:1px solid rgba(255,255,255,0.2);padding:10px 18px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;">Vollprofil Genf</button>
+    <button onclick="openProfile('Lausanne');" style="background:rgba(255,255,255,0.1);color:var(--paper);border:1px solid rgba(255,255,255,0.2);padding:10px 18px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;">Vollprofil Lausanne</button>
+  </div>
+</div>
+<div style="background:var(--ink);border-radius:var(--r2);padding:28px;margin-top:16px;">
+  <div style="font-family:'Fraunces',serif;font-size:18px;color:var(--paper);margin-bottom:8px;">Haben Sie in Genf oder Lausanne gelebt?</div>
+  <p style="font-size:14px;color:rgba(245,242,235,0.65);margin-bottom:20px;line-height:1.7;">Ihre Erfahrung kann anderen helfen, eine bessere Entscheidung zu treffen. Teilen Sie mit, wie das tägliche Leben wirklich ist — Gemeinschaftsgefühl, Verkehr, Erschwinglichkeit, Sicherheit, Integration und Lebensqualität.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;">
+    <button onclick="showPage('reviews');setTimeout(()=>switchRevTab('write'),100);" style="background:var(--green);color:white;border:none;padding:10px 18px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;">Bewertung schreiben →</button>
+  </div>
+</div>`,
+      it: `<div style="background:var(--ink);border-radius:var(--r2);padding:28px;margin-top:40px;">
+  <div style="font-family:'Fraunces',serif;font-size:18px;color:var(--paper);margin-bottom:8px;">Esplora i dati da solo</div>
+  <p style="font-size:14px;color:rgba(245,242,235,0.65);margin-bottom:20px;line-height:1.7;">Usa gli strumenti CommunaRank per confrontare Ginevra e Losanna fianco a fianco, o approfondisci il profilo completo di ogni città.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;">
+    <button onclick="cmpSelected=['Genève','Lausanne'];showPage('compare');" style="background:var(--green);color:white;border:none;padding:10px 18px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;">Confronta fianco a fianco →</button>
+    <button onclick="openProfile('Genève');" style="background:rgba(255,255,255,0.1);color:var(--paper);border:1px solid rgba(255,255,255,0.2);padding:10px 18px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;">Profilo completo di Ginevra</button>
+    <button onclick="openProfile('Lausanne');" style="background:rgba(255,255,255,0.1);color:var(--paper);border:1px solid rgba(255,255,255,0.2);padding:10px 18px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;">Profilo completo di Losanna</button>
+  </div>
+</div>
+<div style="background:var(--ink);border-radius:var(--r2);padding:28px;margin-top:16px;">
+  <div style="font-family:'Fraunces',serif;font-size:18px;color:var(--paper);margin-bottom:8px;">Hai vissuto a Ginevra o a Losanna?</div>
+  <p style="font-size:14px;color:rgba(245,242,235,0.65);margin-bottom:20px;line-height:1.7;">La tua esperienza può aiutare gli altri a fare una scelta migliore. Condividi come è davvero la vita quotidiana — senso di comunità, trasporti, accessibilità, sicurezza, integrazione e qualità della vita.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:10px;">
+    <button onclick="showPage('reviews');setTimeout(()=>switchRevTab('write'),100);" style="background:var(--green);color:white;border:none;padding:10px 18px;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;">Lascia una recensione →</button>
+  </div>
 </div>`
+    }
   }
 ];
 
@@ -3308,19 +3535,23 @@ function renderBlogIndex() {
   canonical.href = 'https://www.communarank.ch/blog';
   const grid = document.getElementById('blog-grid');
   if(!grid) return;
+  const locale  = lang==='fr'?'fr-CH':lang==='de'?'de-CH':lang==='it'?'it-CH':'en-CH';
+  const readLbl = lang==='fr'?'Lire l\'article →':lang==='de'?'Artikel lesen →':lang==='it'?'Leggi l\'articolo →':'Read article →';
   grid.innerHTML = BLOG_POSTS.map(post => {
-    const d = new Date(post.publishDate).toLocaleDateString('en-CH',{year:'numeric',month:'long',day:'numeric'});
+    const title   = (typeof post.title   === 'object') ? (post.title[lang]   || post.title.en)   : post.title;
+    const excerpt = (typeof post.excerpt === 'object') ? (post.excerpt[lang] || post.excerpt.en) : post.excerpt;
+    const d = new Date(post.publishDate).toLocaleDateString(locale,{year:'numeric',month:'long',day:'numeric'});
     return '<div style="background:white;border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;display:flex;flex-direction:column;">'
       + '<div style="padding:24px 24px 0;">'
       + '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'
       + '<span style="background:var(--green3);color:var(--green);font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;">'+post.category+'</span>'
       + '<span style="font-size:11px;color:var(--ink3);">'+d+'</span>'
       + '</div>'
-      + '<h2 style="font-family:\'Fraunces\',serif;font-size:20px;color:var(--ink);margin-bottom:10px;font-weight:400;line-height:1.35;">'+post.title+'</h2>'
-      + '<p style="font-size:14px;color:var(--ink2);line-height:1.7;margin-bottom:20px;">'+post.excerpt+'</p>'
+      + '<h2 style="font-family:\'Fraunces\',serif;font-size:20px;color:var(--ink);margin-bottom:10px;font-weight:400;line-height:1.35;">'+title+'</h2>'
+      + '<p style="font-size:14px;color:var(--ink2);line-height:1.7;margin-bottom:20px;">'+excerpt+'</p>'
       + '</div>'
       + '<div style="padding:0 24px 24px;margin-top:auto;">'
-      + '<button onclick="openBlogArticle(\''+post.slug+'\')" style="background:var(--green);color:white;border:none;padding:9px 18px;border-radius:8px;font-size:13px;font-family:\'DM Sans\',sans-serif;cursor:pointer;">Read article →</button>'
+      + '<button onclick="openBlogArticle(\''+post.slug+'\')" style="background:var(--green);color:white;border:none;padding:9px 18px;border-radius:8px;font-size:13px;font-family:\'DM Sans\',sans-serif;cursor:pointer;">'+readLbl+'</button>'
       + '</div>'
       + '</div>';
   }).join('');
@@ -3329,19 +3560,29 @@ function renderBlogIndex() {
 function renderBlogArticle(slug) {
   const post = BLOG_POSTS.find(p => p.slug === slug);
   if(!post) { showPage('blog'); return; }
-  document.title = post.title + ' · CommunaRank Insights';
+  const L = l => (typeof l === 'object') ? (l[lang] || l.en) : l;
+  const title   = L(post.title);
+  const excerpt = L(post.excerpt);
+  const content = L(post.content);
+  const cta     = L(post.cta);
+  document.title = title + ' · CommunaRank Insights';
   let metaDesc = document.querySelector('meta[name="description"]');
   if(!metaDesc){metaDesc=document.createElement('meta');metaDesc.name='description';document.head.appendChild(metaDesc);}
-  metaDesc.content = post.excerpt;
+  metaDesc.content = excerpt;
   let canonical = document.querySelector('link[rel="canonical"]');
   if(!canonical){canonical=document.createElement('link');canonical.rel='canonical';document.head.appendChild(canonical);}
   canonical.href = 'https://www.communarank.ch/blog/' + slug;
+  const locale = lang==='fr'?'fr-CH':lang==='de'?'de-CH':lang==='it'?'it-CH':'en-CH';
   const el = id => document.getElementById(id);
   if(el('barticle-category')) el('barticle-category').textContent = post.category;
-  if(el('barticle-title'))    el('barticle-title').textContent    = post.title;
-  if(el('barticle-date'))     el('barticle-date').textContent     = new Date(post.publishDate).toLocaleDateString('en-CH',{year:'numeric',month:'long',day:'numeric'});
-  if(el('barticle-content'))  el('barticle-content').innerHTML    = post.content || '';
-  if(el('barticle-cta'))      el('barticle-cta').innerHTML        = post.cta || '';
+  if(el('barticle-title'))    el('barticle-title').textContent    = title;
+  if(el('barticle-date'))     el('barticle-date').textContent     = new Date(post.publishDate).toLocaleDateString(locale,{year:'numeric',month:'long',day:'numeric'});
+  if(el('barticle-content'))  el('barticle-content').innerHTML    = content || '';
+  if(el('barticle-cta'))      el('barticle-cta').innerHTML        = cta || '';
+  const bb = el('barticle-back');
+  if(bb) bb.textContent = '← '+(lang==='fr'?'Retour aux analyses':lang==='de'?'Zurück zu Einblicken':lang==='it'?'Torna alle analisi':'Back to Insights');
+  const bs = el('barticle-share');
+  if(bs) bs.textContent = '⬆ '+(lang==='fr'?'Partager':lang==='de'?'Teilen':lang==='it'?'Condividi':'Share');
 }
 
 function openBlogArticle(slug) {
