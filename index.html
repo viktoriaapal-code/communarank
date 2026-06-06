@@ -1943,6 +1943,7 @@ PATH_TO_PAGE['/ranking'] = 'ranking';
 PATH_TO_PAGE['/index'] = 'index';
 PATH_TO_PAGE['/early-access'] = 'ai';
 PATH_TO_PAGE['/ai'] = 'ai';
+PATH_TO_PAGE['/insights'] = 'blog';
 
 const PAGE_TITLES = {
   home:     'CommunaRank — Smart Community Index Switzerland',
@@ -4293,9 +4294,8 @@ renderRevStarGrid();
 try { ALL_SWISS_COMMUNES = buildCommuneListFromTopo(null); } catch(e) { console.warn('seed communes:', e); }
 _crReady=true;
 renderWeights();renderRanking();renderIndexPillars();applyTranslations();applyWaitlistTranslations();loadReviewsFromSupabase().catch(()=>{});applyRevTranslations();updateHeroStats();
-// Update community count from real data
-const countEl=document.getElementById('community-count');
-if(countEl)countEl.textContent=COMMUNITIES.length.toLocaleString();
+// community-count stays at 2,131 (total Swiss communes); COMMUNITIES.length only
+// reflects the detailed ranked profiles currently in the index — shown elsewhere.
 
 function renderPrivacy() {
   var lang2 = typeof lang !== "undefined" ? lang : "en";
