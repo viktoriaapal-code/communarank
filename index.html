@@ -907,10 +907,8 @@ async function loadReviewsFromSupabase() {
         years:r.years||'',profile:r.profile||'',tenure:r.tenure||'',proptype:r.proptype||'',
         ratings:r.ratings||{},helpful:r.helpful||0,tags:r.tags||[],
         date:(r.created_at||'').split('T')[0],lang:r.lang||'en'}));
-      const SEED_IDS = new Set(['r1','r2','r3','r4','r5']);
-      const local = getReviews().filter(r=>r.id&&r.id.length<20&&!SEED_IDS.has(r.id));
-      const remoteIds = new Set(remote.map(r=>r.id));
-      saveReviews([...remote,...local.filter(r=>!remoteIds.has(r.id))]);
+      // Use Supabase as sole source of truth — never mix in local fallback reviews
+      saveReviews(remote);
       updateHeroStats();
     }
   } catch(e){console.warn('Supabase load:',e.message);}
@@ -3966,8 +3964,10 @@ function shareBlogArticle() {
 
 // ─── UPDATE HERO REVIEW COUNT ─────────────────────────────────────────
 function updateHeroStats() {
-  // Counts Supabase-approved reviews. Locally-stored pending reviews (only present when Supabase insert failed) are also included.
-  const reviews = getReviews();
+  // Count only Supabase-fetched reviews. Exclude seed/demo reviews (r1–r5) so
+  // they never inflate the counter before real data arrives.
+  const _SEED = new Set(['r1','r2','r3','r4','r5']);
+  const reviews = getReviews().filter(r => !_SEED.has(r.id));
   const reviewEl = document.getElementById('review-count');
   if(reviewEl) reviewEl.textContent = reviews.length.toLocaleString();
   const communesReviewed = new Set(reviews.map(r => r.community)).size;
