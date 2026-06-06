@@ -1974,8 +1974,9 @@ function showPage(n, opts) {
   if(n === 'reviews') {
     applyRevTranslations();
     renderRevStarGrid();
-    if(ALL_SWISS_COMMUNES.length < 100) loadCommuneListAsync();
-    loadReviewTagsFromSupabase();
+    const _revHash = (window.location.hash || '').replace('#', '');
+    const _revTarget = ['write','browse','ranking'].indexOf(_revHash) !== -1 ? _revHash : currentRevTab;
+    switchRevTab(_revTarget, {skipHash: true});
   }
 
   // Close mobile hamburger menu if open
@@ -1992,9 +1993,10 @@ function showPage(n, opts) {
 
   // Update browser URL + tab title (skip when called from popstate / initial load)
   if(PAGE_TITLES[n]) document.title = PAGE_TITLES[n];
-  const newPath = ROUTES[n] || '/';
-  if(!opts.skipPush && window.location.pathname !== newPath) {
-    try { history.pushState({page: n}, '', newPath); } catch(e) {}
+  const newPath = n === 'reviews' ? ('/reviews#' + currentRevTab) : (ROUTES[n] || '/');
+  const _curPL = window.location.pathname + (n === 'reviews' ? window.location.hash : '');
+  if(!opts.skipPush && _curPL !== newPath) {
+    try { history.pushState({page: n, revTab: n === 'reviews' ? currentRevTab : undefined}, '', newPath); } catch(e) {}
   }
   if(!opts.skipScroll) window.scrollTo(0, 0);
 }
@@ -2912,7 +2914,8 @@ let selectedRevTags = new Set();
 let REVIEW_TAGS = [];
 let REVIEW_TAGS_RAW = [];
 
-function switchRevTab(tab) {
+function switchRevTab(tab, opts) {
+  opts = opts || {};
   currentRevTab = tab;
   ['write','browse','ranking'].forEach(t => {
     const panel = document.getElementById('rev-tab-'+t);
@@ -2920,6 +2923,9 @@ function switchRevTab(tab) {
     if(panel) panel.style.display = t===tab ? 'block' : 'none';
     if(btn) btn.classList.toggle('active', t===tab);
   });
+  if(!opts.skipHash && window.location.pathname === '/reviews' && window.location.hash !== '#'+tab) {
+    try { history.pushState({page:'reviews', revTab:tab}, '', '/reviews#'+tab); } catch(e) {}
+  }
   if(tab==='write') {
     if(ALL_SWISS_COMMUNES.length<100) loadCommuneListAsync();
     loadReviewTagsFromSupabase();
@@ -4205,8 +4211,11 @@ window.addEventListener('popstate', function(e) {
       ? '/community/' + communityToSlug(_currentCommunity)
       : n === 'blog-article'
       ? '/blog/' + _currentBlogSlug
+      : n === 'reviews'
+      ? (window.location.pathname + window.location.hash)
       : (ROUTES[n] || window.location.pathname);
-    history.replaceState({ page: n, community: _currentCommunity || '', blogSlug: _currentBlogSlug || '' }, '', initPath);
+    const _initRevTab = n === 'reviews' ? ((window.location.hash || '').replace('#', '') || 'write') : undefined;
+    history.replaceState({ page: n, community: _currentCommunity || '', blogSlug: _currentBlogSlug || '', revTab: _initRevTab }, '', initPath);
   } catch(e) {}
   // If the URL points to anything other than ranking, switch to it
   if(n !== 'ranking') {
