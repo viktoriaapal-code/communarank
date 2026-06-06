@@ -3520,9 +3520,10 @@ function switchRevTab(tab, opts) {
     try { history.pushState({page:'reviews', revTab:tab}, '', '/reviews#'+tab); } catch(e) {}
   }
   if(tab==='write') {
-    // Threshold >100 was too low — supplement alone gives ~200 entries.
-    // Only treat as "fully loaded" when TopoJSON has been parsed (~2,131 communes).
-    if(ALL_SWISS_COMMUNES.length<2000) loadCommuneListAsync();
+    // Only fetch TopoJSON once. Note: swiss-maps@4 stores geometry with numeric IDs only
+    // (no name properties), so buildCommuneListFromTopo returns supplement+index regardless.
+    // Commune coverage comes from: supplement (immediate) + GeoAdmin + Supabase (on-demand).
+    if(!mapTopoLoaded) loadCommuneListAsync();
     loadReviewTagsFromSupabase();
   }
   if(tab==='browse') {
