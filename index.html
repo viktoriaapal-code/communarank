@@ -3520,7 +3520,9 @@ function switchRevTab(tab, opts) {
     try { history.pushState({page:'reviews', revTab:tab}, '', '/reviews#'+tab); } catch(e) {}
   }
   if(tab==='write') {
-    if(ALL_SWISS_COMMUNES.length<100) loadCommuneListAsync();
+    // Threshold >100 was too low — supplement alone gives ~200 entries.
+    // Only treat as "fully loaded" when TopoJSON has been parsed (~2,131 communes).
+    if(ALL_SWISS_COMMUNES.length<2000) loadCommuneListAsync();
     loadReviewTagsFromSupabase();
   }
   if(tab==='browse') {
@@ -3603,6 +3605,7 @@ function setOverallStar(val) {
 // Track which queries we've already asked the Geo Admin API about (so we don't refetch)
 const _geoAdminCache = new Set();
 let _geoAdminTimer = null;
+let _supabaseSearchTimer = null;
 
 function showRevSuggestions() {
   const input = document.getElementById('rev-community-input');
@@ -3614,10 +3617,13 @@ function showRevSuggestions() {
   // Render local matches immediately (instant feedback)
   renderRevSuggestions(q);
 
-  // Also query the official Swiss Geo Admin API (covers all 2,131 communes)
-  // Debounced so we don't fire on every keystroke
+  // Query the official Swiss Geo Admin API (covers all 2,131 communes)
   clearTimeout(_geoAdminTimer);
   _geoAdminTimer = setTimeout(() => fetchCommunesFromGeoAdmin(q), 200);
+
+  // Also query Supabase all_communes — the primary full-coverage source
+  clearTimeout(_supabaseSearchTimer);
+  _supabaseSearchTimer = setTimeout(() => fetchCommunesFromSupabase(q), 200);
 }
 
 function renderRevSuggestions(q) {
@@ -3691,6 +3697,44 @@ function fetchCommunesFromGeoAdmin(q) {
       }
     })
     .catch(e => console.warn('Geo Admin commune search failed:', e.message));
+}
+
+// Query Supabase all_communes table for autocomplete — covers every Swiss municipality
+// including those not yet in the ranked COMMUNITIES list (e.g. Stettlen, Kirchlindach).
+async function fetchCommunesFromSupabase(q) {
+  if(!SUPABASE_KEY || SUPABASE_KEY.includes('REPLACE')) return;
+  if(q.length < 2) return;
+  try {
+    const rows = await sbSelect(
+      'all_communes',
+      'name=ilike.' + encodeURIComponent(q) + '*&order=name&limit=20'
+    );
+    if(!rows || !rows.length) return;
+    const seen = new Set(ALL_SWISS_COMMUNES.map(c => c.name.toLowerCase().trim()));
+    let added = 0;
+    rows.forEach(row => {
+      if(!row.name) return;
+      const key = row.name.toLowerCase().trim();
+      if(seen.has(key)) return;
+      seen.add(key);
+      const cantonCode = row.canton_code || '';
+      const cantonFull = Object.values(BFS_CANTON_MAP).find(v => v.endsWith('(' + cantonCode + ')')) || cantonCode;
+      ALL_SWISS_COMMUNES.push({
+        name: row.name,
+        canton: cantonFull,
+        code: cantonCode,
+        bfs_number: row.bfs_number || null
+      });
+      added++;
+    });
+    if(added > 0) {
+      ALL_SWISS_COMMUNES.sort((a, b) => a.name.localeCompare(b.name, 'de'));
+      const input = document.getElementById('rev-community-input');
+      if(input && input.value.toLowerCase().trim() === q) renderRevSuggestions(q);
+    }
+  } catch(e) {
+    console.warn('Supabase commune search failed:', e.message);
+  }
 }
 
 let selectedCommunityData = null;
@@ -4116,6 +4160,9 @@ const BFS_CANTON_MAP = {
 const COMMUNE_SUPPLEMENT = [
   // ── Bern canton suburbs & common communes (the gap that was hiding Bolligen)
   {name:'Bolligen',canton:'Bern (BE)',code:'BE'},
+  {name:'Stettlen',canton:'Bern (BE)',code:'BE',bfs_number:672},
+  {name:'Vechigen',canton:'Bern (BE)',code:'BE'},
+  {name:'Kirchlindach',canton:'Bern (BE)',code:'BE'},
   {name:'Münsingen',canton:'Bern (BE)',code:'BE'},
   {name:'Worb',canton:'Bern (BE)',code:'BE'},
   {name:'Belp',canton:'Bern (BE)',code:'BE'},
