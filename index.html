@@ -2463,7 +2463,7 @@ function renderHomeCantons() {
 function renderHomeBlog() {
   var el = document.getElementById('home-blog-strip');
   if(!el) return;
-  var posts = (typeof BLOG_POSTS!=='undefined'?BLOG_POSTS:[]).slice(0,3);
+  var posts = (typeof BLOG_POSTS!=='undefined'?BLOG_POSTS:[]).slice().sort(function(a,b){return new Date(b.publishDate)-new Date(a.publishDate);}).slice(0,3);
   el.innerHTML = posts.map(function(p){
     var L=function(x){return typeof x==='object'?(x[lang]||x.en||''):(x||'');};
     return '<div onclick="_currentBlogSlug=\''+p.slug+'\';showPage(\'blog-article\')" style="cursor:pointer;background:white;border:1px solid var(--border);border-radius:var(--r2);padding:18px;transition:all .2s" onmouseover="this.style.borderColor=\'var(--green2)\';this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.borderColor=\'var(--border)\';this.style.transform=\'\'">'
@@ -4485,7 +4485,7 @@ function renderBlogIndex() {
   if(!grid) return;
   const locale  = lang==='fr'?'fr-CH':lang==='de'?'de-CH':lang==='it'?'it-CH':'en-CH';
   const readLbl = lang==='fr'?'Lire l\'article →':lang==='de'?'Artikel lesen →':lang==='it'?'Leggi l\'articolo →':'Read article →';
-  grid.innerHTML = BLOG_POSTS.map(post => {
+  grid.innerHTML = BLOG_POSTS.slice().sort((a,b)=>new Date(b.publishDate)-new Date(a.publishDate)).map(post => {
     const title   = (typeof post.title   === 'object') ? (post.title[lang]   || post.title.en)   : post.title;
     const excerpt = (typeof post.excerpt === 'object') ? (post.excerpt[lang] || post.excerpt.en) : post.excerpt;
     const d = new Date(post.publishDate).toLocaleDateString(locale,{year:'numeric',month:'long',day:'numeric'});
