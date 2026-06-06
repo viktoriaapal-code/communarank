@@ -390,9 +390,24 @@ function closeMobileNav() {
           <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-tags">Quick tags</label>
           <div id="rev-quick-tags" class="filter-chips" style="margin-bottom:0;"></div>
         </div>
+        <!-- Pros & Cons -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+          <div>
+            <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-pros">👍 What I love (optional)</label>
+            <textarea id="rev-pros" rows="3"
+              style="width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:var(--r);font-size:13px;font-family:'DM Sans',sans-serif;resize:vertical;line-height:1.6;"
+              placeholder="e.g. Great schools, easy train access..."></textarea>
+          </div>
+          <div>
+            <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-cons">👎 What could improve (optional)</label>
+            <textarea id="rev-cons" rows="3"
+              style="width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:var(--r);font-size:13px;font-family:'DM Sans',sans-serif;resize:vertical;line-height:1.6;"
+              placeholder="e.g. Expensive parking, limited nightlife..."></textarea>
+          </div>
+        </div>
         <details id="rev-more-section" style="margin-bottom:18px;border:1px solid var(--border);border-radius:var(--r);background:var(--paper);">
           <summary style="padding:14px 16px;cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;">
-            <span style="font-family:'Fraunces',serif;font-size:15px;color:var(--green);" id="rev-more-toggle-lbl">Want to share more?</span>
+            <span style="font-family:'Fraunces',serif;font-size:15px;color:var(--green);" id="rev-more-toggle-lbl">More details</span>
             <span style="font-size:11px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.6px;font-family:'DM Sans',sans-serif;" id="rev-more-hint">Optional</span>
           </summary>
           <div style="padding:0 16px 16px;border-top:1px solid var(--border);">
@@ -401,21 +416,6 @@ function closeMobileNav() {
         <div style="margin-bottom:18px;padding-top:16px;">
           <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:12px;" id="rev-lbl-ratings">Rate each dimension (1–5 stars)</label>
           <div id="rev-star-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;"></div>
-        </div>
-        <!-- Pros & Cons -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
-          <div>
-            <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-pros">👍 What I love</label>
-            <textarea id="rev-pros" rows="3"
-              style="width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:var(--r);font-size:13px;font-family:'DM Sans',sans-serif;resize:vertical;line-height:1.6;"
-              placeholder="e.g. Great schools, easy train access..."></textarea>
-          </div>
-          <div>
-            <label style="font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;" id="rev-lbl-cons">👎 What could improve</label>
-            <textarea id="rev-cons" rows="3"
-              style="width:100%;padding:10px 14px;border:1px solid var(--border2);border-radius:var(--r);font-size:13px;font-family:'DM Sans',sans-serif;resize:vertical;line-height:1.6;"
-              placeholder="e.g. Expensive parking, limited nightlife..."></textarea>
-          </div>
         </div>
         <!-- Written review (optional) -->
         <div style="margin-bottom:18px;">
@@ -2726,9 +2726,9 @@ const REV_T = {
     navBtn:'Reviews', title:'Community Reviews', sub:'Rate and review your community — help others find where they truly belong',
     tabWrite:'✍️ Write a Review', tabBrowse:'📋 Browse Reviews', tabRanking:"🏆 People's Ranking",
     formTitle:'Share your experience', lblCommunity:'Community', lblRatings:'Rate each dimension (1–5 stars)',
-    lblOverall:'Overall impression', lblPros:'👍 What I love', lblCons:'👎 What could improve',
+    lblOverall:'Overall impression', lblPros:'👍 What I love (optional)', lblCons:'👎 What could improve (optional)',
     lblText:'Your review (optional)', lblTags:'Quick tags', lblName:'Nickname', lblYears:'Years living there', lblProfile:'I am a',
-    moreToggle:'Want to share more?', moreHint:'Optional',
+    moreToggle:'More details', moreHint:'Optional',
     submitBtn:'Submit review →', submitting:'Submitting...', privacy:'Reviews are publicly visible. We moderate for spam.',
     rpFamily:'Family with children', rpCouple:'Couple', rpSingle:'Single professional',
     rpRetiree:'Retiree', rpStudent:'Student', rpExpat:'Expat',
@@ -2765,9 +2765,9 @@ const REV_T = {
     navBtn:'Avis', title:'Avis sur les communes', sub:'Notez et commentez votre commune — aidez les autres à trouver leur lieu de vie',
     tabWrite:'✍️ Écrire un avis', tabBrowse:'📋 Parcourir les avis', tabRanking:'🏆 Classement populaire',
     formTitle:'Partagez votre expérience', lblCommunity:'Commune', lblRatings:'Notez chaque dimension (1–5 étoiles)',
-    lblOverall:'Impression générale', lblPros:'👍 Ce que j\'aime', lblCons:'👎 Ce qui pourrait s\'améliorer',
+    lblOverall:'Impression générale', lblPros:'👍 Ce que j\'aime (optionnel)', lblCons:'👎 Ce qui pourrait s\'améliorer (optionnel)',
     lblText:'Votre avis (optionnel)', lblTags:'Étiquettes rapides', lblName:'Pseudonyme', lblYears:'Années de résidence', lblProfile:'Je suis',
-    moreToggle:'Envie d\'en dire plus ?', moreHint:'Optionnel',
+    moreToggle:'Plus de détails', moreHint:'Optionnel',
     submitBtn:'Soumettre l\'avis →', submitting:'Envoi en cours...', privacy:'Les avis sont publics. Nous modérons le spam.',
     rpFamily:'Famille avec enfants', rpCouple:'Couple', rpSingle:'Professionnel célibataire',
     rpRetiree:'Retraité', rpStudent:'Étudiant', rpExpat:'Expatrié',
@@ -2804,9 +2804,9 @@ const REV_T = {
     navBtn:'Bewertungen', title:'Gemeindebewertungen', sub:'Bewerten Sie Ihre Gemeinde — helfen Sie anderen, ihren idealen Wohnort zu finden',
     tabWrite:'✍️ Bewertung schreiben', tabBrowse:'📋 Bewertungen durchsuchen', tabRanking:'🏆 Volksranking',
     formTitle:'Teilen Sie Ihre Erfahrung', lblCommunity:'Gemeinde', lblRatings:'Bewerten Sie jede Dimension (1–5 Sterne)',
-    lblOverall:'Gesamteindruck', lblPros:'👍 Was mir gefällt', lblCons:'👎 Was verbessert werden könnte',
+    lblOverall:'Gesamteindruck', lblPros:'👍 Was mir gefällt (optional)', lblCons:'👎 Was verbessert werden könnte (optional)',
     lblText:'Ihre Bewertung (optional)', lblTags:'Schnell-Tags', lblName:'Spitzname', lblYears:'Jahre dort wohnhaft', lblProfile:'Ich bin',
-    moreToggle:'Mehr erzählen?', moreHint:'Optional',
+    moreToggle:'Weitere Details', moreHint:'Optional',
     submitBtn:'Bewertung einreichen →', submitting:'Wird gesendet...', privacy:'Bewertungen sind öffentlich sichtbar. Spam wird moderiert.',
     rpFamily:'Familie mit Kindern', rpCouple:'Paar', rpSingle:'Single/Berufstätige',
     rpRetiree:'Rentner/in', rpStudent:'Student/in', rpExpat:'Expat',
@@ -2843,9 +2843,9 @@ const REV_T = {
     navBtn:'Recensioni', title:'Recensioni dei comuni', sub:'Valuta e recensisci il tuo comune — aiuta gli altri a trovare dove appartenere',
     tabWrite:'✍️ Scrivi recensione', tabBrowse:'📋 Sfoglia recensioni', tabRanking:'🏆 Classifica popolare',
     formTitle:'Condividi la tua esperienza', lblCommunity:'Comune', lblRatings:'Valuta ogni dimensione (1–5 stelle)',
-    lblOverall:'Impressione generale', lblPros:'👍 Cosa amo', lblCons:'👎 Cosa potrebbe migliorare',
+    lblOverall:'Impressione generale', lblPros:'👍 Cosa amo (opzionale)', lblCons:'👎 Cosa potrebbe migliorare (opzionale)',
     lblText:'La tua recensione (opzionale)', lblTags:'Tag rapidi', lblName:'Soprannome', lblYears:'Anni di residenza', lblProfile:'Sono',
-    moreToggle:'Vuoi aggiungere altro?', moreHint:'Opzionale',
+    moreToggle:'Più dettagli', moreHint:'Opzionale',
     submitBtn:'Invia recensione →', submitting:'Invio in corso...', privacy:'Le recensioni sono pubbliche. Moderiamo lo spam.',
     rpFamily:'Famiglia con figli', rpCouple:'Coppia', rpSingle:'Professionista single',
     rpRetiree:'Pensionato/a', rpStudent:'Studente', rpExpat:'Expat',
