@@ -249,6 +249,10 @@ function closeMobileNav() {
     <div class="stat-item"><div class="stat-num">4</div><div class="stat-label" id="h-s4">Languages</div></div>
   </div>
 </div>
+<div id="compact-header" style="display:none;background:var(--ink);padding:20px 24px 18px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.08);">
+  <h2 id="compact-header-title" style="font-family:'Fraunces',serif;font-size:clamp(18px,2.5vw,26px);font-weight:300;color:var(--paper);margin:0 0 6px;line-height:1.2;"></h2>
+  <p id="compact-header-sub" style="font-size:13px;color:rgba(245,242,235,0.55);margin:0;line-height:1.5;max-width:600px;margin-inline:auto;"></p>
+</div>
 <div class="main">
 <div class="page active" id="page-ranking">
   <div class="section">
@@ -948,6 +952,7 @@ function applyTranslations(){
   // Re-render privacy page if currently shown
   var pp=document.getElementById('page-privacy');if(pp&&pp.style.display!=='none')renderPrivacy();
   renderContact();renderTerms();
+  _syncHero(_currentPage);
 }
 function calcScore(c){let t=0,w=0;for(const[k,d]of Object.entries(WEIGHTS_DEF)){t+=c.scores[k]*d.val;w+=d.val}return Math.round(t/w)}
 function renderWeights(){const g=document.getElementById('weights-grid');g.innerHTML='';for(const[k,w]of Object.entries(WEIGHTS_DEF)){const d=document.createElement('div');d.className='weight-item';d.innerHTML=`<label><span>${w.icon} ${w.label[lang]||w.label.en}</span><span class="weight-badge" id="wb-${k}">${w.val}%</span></label><input type="range" min="0" max="30" step="1" value="${w.val}" oninput="updateWeight('${k}',this.value)">`;g.appendChild(d)}}
@@ -1903,6 +1908,38 @@ function pageFromUrl() {
   return 'ranking';
 }
 
+let _currentPage = 'ranking';
+function _syncHero(page) {
+  _currentPage = page;
+  var hero = document.querySelector('.hero');
+  var ch = document.getElementById('compact-header');
+  var ct = document.getElementById('compact-header-title');
+  var cs = document.getElementById('compact-header-sub');
+  if (!hero || !ch) return;
+  if (page === 'ranking') { hero.style.display = ''; ch.style.display = 'none'; return; }
+  hero.style.display = 'none'; ch.style.display = 'block';
+  var title = '', sub = '';
+  if (page === 'compare')           { title = getT('cmpTitle');    sub = getT('cmpSub'); }
+  else if (page === 'index')        { title = getT('idxTitle');    sub = getT('idxSub'); }
+  else if (page === 'map')          { var _mt=(typeof MAP_T!=='undefined'&&MAP_T[lang])||{title:'Community Map',sub:''}; title=_mt.title; sub=_mt.sub; }
+  else if (page === 'reviews')      { var _rt=(typeof REV_T!=='undefined'&&(REV_T[lang]||REV_T.en))||{title:'Community Reviews',sub:''}; title=_rt.title; sub=_rt.sub; }
+  else if (page === 'ai')           { title = getT('aiPageTitle'); sub = getT('aiPageSub'); }
+  else if (page === 'blog')         {
+    var _blt={en:'CommunaRank Insights',fr:'Insights CommunaRank',de:'CommunaRank Einblicke',it:'Approfondimenti CommunaRank'};
+    var _bls={en:'Research and data-driven community guides',fr:'Recherches et guides communautaires',de:'Forschung und Gemeindeführer',it:'Ricerche e guide sulle comunità'};
+    title=_blt[lang]||_blt.en; sub=_bls[lang]||_bls.en;
+  }
+  else if (page === 'community')    { title = _currentCommunity||''; sub = ''; }
+  else if (page === 'blog-article') {
+    var _art=typeof BLOG_POSTS!=='undefined'?BLOG_POSTS.find(function(p){return p.slug===_currentBlogSlug;}):null;
+    title=_art?(_art.title[lang]||_art.title.en||''):''; sub='';
+  }
+  else if (page === 'privacy') { var _pv={en:'Privacy Policy',fr:'Politique de confidentialité',de:'Datenschutzrichtlinie',it:'Informativa sulla privacy'}; title=_pv[lang]||_pv.en; }
+  else if (page === 'terms')   { var _tm={en:'Terms of Service',fr:"Conditions d'utilisation",de:'Nutzungsbedingungen',it:'Termini di servizio'}; title=_tm[lang]||_tm.en; }
+  else if (page === 'contact') { var _co={en:'Contact',fr:'Contact',de:'Kontakt',it:'Contatto'}; title=_co[lang]||_co.en; }
+  if (ct) ct.textContent = title;
+  if (cs) cs.textContent = sub;
+}
 function showPage(n, opts) {
   opts = opts || {};
   // Community SEO page — special routing (uses slug URL, not ROUTES map)
@@ -1927,6 +1964,7 @@ function showPage(n, opts) {
     if(!opts.skipPush && window.location.pathname !== newPath) {
       try { history.pushState({page:'community',community:_currentCommunity}, '', newPath); } catch(e) {}
     }
+    _syncHero('community');
     if(!opts.skipScroll) window.scrollTo(0, 0);
     return;
   }
@@ -1951,6 +1989,7 @@ function showPage(n, opts) {
     if(!opts.skipPush && window.location.pathname !== newPath) {
       try { history.pushState({page:'blog-article',blogSlug:_currentBlogSlug}, '', newPath); } catch(e) {}
     }
+    _syncHero('blog-article');
     if(!opts.skipScroll) window.scrollTo(0, 0);
     return;
   }
@@ -1996,6 +2035,7 @@ function showPage(n, opts) {
   if(!opts.skipPush && _curPL !== newPath) {
     try { history.pushState({page: n, revTab: n === 'reviews' ? currentRevTab : undefined}, '', newPath); } catch(e) {}
   }
+  _syncHero(n);
   if(!opts.skipScroll) window.scrollTo(0, 0);
 }
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
